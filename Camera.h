@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector3.h"
+#include "Vector2.h"
 #include "AABB.h"
 #include "Constants.h"
 #include "GamesEngineeringBase.h"
@@ -8,15 +8,15 @@
 class Camera
 {
 public:
-	Vector3 globalPosition;
+	Vector2 globalPosition;
 
 	Camera() {
-		globalPosition = Vector3();
+		globalPosition = Vector2();
 	}
 
 	AABB GetAABB() const {
-		Vector3 min = Vector3(globalPosition.x - FOV * ASPECT_RATIO / 2, globalPosition.y - FOV / 2, 1);
-		Vector3 max = Vector3(globalPosition.x + FOV * ASPECT_RATIO / 2, globalPosition.y + FOV / 2, 1);
+		Vector2 min = Vector2(globalPosition.x - FOV * ASPECT_RATIO / 2, globalPosition.y - FOV / 2);
+		Vector2 max = Vector2(globalPosition.x + FOV * ASPECT_RATIO / 2, globalPosition.y + FOV / 2);
 		return AABB(min, max);
 	}
 
@@ -35,11 +35,10 @@ public:
 	}
 
 	// Get the global position of a pixel in the camera's view
-	Vector3 GetGlobalPosition(const int&x, const int&y) const {
-		Vector3 res;
+	Vector2 GetGlobalPosition(const int&x, const int&y) const {
+		Vector2 res;
 		res.x = ((float)x / WINDOW_WIDTH - 0.5f) * FOV * ASPECT_RATIO + globalPosition.x;
 		res.y = ((float)y / WINDOW_HEIGHT - 0.5f) * FOV + globalPosition.y;
-		res.w = 1;
 		return res;
 	}
 

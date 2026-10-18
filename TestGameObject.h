@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector3.h"
+#include "Vector2.h"
 #include "GamesEngineeringBase.h"
 #include "AABB.h"
 #include "Camera.h"
@@ -7,14 +7,14 @@
 class TestGameObject
 {
 public:
-	Vector3 globalPosition;
-	Vector3 scale;
+	Vector2 globalPosition;
+	Vector2 scale;
 	float moveSpeed;
 	GamesEngineeringBase::Window& env;
 
 	TestGameObject(GamesEngineeringBase::Window& canvas) : env(canvas) {
-		globalPosition = Vector3();
-		scale = Vector3(100, 100, 1); // a square
+		globalPosition = Vector2();
+		scale = Vector2(100, 100); // a square
 		moveSpeed = 600; // global position per second
 		OnStart();
 	}
@@ -31,8 +31,8 @@ public:
 private:
 	struct State
 	{
-		Vector3 globalPositionS;
-		Vector3 scaleS;
+		Vector2 globalPositionS;
+		Vector2 scaleS;
 	} prevState, curState;
 
 	State GetRenderState(const float& alpha) const;

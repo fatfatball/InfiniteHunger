@@ -1,10 +1,10 @@
 #pragma once
-#include "Vector3.h"
+#include "Vector2.h"
 #include <algorithm>
 
 struct AABB {
-    Vector3 min, max;
-    AABB(Vector3 min, Vector3 max){
+    Vector2 min, max;
+    AABB(Vector2 min, Vector2 max){
 		this->min = min;
 		this->max = max;
     }
@@ -17,18 +17,16 @@ struct AABB {
 
 	AABB GetIntersectionAABB(const AABB& other) const {
 		if (!Intersects(other)) {
-			return AABB(Vector3(0, 0, 0), Vector3(0, 0, 0));
+			return AABB(Vector2(0, 0), Vector2(0, 0));
 		}
 
-		Vector3 intersectionMin = Vector3(
+		Vector2 intersectionMin = Vector2(
 			std::max(min.x, other.min.x),
-			std::max(min.y, other.min.y),
-			std::max(min.w, other.min.w)
+			std::max(min.y, other.min.y)
 		);
-		Vector3 intersectionMax = Vector3(
+		Vector2 intersectionMax = Vector2(
 			std::min(max.x, other.max.x),
-			std::min(max.y, other.max.y),
-			std::min(max.w, other.max.w)
+			std::min(max.y, other.max.y)
 		);
 		return AABB(intersectionMin, intersectionMax);
 	}

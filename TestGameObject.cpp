@@ -7,7 +7,7 @@ void TestGameObject::OnStart() {
 }
 
 void TestGameObject::FixedUpdate(const float& dt) {
-	Vector3 input = Vector3();
+	Vector2 input = Vector2();
 	if (env.keyPressed(0x57)) { // W
 		input.y += -1;
 	}
@@ -62,7 +62,7 @@ void TestGameObject::RenderSelf(const float& alpha, const Camera& camera) {
 	ScreenAABB screenAABB = camera.GetScreenAABB(intersectionAABB);
 	for (int i = screenAABB.minX; i <= screenAABB.maxX; ++i) {
 		for (int j = screenAABB.minY; j <= screenAABB.maxY; ++j) {
-			Vector3 curGlobalPos = camera.GetGlobalPosition(i, j);
+			Vector2 curGlobalPos = camera.GetGlobalPosition(i, j);
 			float u = (curGlobalPos.x - thisAABB.min.x) / (thisAABB.max.x - thisAABB.min.x);
 			float v = (curGlobalPos.y - thisAABB.min.y) / (thisAABB.max.y - thisAABB.min.y);
 			ColorRGBA color = GetColorAt(u, v);
@@ -73,8 +73,8 @@ void TestGameObject::RenderSelf(const float& alpha, const Camera& camera) {
 
 AABB TestGameObject::GetAABB(const float& alpha) const {
 	State renderState = GetRenderState(alpha);
-	Vector3 min = Vector3(renderState.globalPositionS.x - renderState.scaleS.x / 2, renderState.globalPositionS.y - renderState.scaleS.y / 2, 1);
-	Vector3 max = Vector3(renderState.globalPositionS.x + renderState.scaleS.x / 2, renderState.globalPositionS.y + renderState.scaleS.y / 2, 1);
+	Vector2 min = Vector2(renderState.globalPositionS.x - renderState.scaleS.x / 2, renderState.globalPositionS.y - renderState.scaleS.y / 2);
+	Vector2 max = Vector2(renderState.globalPositionS.x + renderState.scaleS.x / 2, renderState.globalPositionS.y + renderState.scaleS.y / 2);
 	return AABB(min, max);
 }
 

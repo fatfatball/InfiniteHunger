@@ -144,7 +144,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
     <ClInclude Include="TestGameObject.h" />
-    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
