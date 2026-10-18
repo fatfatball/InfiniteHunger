@@ -1,4 +1,7 @@
 #pragma once
+#include <cmath>
+#include <stdexcept>
+
 class Vector3
 {
 public:
@@ -14,8 +17,8 @@ public:
 
 	Vector3(const float& x, const float& y, const float& w) {
 		this->x = x;
-		this->x = y;
-		this->x = w;
+		this->y = y;
+		this->w = w;
 	}
 
 	float& operator[](const int& index) {
@@ -26,10 +29,12 @@ public:
 			return y;
 		case 2:
 			return w;
+		default:
+			throw std::out_of_range("Index out of range for Vector3");
 		}
 	}
 
-	Vector3 operator+(const Vector3& other) {
+	Vector3 operator+(const Vector3& other) const {
 		Vector3 a = Vector3(x, y, w);
 		if (w != 0) {
 			a = Simplified();
@@ -45,7 +50,7 @@ public:
 		return a;
 	}
 
-	Vector3 operator-(const Vector3& other) {
+	Vector3 operator-(const Vector3& other) const {
 		Vector3 a = Vector3(x, y, w);
 		if (w != 0) {
 			a = Simplified();
@@ -62,16 +67,16 @@ public:
 	}
 
 	template<typename T>
-	Vector3 operator*(const T& val) {
+	Vector3 operator*(const T& val) const {
 		return Vector3(x * val, y * val, w);
 	}
 
 	float Length() const {
 		if (w == 0) {
-			return sqrt(x * x + y * y);
+			return std::sqrt(x * x + y * y);
 		}
 		else {
-			return sqrt(x * x + y * y) / w;
+			return std::sqrt(x * x + y * y) / w;
 		}
 	}
 
@@ -88,21 +93,26 @@ public:
 	Vector3 Normalized() const {
 		Vector3 res = Simplified();
 		float l = res.Length();
+		if (l < 1e-6f) {
+			return res;
+		}
 		res.x /= l;
 		res.y /= l;
 		return res;
 	}
 };
 
-class ColorRGB {
+class ColorRGBA {
 public:
 	unsigned char r = 0;
 	unsigned char g = 0;
 	unsigned char b = 0;
+	float a = 0;
 
-	ColorRGB() {
+	ColorRGBA() {
 		r = 0;
 		g = 0;
 		b = 0;
+		a = 0;
 	}
 };

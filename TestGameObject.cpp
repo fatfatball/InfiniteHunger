@@ -5,7 +5,7 @@ void TestGameObject::OnStart() {
 	curState = { globalPosition, scale };
 }
 
-void TestGameObject::FixedUpdate(float dt) {
+void TestGameObject::FixedUpdate(const float& dt) {
 	Vector3 input = Vector3();
 	if (env.keyPressed(0x57)) { // W
 		input.y += -1;
@@ -19,19 +19,28 @@ void TestGameObject::FixedUpdate(float dt) {
 	if (env.keyPressed(0x44)) { // D
 		input.x += 1;
 	}
-	input = input.Normalized();
+
+	if (input.Length() > 0) {
+		input = input.Normalized();
+	}
 
 	globalPosition = globalPosition + input * moveSpeed * dt;
 }
 
-void TestGameObject::VisualUpdate(float dt) {
+void TestGameObject::VisualUpdate(const float& dt) {
 
 }
 
-ColorRGB TestGameObject::GetColorAt(float u, float v) {
-	ColorRGB color;
+ColorRGBA TestGameObject::GetColorAt(const float& u, const float& v) const {
+	ColorRGBA color;
+	if (u > 1.0f || u < 0.0f || v > 1.0f || v < 0.0f) {
+		return color;
+	}
+
 	color.r = u * 255;
 	color.g = v * 255;
+	color.b = 0;
+	color.a = 1;
 
 	return color;
 }
@@ -42,7 +51,34 @@ void TestGameObject::UpdateStates() {
 	curState.scaleS = scale;
 }
 
-TestGameObject::State TestGameObject::GetRenderState(float alpha) {
+void TestGameObject::RenderSelf(const float& alpha, const Camera& camera) {
+	AABB thisAABB = GetAABB(alpha);
+	AABB cameraAABB = camera.GetAABB();
+	if (!thisAABB.Intersects(cameraAABB)) {
+		return;
+	}
+
+	AABB intersectionAABB = thisAABB.GetIntersectionAABB(cameraAABB);
+	ScreenAABB screenAABB = camera.GetScreenAABB(intersectionAABB);
+	for (int i = screenAABB.minX; i < screenAABB.maxX; ++i) {
+		for (int j = screenAABB.minY; j < screenAABB.maxY; ++j) {
+			Vector3 curGlobalPos = camera.GetGlobalPosition(i, j);
+			float u = (curGlobalPos.x - thisAABB.min.x) / (thisAABB.max.x - thisAABB.min.x);
+			float v = (curGlobalPos.y - thisAABB.min.y) / (thisAABB.max.y - thisAABB.min.y);
+			ColorRGBA color = GetColorAt(u, v);
+			camera.DrawOnCanvas(env, i, j, color);
+		}
+	}
+}
+
+AABB TestGameObject::GetAABB(const float& alpha) const {
+	State renderState = GetRenderState(alpha);
+	Vector3 min = Vector3(renderState.globalPositionS.x - renderState.scaleS.x / 2, renderState.globalPositionS.y - renderState.scaleS.y / 2, 1);
+	Vector3 max = Vector3(renderState.globalPositionS.x + renderState.scaleS.x / 2, renderState.globalPositionS.y + renderState.scaleS.y / 2, 1);
+	return AABB(min, max);
+}
+
+TestGameObject::State TestGameObject::GetRenderState(const float& alpha) const {
 	State renderState;
 	renderState.globalPositionS = prevState.globalPositionS * (1 - alpha) 
 		+ curState.globalPositionS * alpha;
