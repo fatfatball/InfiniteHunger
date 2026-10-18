@@ -1,4 +1,5 @@
 #include "TestGameObject.h"
+#include <algorithm>
 
 void TestGameObject::OnStart() {
 	prevState = { globalPosition, scale };
@@ -33,14 +34,13 @@ void TestGameObject::VisualUpdate(const float& dt) {
 
 ColorRGBA TestGameObject::GetColorAt(const float& u, const float& v) const {
 	ColorRGBA color;
-	if (u > 1.0f || u < 0.0f || v > 1.0f || v < 0.0f) {
-		return color;
-	}
+	float uu = std::clamp(u, 0.0f, 1.0f);
+	float vv = std::clamp(v, 0.0f, 1.0f);
 
-	color.r = u * 255;
-	color.g = v * 255;
+	color.r = uu * 255;
+	color.g = vv * 255;
 	color.b = 0;
-	color.a = 1;
+	color.a = 255;
 
 	return color;
 }
@@ -60,8 +60,8 @@ void TestGameObject::RenderSelf(const float& alpha, const Camera& camera) {
 
 	AABB intersectionAABB = thisAABB.GetIntersectionAABB(cameraAABB);
 	ScreenAABB screenAABB = camera.GetScreenAABB(intersectionAABB);
-	for (int i = screenAABB.minX; i < screenAABB.maxX; ++i) {
-		for (int j = screenAABB.minY; j < screenAABB.maxY; ++j) {
+	for (int i = screenAABB.minX; i <= screenAABB.maxX; ++i) {
+		for (int j = screenAABB.minY; j <= screenAABB.maxY; ++j) {
 			Vector3 curGlobalPos = camera.GetGlobalPosition(i, j);
 			float u = (curGlobalPos.x - thisAABB.min.x) / (thisAABB.max.x - thisAABB.min.x);
 			float v = (curGlobalPos.y - thisAABB.min.y) / (thisAABB.max.y - thisAABB.min.y);

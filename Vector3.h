@@ -76,7 +76,7 @@ public:
 			return std::sqrt(x * x + y * y);
 		}
 		else {
-			return std::sqrt(x * x + y * y) / w;
+			return std::sqrt(x * x + y * y) / std::fabs(w);
 		}
 	}
 
@@ -107,7 +107,7 @@ public:
 	unsigned char r = 0;
 	unsigned char g = 0;
 	unsigned char b = 0;
-	float a = 0;
+	unsigned char a = 0;
 
 	ColorRGBA() {
 		r = 0;

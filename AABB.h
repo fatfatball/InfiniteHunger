@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector3.h"
+#include <algorithm>
 
 struct AABB {
     Vector3 min, max;
@@ -34,8 +35,8 @@ struct AABB {
 };
 
 struct ScreenAABB { // Screen AABB is the AABB in screen space, pixel coordinates
-	unsigned short minX, minY, maxX, maxY;
-	ScreenAABB(unsigned short minX, unsigned short minY, unsigned short maxX, unsigned short maxY) {
+	short minX, minY, maxX, maxY;
+	ScreenAABB(short minX, short minY, short maxX, short maxY) {
 		this->minX = minX;
 		this->minY = minY;
 		this->maxX = maxX;

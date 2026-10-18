@@ -3,6 +3,7 @@
 #include "AABB.h"
 #include "Constants.h"
 #include "GamesEngineeringBase.h"
+#include <algorithm>
 
 class Camera
 {
@@ -20,23 +21,16 @@ public:
 	}
 
 	ScreenAABB GetScreenAABB(const AABB& aabb) const {
-		ScreenAABB screenAABB(0, 0, 0, 0);
-		screenAABB.minX = ((aabb.min.x - globalPosition.x) / (FOV * ASPECT_RATIO) * WINDOW_WIDTH) + WINDOW_WIDTH / 2;
-		screenAABB.minY = ((aabb.min.y - globalPosition.y) / FOV * WINDOW_HEIGHT) + WINDOW_HEIGHT / 2;
-		screenAABB.maxX = ((aabb.max.x - globalPosition.x) / (FOV * ASPECT_RATIO) * WINDOW_WIDTH) + 1 + WINDOW_WIDTH / 2;
-		screenAABB.maxY = ((aabb.max.y - globalPosition.y) / FOV * WINDOW_HEIGHT) + 1 + WINDOW_HEIGHT / 2;
-		if (screenAABB.minX < 0) {
-			screenAABB.minX = 0;
-		}
-		if (screenAABB.minY < 0) {
-			screenAABB.minY = 0;
-		}
-		if (screenAABB.maxX > WINDOW_WIDTH - 1) {
-			screenAABB.maxX = WINDOW_WIDTH - 1;
-		}
-		if (screenAABB.maxY > WINDOW_HEIGHT - 1) {
-			screenAABB.maxY = WINDOW_HEIGHT - 1;
-		}
+		float minX = (aabb.min.x - globalPosition.x) / (FOV * ASPECT_RATIO) * WINDOW_WIDTH + WINDOW_WIDTH / 2;
+		float minY = (aabb.min.y - globalPosition.y) / FOV * WINDOW_HEIGHT + WINDOW_HEIGHT / 2;
+		float maxX = (aabb.max.x - globalPosition.x) / (FOV * ASPECT_RATIO) * WINDOW_WIDTH + 1 + WINDOW_WIDTH / 2;
+		float maxY = (aabb.max.y - globalPosition.y) / FOV * WINDOW_HEIGHT + 1 + WINDOW_HEIGHT / 2;\
+
+		ScreenAABB screenAABB( 
+			std::clamp((short)minX, (short)0, (short)(WINDOW_WIDTH - 1)),
+			std::clamp((short)minY, (short)0, (short)(WINDOW_HEIGHT - 1)), 
+			std::clamp((short)maxX, (short)0, (short)(WINDOW_WIDTH - 1)),
+			std::clamp((short)maxY, (short)0, (short)(WINDOW_HEIGHT - 1)));
 		return screenAABB;
 	}
 
@@ -50,14 +44,19 @@ public:
 	}
 
 	void DrawOnCanvas(GamesEngineeringBase::Window& env, const int& x, const int& y, const ColorRGBA& color) const {
+		if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT) {
+			return;
+		}
+		
 		unsigned char* backBuffer = env.getBackBuffer();
 		int index = ((y * WINDOW_WIDTH) + x) * 3;
 		auto r = backBuffer[index];
 		auto g = backBuffer[index + 1];
 		auto b = backBuffer[index + 2];
-		backBuffer[index] = color.r * color.a + r * (1 - color.a);
-		backBuffer[index + 1] = color.g * color.a + g * (1 - color.a);
-		backBuffer[index + 2] = color.b * color.a + b * (1 - color.a);
+		float alpha = color.a / 255.0f;
+		backBuffer[index] = color.r * alpha + r * (1 - alpha);
+		backBuffer[index + 1] = color.g * alpha + g * (1 - alpha);
+		backBuffer[index + 2] = color.b * alpha + b * (1 - alpha);
 	}
 };
 

@@ -35,7 +35,7 @@ int main() {
 		frameTimeAccumulator += frameTime;
 
 #pragma region FixedUpdate
-		while (frameTimeAccumulator > FIXED_DELTATIME) {
+		while (frameTimeAccumulator >= FIXED_DELTATIME) {
 			// TODO: traverse the fixed_updated objects
 			// TODO: store the previous state
 			// TODO: update the current state using FIXED_DELTATIME
