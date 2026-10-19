@@ -10,7 +10,7 @@ class TestGameObject
 	{
 		Vector2 globalPositionS;
 		Vector2 scaleS;
-		float rotationS;
+		float rotationS = 0.f;
 	};
 public:
 	Vector2 globalPosition;
@@ -36,7 +36,8 @@ public:
 
 	void UpdateStates(); // to store the pos and scale into curState, and move the old curState to prevState
 	void RenderSelf(const float& alpha, const Camera& Camera);
-	AABB GetAABB(const float& alpha, const State& renderState) const;
+	AABB GetAABB(const float& alpha, const State& state) const;
+	State GetCurState() const { return curState; }
 
 private:
 	State prevState, curState;

@@ -97,17 +97,17 @@ void TestGameObject::RenderSelf(const float& alpha, const Camera& camera) {
 	}
 }
 
-AABB TestGameObject::GetAABB(const float& alpha, const State& renderState) const {
-	const float hx = renderState.scaleS.x / 2;
-	const float hy = renderState.scaleS.y / 2;
-	const float cosTheta = std::cos(renderState.rotationS);
-	const float sinTheta = std::sin(renderState.rotationS);
+AABB TestGameObject::GetAABB(const float& alpha, const State& state) const {
+	const float hx = state.scaleS.x / 2;
+	const float hy = state.scaleS.y / 2;
+	const float cosTheta = std::cos(state.rotationS);
+	const float sinTheta = std::sin(state.rotationS);
 
 	const float resX = std::abs(cosTheta * hx) + std::abs(sinTheta * hy);
 	const float resY = std::abs(sinTheta * hx) + std::abs(cosTheta * hy);
 
-	Vector2 min = Vector2(renderState.globalPositionS.x - resX, renderState.globalPositionS.y - resY);
-	Vector2 max = Vector2(renderState.globalPositionS.x + resX, renderState.globalPositionS.y + resY);
+	Vector2 min = Vector2(state.globalPositionS.x - resX, state.globalPositionS.y - resY);
+	Vector2 max = Vector2(state.globalPositionS.x + resX, state.globalPositionS.y + resY);
 	return AABB(min, max);
 }
 

@@ -3,6 +3,7 @@
 #include "TestGameObject.h"
 #include "Camera.h"
 #include <iostream>
+#include "List.h"
 
 int main() {
 	GamesEngineeringBase::Window canvas;

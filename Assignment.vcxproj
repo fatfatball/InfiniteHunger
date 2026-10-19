@@ -140,16 +140,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
-    <ClInclude Include="BaseGameObect.h" />
+    <ClInclude Include="BaseGameObject.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="TestGameObject.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BaseGameObect.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TestGameObject.cpp" />
   </ItemGroup>
