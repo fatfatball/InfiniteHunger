@@ -40,9 +40,9 @@ int main() {
 			// TODO: store the previous state
 			// TODO: update the current state using FIXED_DELTATIME
 			objPtr->FixedUpdate(FIXED_DELTATIME);
-			objPtr->UpdateStates();
 			frameTimeAccumulator -= FIXED_DELTATIME;
 		}
+		objPtr->UpdateStates();
 #pragma endregion
 
 #pragma region VisualUpdate

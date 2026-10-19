@@ -1,31 +1,41 @@
 #include "TestGameObject.h"
 #include <algorithm>
+#include "Math.h"
 
 void TestGameObject::OnStart() {
-	prevState = { globalPosition, scale };
-	curState = { globalPosition, scale };
+	prevState = { globalPosition, scale, rotation };
+	curState = { globalPosition, scale, rotation };
 }
 
 void TestGameObject::FixedUpdate(const float& dt) {
-	Vector2 input = Vector2();
+	Vector2 inputDir = Vector2();
 	if (env.keyPressed(0x57)) { // W
-		input.y += -1;
+		inputDir.y += -1;
 	}
 	if (env.keyPressed(0x41)) { // A
-		input.x += -1;
+		inputDir.x += -1;
 	}
 	if (env.keyPressed(0x53)) { // S
-		input.y += 1;
+		inputDir.y += 1;
 	}
 	if (env.keyPressed(0x44)) { // D
-		input.x += 1;
+		inputDir.x += 1;
 	}
 
-	if (input.Length() > 0) {
-		input = input.Normalized();
+	if (inputDir.Length() > 0) {
+		inputDir = inputDir.Normalized();
 	}
 
-	globalPosition = globalPosition + input * moveSpeed * dt;
+	float inputAngle = 0;
+	if (env.keyPressed(0x51)) { // Q
+		inputAngle += 1;
+	}
+	if (env.keyPressed(0x45)) { // E
+		inputAngle -= 1;
+	}
+
+	globalPosition = globalPosition + inputDir * moveSpeed * dt;
+	rotation = Math::WrapAngle(rotation + inputAngle * rotationSpeed * dt);
 }
 
 void TestGameObject::VisualUpdate(const float& dt) {
@@ -49,10 +59,12 @@ void TestGameObject::UpdateStates() {
 	prevState = curState;
 	curState.globalPositionS = globalPosition;
 	curState.scaleS = scale;
+	curState.rotationS = rotation;
 }
 
 void TestGameObject::RenderSelf(const float& alpha, const Camera& camera) {
-	AABB thisAABB = GetAABB(alpha);
+	State renderState = GetRenderState(alpha);
+	AABB thisAABB = GetAABB(alpha, renderState);
 	AABB cameraAABB = camera.GetAABB();
 	if (!thisAABB.Intersects(cameraAABB)) {
 		return;
@@ -60,28 +72,49 @@ void TestGameObject::RenderSelf(const float& alpha, const Camera& camera) {
 
 	AABB intersectionAABB = thisAABB.GetIntersectionAABB(cameraAABB);
 	ScreenAABB screenAABB = camera.GetScreenAABB(intersectionAABB);
+	const float cosTheta = std::cos(renderState.rotationS);
+	const float sinTheta = std::sin(renderState.rotationS);
+	Vector2 halfScale = renderState.scaleS * 0.5f;
+
 	for (int i = screenAABB.minX; i <= screenAABB.maxX; ++i) {
 		for (int j = screenAABB.minY; j <= screenAABB.maxY; ++j) {
 			Vector2 curGlobalPos = camera.GetGlobalPosition(i, j);
-			float u = (curGlobalPos.x - thisAABB.min.x) / (thisAABB.max.x - thisAABB.min.x);
-			float v = (curGlobalPos.y - thisAABB.min.y) / (thisAABB.max.y - thisAABB.min.y);
+			Vector2 localPos = curGlobalPos - renderState.globalPositionS;
+			Vector2 rotatedPos = Vector2(
+				cosTheta * localPos.x + sinTheta * localPos.y,
+				cosTheta * localPos.y - sinTheta * localPos.x
+			);
+
+			if (std::abs(rotatedPos.x) > halfScale.x || std::abs(rotatedPos.y) > halfScale.y) {
+				continue;
+			}
+
+			float u = rotatedPos.x / (halfScale.x * 2.0f) + 0.5f;
+			float v = rotatedPos.y / (halfScale.y * 2.0f) + 0.5f;
 			ColorRGBA color = GetColorAt(u, v);
 			camera.DrawOnCanvas(env, i, j, color);
 		}
 	}
 }
 
-AABB TestGameObject::GetAABB(const float& alpha) const {
-	State renderState = GetRenderState(alpha);
-	Vector2 min = Vector2(renderState.globalPositionS.x - renderState.scaleS.x / 2, renderState.globalPositionS.y - renderState.scaleS.y / 2);
-	Vector2 max = Vector2(renderState.globalPositionS.x + renderState.scaleS.x / 2, renderState.globalPositionS.y + renderState.scaleS.y / 2);
+AABB TestGameObject::GetAABB(const float& alpha, const State& renderState) const {
+	const float hx = renderState.scaleS.x / 2;
+	const float hy = renderState.scaleS.y / 2;
+	const float cosTheta = std::cos(renderState.rotationS);
+	const float sinTheta = std::sin(renderState.rotationS);
+
+	const float resX = std::abs(cosTheta * hx) + std::abs(sinTheta * hy);
+	const float resY = std::abs(sinTheta * hx) + std::abs(cosTheta * hy);
+
+	Vector2 min = Vector2(renderState.globalPositionS.x - resX, renderState.globalPositionS.y - resY);
+	Vector2 max = Vector2(renderState.globalPositionS.x + resX, renderState.globalPositionS.y + resY);
 	return AABB(min, max);
 }
 
 TestGameObject::State TestGameObject::GetRenderState(const float& alpha) const {
 	State renderState;
-	renderState.globalPositionS = prevState.globalPositionS * (1 - alpha) 
-		+ curState.globalPositionS * alpha;
-	renderState.scaleS = prevState.scaleS * (1 - alpha) + curState.scaleS * alpha;
+	renderState.globalPositionS = Math::Lerp(prevState.globalPositionS, curState.globalPositionS, alpha);
+	renderState.scaleS = Math::Lerp(prevState.scaleS, curState.scaleS, alpha);
+	renderState.rotationS = Math::LerpAngle(prevState.rotationS, curState.rotationS, alpha);
 	return renderState;
 }
