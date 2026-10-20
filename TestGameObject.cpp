@@ -5,15 +5,17 @@
 
 TestGameObject::TestGameObject(GamesEngineeringBase::Window& canvas) 
 : BaseGameObject(canvas) {
-	scale = Vector2(100, 100); // a square
+	scale = Vector2(500, 500); // a square
 	rotation = 0;
 	moveSpeed = 600; // global position per second
 	rotationSpeed = PI; // radians per second
+	renderOrder = RenderOrder::Third;
+	prevState = { globalPosition, scale, rotation };
+	curState = { globalPosition, scale, rotation };
 }
 
 void TestGameObject::OnStart() {
-	prevState = { globalPosition, scale, rotation };
-	curState = { globalPosition, scale, rotation };
+	
 }
 
 void TestGameObject::FixedUpdate(const float& dt) {
@@ -64,10 +66,10 @@ ColorRGBA TestGameObject::GetColorAt(const float& u, const float& v) const {
 	float uu = std::clamp(u, 0.0f, 1.0f);
 	float vv = std::clamp(v, 0.0f, 1.0f);
 
-	color.r = uu * 255;
-	color.g = vv * 255;
-	color.b = 0;
-	color.a = 255;
+	color.r = (unsigned char)(uu * 255);
+	color.g = (unsigned char)(vv * 255);
+	color.b = (unsigned char)0;
+	color.a = (unsigned char)255;
 
 	return color;
 }

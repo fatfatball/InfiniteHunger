@@ -4,6 +4,8 @@
 #include "Camera.h"
 #include <iostream>
 #include "List.h"
+#include "Scene.h"
+#include <memory>
 
 int main() {
 	GamesEngineeringBase::Window canvas;
@@ -14,10 +16,12 @@ int main() {
 	GamesEngineeringBase::Timer loopTimer = GamesEngineeringBase::Timer();
 	float frameTime;
 	float frameTimeAccumulator = 0;
-	TestGameObject* objPtr = new TestGameObject(canvas);
-
 	int frameCounter = 0;
 	float frameTimeCounter = 0;
+
+	Scene mainScene = Scene(canvas, camera);
+	mainScene.AddObject(std::make_shared<TestGameObject>(canvas));
+	bool prevBPressed = false;
 
 	while (running) {
 		frameTime = loopTimer.dt();
@@ -40,9 +44,9 @@ int main() {
 			// TODO: traverse the fixed_updated objects
 			// TODO: store the previous state
 			// TODO: update the current state using FIXED_DELTATIME
-			objPtr->FixedUpdate(FIXED_DELTATIME);
-			objPtr->UpdateStates();
 			// TODO: traverse the recycle-marked objects, delete them all
+			mainScene.FixedUpdateObjects(FIXED_DELTATIME);
+			mainScene.RecycleObjects();
 			frameTimeAccumulator -= FIXED_DELTATIME;
 		}
 #pragma endregion
@@ -53,26 +57,30 @@ int main() {
 		//	alpha = frameTimeAccumulator / FIXED_DELTATIME
 		//	renderState = prevState * (1.0 - alpha) + curState * alpha
 		// for visual-updated objects, just update
-		objPtr->VisualUpdate(frameTime);
+		mainScene.VisualUpdateObjects(frameTime);
 #pragma endregion
 
 #pragma region Render
 		canvas.clear();
 		// TODO: traverse the render-able objects, sort them by order, 
 		// then call render method respectively.
-		objPtr->RenderSelf(frameTimeAccumulator / FIXED_DELTATIME, camera);
+		mainScene.RenderObjects(frameTimeAccumulator / FIXED_DELTATIME);
 		canvas.present();
 #pragma endregion
 
-		// only for test, esc to close
-		if (canvas.keyPressed(0x1b)) {
+		// only for test
+		if (canvas.keyPressed(0x1b)) { // esc to close
 			running = false;
 		}
-	}
-	
-	if (objPtr != nullptr) {
-		delete objPtr;
-		objPtr = nullptr;
+		if (canvas.keyPressed(0x42)) { // B to spawn another test object
+			if (prevBPressed == false) {
+				mainScene.AddObject(std::make_shared<TestGameObject>(canvas));
+			}
+			prevBPressed = true;
+		}
+		else {
+			prevBPressed = false;
+		}
 	}
 	return 0;
 }

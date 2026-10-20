@@ -2,8 +2,10 @@
 #include "Vector2.h"
 #include <algorithm>
 
-struct AABB {
+struct AABB { 
+	// knwon issue: never check if max > min, or if AABB is so small that it can be ignored
     Vector2 min, max;
+
     AABB(Vector2 min, Vector2 max){
 		this->min = min;
 		this->max = max;

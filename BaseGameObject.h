@@ -4,10 +4,11 @@
 #include "AABB.h"
 #include "Camera.h"
 #include "Math.h"
-#include "Scene.h"
 
 // base class for all game objects, including:
 // trigger / renderable objects / spawner
+class Scene;
+
 class BaseGameObject
 {
 protected:
@@ -22,6 +23,7 @@ public:
 	bool isPendingDestroy = false;
 	GamesEngineeringBase::Window& env;
 	Scene* scene;
+	RenderOrder renderOrder;
 
 	Vector2 globalPosition = {};
 	Vector2 scale = {};
@@ -31,6 +33,7 @@ public:
 		isActive = true;
 		isPendingDestroy = false;
 		scene = nullptr;
+		renderOrder = RenderOrder::First;
 		globalPosition = Vector2();
 		scale = Vector2();
 		rotation = 0.f;
@@ -53,7 +56,10 @@ public:
 
 	virtual void RenderSelf(float alpha, const Camera& camera) {
 		State renderState = GetRenderState(alpha);
-		AABB thisAABB = GetAABB(alpha, renderState);
+		if (renderState.scaleS.Length() < 1) {
+			return;
+		}
+		AABB thisAABB = GetAABB(renderState);
 		AABB cameraAABB = camera.GetAABB();
 		if (!thisAABB.Intersects(cameraAABB)) {
 			return;
@@ -86,7 +92,7 @@ public:
 		}
 	}
 
-	AABB GetAABB(const float& alpha, const State& state) const {
+	AABB GetAABB(const State& state) const {
 		const float hx = state.scaleS.x / 2;
 		const float hy = state.scaleS.y / 2;
 		const float cosTheta = std::cos(state.rotationS);
@@ -98,6 +104,10 @@ public:
 		Vector2 min = Vector2(state.globalPositionS.x - resX, state.globalPositionS.y - resY);
 		Vector2 max = Vector2(state.globalPositionS.x + resX, state.globalPositionS.y + resY);
 		return AABB(min, max);
+	}
+
+	virtual AABB GetAABB() {
+		return GetAABB(curState);
 	}
 
 	State GetCurState() const {

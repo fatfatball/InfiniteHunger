@@ -47,6 +47,14 @@ public:
 			return;
 		}
 		
+		if (color.a == 255) {
+			env.draw(x, y, color.r, color.g, color.b);
+			return;
+		}
+		else if (color.a == 0) {
+			return;
+		}
+
 		unsigned char* backBuffer = env.getBackBuffer();
 		int index = ((y * WINDOW_WIDTH) + x) * 3;
 		auto r = backBuffer[index];
@@ -59,3 +67,8 @@ public:
 	}
 };
 
+enum class RenderOrder {
+	First,
+	Second,
+	Third,
+};
