@@ -38,7 +38,7 @@ public:
 		size = count;
 	}
 
-	List(const List& other) {
+	List(const List& other) requires std::is_copy_constructible_v<T> {
 		Reserve(other.size);
 		for (int i = 0; i < other.size; ++i) {
 			std::construct_at(data + i, other[i]);
@@ -73,7 +73,7 @@ public:
 		}
 	}
 
-	List& operator=(const List& other) {
+	List& operator=(const List& other) requires std::is_copy_constructible_v<T> {
 		if (this != &other) {
 			List tmp(other);
 			Swap(tmp);
@@ -190,7 +190,7 @@ public:
 		}
 	}
 
-	void PushBack(const T& element) {
+	void PushBack(const T& element) requires std::is_copy_constructible_v<T> {
 		if (size == capacity) {
 			T tmp = T(element);
 			GrowIfNeeded(size + 1);
@@ -204,7 +204,7 @@ public:
 
 	void PushBack(T&& element) {
 		if (size == capacity) {
-			T tmp(element);
+			T tmp(std::move(element));
 			GrowIfNeeded(size + 1);
 			std::construct_at(data + size, std::move(tmp));
 		}
@@ -232,7 +232,7 @@ public:
 		return true;
 	}
 
-	bool Insert(const T& element, int index) {
+	bool Insert(const T& element, int index) requires std::is_copy_constructible_v<T> {
 		if (index < 0 || index > size) {
 			return false;
 		}
@@ -242,6 +242,30 @@ public:
 		}
 
 		T tmp(element);
+		if (size == capacity) {
+			GrowIfNeeded(size + 1);
+		}
+
+		std::construct_at(data + size, std::move(data[size - 1]));
+		for (int i = size - 1; i > index; --i) {
+			data[i] = std::move(data[i - 1]);
+		}
+		data[index] = std::move(tmp);
+
+		++size;
+		return true;
+	}
+
+	bool Insert(T&& element, int index) {
+		if (index < 0 || index > size) {
+			return false;
+		}
+		if (index == size) {
+			PushBack(std::move(element));
+			return true;
+		}
+
+		T tmp(std::move(element));
 		if (size == capacity) {
 			GrowIfNeeded(size + 1);
 		}
