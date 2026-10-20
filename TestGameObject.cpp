@@ -1,6 +1,15 @@
 #include "TestGameObject.h"
 #include <algorithm>
 #include "Math.h"
+#include <iostream>
+
+TestGameObject::TestGameObject(GamesEngineeringBase::Window& canvas) 
+: BaseGameObject(canvas) {
+	scale = Vector2(100, 100); // a square
+	rotation = 0;
+	moveSpeed = 600; // global position per second
+	rotationSpeed = PI; // radians per second
+}
 
 void TestGameObject::OnStart() {
 	prevState = { globalPosition, scale, rotation };
@@ -34,12 +43,20 @@ void TestGameObject::FixedUpdate(const float& dt) {
 		inputAngle -= 1;
 	}
 
+	if (env.keyPressed(0x20)) { // space
+		isPendingDestroy = true;
+	}
+
 	globalPosition = globalPosition + inputDir * moveSpeed * dt;
 	rotation = Math::WrapAngle(rotation + inputAngle * rotationSpeed * dt);
 }
 
 void TestGameObject::VisualUpdate(const float& dt) {
 
+}
+
+void TestGameObject::OnDestroy() {
+	std::cout << "I'm destroyed!" << std::endl;
 }
 
 ColorRGBA TestGameObject::GetColorAt(const float& u, const float& v) const {
@@ -53,68 +70,4 @@ ColorRGBA TestGameObject::GetColorAt(const float& u, const float& v) const {
 	color.a = 255;
 
 	return color;
-}
-
-void TestGameObject::UpdateStates() {
-	prevState = curState;
-	curState.globalPositionS = globalPosition;
-	curState.scaleS = scale;
-	curState.rotationS = rotation;
-}
-
-void TestGameObject::RenderSelf(const float& alpha, const Camera& camera) {
-	State renderState = GetRenderState(alpha);
-	AABB thisAABB = GetAABB(alpha, renderState);
-	AABB cameraAABB = camera.GetAABB();
-	if (!thisAABB.Intersects(cameraAABB)) {
-		return;
-	}
-
-	AABB intersectionAABB = thisAABB.GetIntersectionAABB(cameraAABB);
-	ScreenAABB screenAABB = camera.GetScreenAABB(intersectionAABB);
-	const float cosTheta = std::cos(renderState.rotationS);
-	const float sinTheta = std::sin(renderState.rotationS);
-	Vector2 halfScale = renderState.scaleS * 0.5f;
-
-	for (int i = screenAABB.minX; i <= screenAABB.maxX; ++i) {
-		for (int j = screenAABB.minY; j <= screenAABB.maxY; ++j) {
-			Vector2 curGlobalPos = camera.GetGlobalPosition(i, j);
-			Vector2 localPos = curGlobalPos - renderState.globalPositionS;
-			Vector2 rotatedPos = Vector2(
-				cosTheta * localPos.x + sinTheta * localPos.y,
-				cosTheta * localPos.y - sinTheta * localPos.x
-			);
-
-			if (std::abs(rotatedPos.x) > halfScale.x || std::abs(rotatedPos.y) > halfScale.y) {
-				continue;
-			}
-
-			float u = rotatedPos.x / (halfScale.x * 2.0f) + 0.5f;
-			float v = rotatedPos.y / (halfScale.y * 2.0f) + 0.5f;
-			ColorRGBA color = GetColorAt(u, v);
-			camera.DrawOnCanvas(env, i, j, color);
-		}
-	}
-}
-
-AABB TestGameObject::GetAABB(const float& alpha, const State& state) const {
-	const float hx = state.scaleS.x / 2;
-	const float hy = state.scaleS.y / 2;
-	const float cosTheta = std::cos(state.rotationS);
-	const float sinTheta = std::sin(state.rotationS);
-
-	const float resX = std::abs(cosTheta * hx) + std::abs(sinTheta * hy);
-	const float resY = std::abs(sinTheta * hx) + std::abs(cosTheta * hy);
-
-	Vector2 min = Vector2(state.globalPositionS.x - resX, state.globalPositionS.y - resY);
-	Vector2 max = Vector2(state.globalPositionS.x + resX, state.globalPositionS.y + resY);
-	return AABB(min, max);
-}
-
-TestGameObject::State TestGameObject::GetRenderState(const float& alpha) const {
-	State renderState;
-	renderState.globalPositionS = Math::Lerp(prevState.globalPositionS, curState.globalPositionS, alpha);
-	renderState.scaleS = Math::Lerp(prevState.scaleS, curState.scaleS, alpha);
-	renderState.rotationS = Math::LerpAngle(prevState.rotationS, curState.rotationS, alpha);
-	return renderState;
 }

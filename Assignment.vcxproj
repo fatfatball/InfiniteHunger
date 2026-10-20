@@ -146,11 +146,13 @@
     <ClInclude Include="GamesEngineeringBase.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="TestGameObject.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TestGameObject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

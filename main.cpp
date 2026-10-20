@@ -41,9 +41,10 @@ int main() {
 			// TODO: store the previous state
 			// TODO: update the current state using FIXED_DELTATIME
 			objPtr->FixedUpdate(FIXED_DELTATIME);
+			objPtr->UpdateStates();
+			// TODO: traverse the recycle-marked objects, delete them all
 			frameTimeAccumulator -= FIXED_DELTATIME;
 		}
-		objPtr->UpdateStates();
 #pragma endregion
 
 #pragma region VisualUpdate
@@ -61,10 +62,6 @@ int main() {
 		// then call render method respectively.
 		objPtr->RenderSelf(frameTimeAccumulator / FIXED_DELTATIME, camera);
 		canvas.present();
-#pragma endregion
-
-#pragma region RecycleMarkedObjects
-		// TODO: traverse the recycle-marked objects, delete them all
 #pragma endregion
 
 		// only for test, esc to close
