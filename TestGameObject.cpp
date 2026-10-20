@@ -9,6 +9,7 @@ TestGameObject::TestGameObject(GamesEngineeringBase::Window& canvas)
 	rotation = 0;
 	moveSpeed = 600; // global position per second
 	rotationSpeed = PI; // radians per second
+	zoomSpeed = 300; // global position per second
 	renderOrder = RenderOrder::Third;
 	prevState = { globalPosition, scale, rotation };
 	curState = { globalPosition, scale, rotation };
@@ -45,12 +46,28 @@ void TestGameObject::FixedUpdate(const float& dt) {
 		inputAngle -= 1;
 	}
 
+	float inputZoomH = 0;
+	float inputZoomV = 0;
+	if (env.keyPressed(0x5a)) { // z
+		inputZoomH += 1;
+	}
+	if (env.keyPressed(0x58)) { // x
+		inputZoomH -= 1;
+	}
+	if (env.keyPressed(0x43)) { // c
+		inputZoomV += 1;
+	}
+	if (env.keyPressed(0x56)) { // v
+		inputZoomV -= 1;
+	}
+
 	if (env.keyPressed(0x20)) { // space
 		isPendingDestroy = true;
 	}
 
 	globalPosition = globalPosition + inputDir * moveSpeed * dt;
 	rotation = Math::WrapAngle(rotation + inputAngle * rotationSpeed * dt);
+	scale = scale + Vector2(inputZoomH * zoomSpeed * dt, inputZoomV * zoomSpeed * dt);
 }
 
 void TestGameObject::VisualUpdate(const float& dt) {

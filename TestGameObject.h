@@ -9,6 +9,7 @@ class TestGameObject : public BaseGameObject {
 public:
 	float moveSpeed;
 	float rotationSpeed;
+	float zoomSpeed;
 
 	TestGameObject(GamesEngineeringBase::Window& canvas);
 
