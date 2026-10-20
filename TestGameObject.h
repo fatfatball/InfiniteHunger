@@ -4,6 +4,7 @@
 #include "AABB.h"
 #include "Camera.h"
 #include "BaseGameObject.h"
+#include "SmallStructs.h"
 
 class TestGameObject : public BaseGameObject {
 public:

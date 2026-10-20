@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector2.h"
 #include <algorithm>
+// AABB and ScreenAABB
 
 struct AABB { 
 	// knwon issue: never check if max > min, or if AABB is so small that it can be ignored

@@ -34,38 +34,15 @@ void Scene::VisualUpdateObjects(float dt) {
 
 void Scene::RenderObjects(const float& alpha) {
 	int size = objects.GetSize();
-	List<std::shared_ptr<BaseGameObject>> firstOrder;
-	List<std::shared_ptr<BaseGameObject>> secondOrder;
-	List<std::shared_ptr<BaseGameObject>> thirdOrder;
-	
-	for (int i = 0; i < size; ++i) {
-		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
-			continue;
+	for (int order = 0; order < 3; ++order) {
+		for (int i = 0; i < size; ++i) {
+			if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
+				continue;
+			}
+			if (objects[i]->renderOrder == order) {
+				objects[i]->RenderSelf(alpha, camera);
+			}
 		}
-
-		switch (objects[i]->renderOrder) {
-		case RenderOrder::First:
-			firstOrder.PushBack(objects[i]);
-			break;
-		case RenderOrder::Second:
-			secondOrder.PushBack(objects[i]);
-			break;
-		case RenderOrder::Third:
-			thirdOrder.PushBack(objects[i]);
-			break;
-		default:
-			break;
-		}
-	}
-
-	for (int i = 0; i < firstOrder.GetSize(); ++i) {
-		firstOrder[i]->RenderSelf(alpha, camera);
-	}
-	for (int i = 0; i < secondOrder.GetSize(); ++i) {
-		secondOrder[i]->RenderSelf(alpha, camera);
-	}
-	for (int i = 0; i < thirdOrder.GetSize(); ++i) {
-		thirdOrder[i]->RenderSelf(alpha, camera);
 	}
 }
 

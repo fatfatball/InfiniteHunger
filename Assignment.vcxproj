@@ -147,6 +147,7 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SmallStructs.h" />
     <ClInclude Include="TestGameObject.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>

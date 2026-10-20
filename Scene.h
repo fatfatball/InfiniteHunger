@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include <memory>
 
+// a scene contains lots of objects, and manage their life circles
 class Scene{
 private:
 	List<std::shared_ptr<BaseGameObject>> objects;

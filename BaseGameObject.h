@@ -4,6 +4,7 @@
 #include "AABB.h"
 #include "Camera.h"
 #include "Math.h"
+#include "SmallStructs.h"
 
 // base class for all game objects, including:
 // trigger / renderable objects / spawner
@@ -26,7 +27,7 @@ public:
 	RenderOrder renderOrder;
 
 	Vector2 globalPosition = {};
-	Vector2 scale = {}; // should be positive, negative means flipped
+	Vector2 scale = {}; // negative means flipped; directly represents the volume by global axis
 	float rotation = 0.f; // in rad, 0 is facing right, pi/2 is facing up
 
 	BaseGameObject(GamesEngineeringBase::Window& canvas) : env(canvas) {
@@ -59,38 +60,48 @@ public:
 		if (renderState.scaleS.Length() < 1) {
 			return;
 		}
+		// check if this object intersects with camera's view
 		AABB thisAABB = GetAABB(renderState);
 		AABB cameraAABB = camera.GetAABB();
 		if (!thisAABB.Intersects(cameraAABB)) {
 			return;
 		}
 
+		// get the intersected AABB, traverse every pixel to draw
 		AABB intersectionAABB = thisAABB.GetIntersectionAABB(cameraAABB);
 		ScreenAABB screenAABB = camera.GetScreenAABB(intersectionAABB);
+		// pre calculate some values
 		const float cosTheta = std::cos(renderState.rotationS);
 		const float sinTheta = std::sin(renderState.rotationS);
 		Vector2 halfScale = {
 			std::abs(renderState.scaleS.x * 0.5f),
 			std::abs(renderState.scaleS.y * 0.5f)
 		};
+		Vector2 invScale = { 1 / renderState.scaleS.x , 1 / renderState.scaleS.y };
+		unsigned char* backBuffer = env.getBackBuffer();
+		Vector2 beginPos = camera.GetGlobalPosition(screenAABB.minX, screenAABB.minY);
+		beginPos = beginPos + camera.globalPosition - renderState.globalPositionS;
 
-		for (int i = screenAABB.minX; i <= screenAABB.maxX; ++i) {
-			for (int j = screenAABB.minY; j <= screenAABB.maxY; ++j) {
-				Vector2 curGlobalPos = camera.GetGlobalPosition(i, j);
-				Vector2 localPos = curGlobalPos - renderState.globalPositionS;
-				Vector2 rotatedPos = Vector2(
-					cosTheta * localPos.x + sinTheta * localPos.y,
-					cosTheta * localPos.y - sinTheta * localPos.x
-				);
+		Vector2 localPos, rotatedPos, offset;
+		float u, v;
+		ColorRGBA color;
+		for (int j = screenAABB.minY; j <= screenAABB.maxY; ++j) {
+			for (int i = screenAABB.minX; i <= screenAABB.maxX; ++i) {
+				offset.x = (i - screenAABB.minX) * STEP_X;
+				offset.y = (j - screenAABB.minY) * STEP_Y;
+				localPos = beginPos + offset;
+				// rotate -theta to get to the pos on texture
+				rotatedPos.x = cosTheta * localPos.x + sinTheta * localPos.y;
+				rotatedPos.y = cosTheta * localPos.y - sinTheta * localPos.x;
 
 				if (std::abs(rotatedPos.x) > halfScale.x || std::abs(rotatedPos.y) > halfScale.y) {
 					continue;
 				}
 
-				float u = rotatedPos.x / renderState.scaleS.x + 0.5f;
-				float v = rotatedPos.y / renderState.scaleS.y + 0.5f;
-				ColorRGBA color = GetColorAt(u, v);
-				camera.DrawOnCanvas(env, i, j, color);
+				u = rotatedPos.x * invScale.x + 0.5f;
+				v = rotatedPos.y * invScale.y + 0.5f;
+				color = GetColorAt(u, v);
+				camera.DrawOnCanvas(env, backBuffer, i, j, color);
 			}
 		}
 	}

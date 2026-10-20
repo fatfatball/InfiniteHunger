@@ -9,7 +9,7 @@
 
 int main() {
 	GamesEngineeringBase::Window canvas;
-	canvas.create(1280, 720, "test_window_name");
+	canvas.create(WINDOW_WIDTH, WINDOW_HEIGHT, "test_window_name");
 	bool running = true;
 	Camera camera;
 
@@ -36,10 +36,10 @@ int main() {
 		frameTimeCounter += frameTime;
 		if (frameTimeCounter > 1.0f) {
 			std::cout << "FPS: " << frameCounter / frameTimeCounter << std::endl;
-			std::cout << "fixed update time: " << fixedUpdateTime << std::endl;
-			std::cout << "clear time: " << clearTime << std::endl;
-			std::cout << "render time: " << renderTime << std::endl;
-			std::cout << "present time: " << presentTime << std::endl;
+			std::cout << "fixed update time: " << fixedUpdateTime / frameTimeCounter << std::endl;
+			std::cout << "clear time: " << clearTime / frameTimeCounter << std::endl;
+			std::cout << "render time: " << renderTime / frameTimeCounter << std::endl;
+			std::cout << "present time: " << presentTime / frameTimeCounter << std::endl;
 			frameTimeCounter = 0;
 			frameCounter = 0;
 			fixedUpdateTime = 0;
@@ -58,23 +58,19 @@ int main() {
 #pragma region FixedUpdate
 		performanceTestTimer.reset();
 		while (frameTimeAccumulator >= FIXED_DELTATIME) {
-			// TODO: traverse the fixed_updated objects
-			// TODO: store the previous state
-			// TODO: update the current state using FIXED_DELTATIME
-			// TODO: traverse the recycle-marked objects, delete them all
+			// traverse the fixed_updated objects
+			// store the previous state
+			// update the current state using FIXED_DELTATIME
 			mainScene.FixedUpdateObjects(FIXED_DELTATIME);
-			mainScene.RecycleObjects();
+			// traverse the recycle-marked objects, delete them all
+			mainScene.RecycleObjects(); 
 			frameTimeAccumulator -= FIXED_DELTATIME;
 		}
 		fixedUpdateTime += performanceTestTimer.dt();
 #pragma endregion
 
 #pragma region VisualUpdate
-		// TODO: traverse the objects, update them by frameTime
-		// for fixed-updated objects, use interpolation: 
-		//	alpha = frameTimeAccumulator / FIXED_DELTATIME
-		//	renderState = prevState * (1.0 - alpha) + curState * alpha
-		// for visual-updated objects, just update
+		// traverse the objects, update them by frameTime
 		mainScene.VisualUpdateObjects(frameTime);
 #pragma endregion
 
@@ -82,7 +78,7 @@ int main() {
 		performanceTestTimer.reset();
 		canvas.clear();
 		clearTime += performanceTestTimer.dt();
-		// TODO: traverse the render-able objects, sort them by order, 
+		// traverse the render-able objects, sort them by order, 
 		// then call render method respectively.
 		mainScene.RenderObjects(frameTimeAccumulator / FIXED_DELTATIME);
 		renderTime += performanceTestTimer.dt();
