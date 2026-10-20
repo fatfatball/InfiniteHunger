@@ -13,11 +13,17 @@ int main() {
 	bool running = true;
 	Camera camera;
 
-	GamesEngineeringBase::Timer loopTimer = GamesEngineeringBase::Timer();
+	GamesEngineeringBase::Timer loopTimer;
 	float frameTime;
 	float frameTimeAccumulator = 0;
 	int frameCounter = 0;
 	float frameTimeCounter = 0;
+
+	GamesEngineeringBase::Timer performanceTestTimer;
+	float fixedUpdateTime = 0;
+	float clearTime = 0;
+	float renderTime = 0;
+	float presentTime = 0;
 
 	Scene mainScene = Scene(canvas, camera);
 	mainScene.AddObject(std::make_shared<TestGameObject>(canvas));
@@ -26,13 +32,23 @@ int main() {
 	while (running) {
 		frameTime = loopTimer.dt();
 
+#pragma region PerformanceDetect
 		frameTimeCounter += frameTime;
-		if (frameTimeCounter > 0.5f) {
+		if (frameTimeCounter > 1.0f) {
 			std::cout << "FPS: " << frameCounter / frameTimeCounter << std::endl;
+			std::cout << "fixed update time: " << fixedUpdateTime << std::endl;
+			std::cout << "clear time: " << clearTime << std::endl;
+			std::cout << "render time: " << renderTime << std::endl;
+			std::cout << "present time: " << presentTime << std::endl;
 			frameTimeCounter = 0;
 			frameCounter = 0;
+			fixedUpdateTime = 0;
+			clearTime = 0;
+			renderTime = 0;
+			presentTime = 0;
 		}
 		frameCounter += 1;
+#pragma endregion
 
 		if (frameTime > 0.1f) {
 			frameTime = 0.1f; // to avoid enormous dt
@@ -40,6 +56,7 @@ int main() {
 		frameTimeAccumulator += frameTime;
 
 #pragma region FixedUpdate
+		performanceTestTimer.reset();
 		while (frameTimeAccumulator >= FIXED_DELTATIME) {
 			// TODO: traverse the fixed_updated objects
 			// TODO: store the previous state
@@ -49,6 +66,7 @@ int main() {
 			mainScene.RecycleObjects();
 			frameTimeAccumulator -= FIXED_DELTATIME;
 		}
+		fixedUpdateTime += performanceTestTimer.dt();
 #pragma endregion
 
 #pragma region VisualUpdate
@@ -61,14 +79,18 @@ int main() {
 #pragma endregion
 
 #pragma region Render
+		performanceTestTimer.reset();
 		canvas.clear();
+		clearTime += performanceTestTimer.dt();
 		// TODO: traverse the render-able objects, sort them by order, 
 		// then call render method respectively.
 		mainScene.RenderObjects(frameTimeAccumulator / FIXED_DELTATIME);
+		renderTime += performanceTestTimer.dt();
 		canvas.present();
+		presentTime += performanceTestTimer.dt();
 #pragma endregion
 
-		// only for test
+#pragma region OnlyForTest
 		if (canvas.keyPressed(0x1b)) { // esc to close
 			running = false;
 		}
@@ -81,6 +103,7 @@ int main() {
 		else {
 			prevBPressed = false;
 		}
+#pragma endregion
 	}
 	return 0;
 }

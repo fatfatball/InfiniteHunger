@@ -26,7 +26,7 @@ public:
 	RenderOrder renderOrder;
 
 	Vector2 globalPosition = {};
-	Vector2 scale = {};
+	Vector2 scale = {}; // should be positive, negative means flipped
 	float rotation = 0.f; // in rad, 0 is facing right, pi/2 is facing up
 
 	BaseGameObject(GamesEngineeringBase::Window& canvas) : env(canvas) {
@@ -69,7 +69,10 @@ public:
 		ScreenAABB screenAABB = camera.GetScreenAABB(intersectionAABB);
 		const float cosTheta = std::cos(renderState.rotationS);
 		const float sinTheta = std::sin(renderState.rotationS);
-		Vector2 halfScale = renderState.scaleS * 0.5f;
+		Vector2 halfScale = {
+			std::abs(renderState.scaleS.x * 0.5f),
+			std::abs(renderState.scaleS.y * 0.5f)
+		};
 
 		for (int i = screenAABB.minX; i <= screenAABB.maxX; ++i) {
 			for (int j = screenAABB.minY; j <= screenAABB.maxY; ++j) {
@@ -84,8 +87,8 @@ public:
 					continue;
 				}
 
-				float u = rotatedPos.x / (halfScale.x * 2.0f) + 0.5f;
-				float v = rotatedPos.y / (halfScale.y * 2.0f) + 0.5f;
+				float u = rotatedPos.x / renderState.scaleS.x + 0.5f;
+				float v = rotatedPos.y / renderState.scaleS.y + 0.5f;
 				ColorRGBA color = GetColorAt(u, v);
 				camera.DrawOnCanvas(env, i, j, color);
 			}
@@ -93,8 +96,8 @@ public:
 	}
 
 	AABB GetAABB(const State& state) const {
-		const float hx = state.scaleS.x / 2;
-		const float hy = state.scaleS.y / 2;
+		const float hx = std::abs(state.scaleS.x / 2);
+		const float hy = std::abs(state.scaleS.y / 2);
 		const float cosTheta = std::cos(state.rotationS);
 		const float sinTheta = std::sin(state.rotationS);
 
