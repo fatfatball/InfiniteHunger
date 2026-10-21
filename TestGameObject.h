@@ -18,6 +18,7 @@ public:
 	void FixedUpdate(const float& dt) override;
 	void VisualUpdate(const float& dt) override;
 	void OnDestroy() override;
-	ColorRGBA GetColorAt(const float& u, const float& v) const override; // sample the texture
+	inline ColorRGBA GetColorAt(const float& u, const float& v) const override; // sample the texture
+	inline unsigned char GetAlphaAt(const float& u, const float&) const override;
 };
 

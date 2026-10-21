@@ -5,7 +5,7 @@
 
 TestGameObject::TestGameObject(GamesEngineeringBase::Window& canvas) 
 : BaseGameObject(canvas) {
-	scale = Vector2(500, 500); // a square
+	scale = Vector2(600, 600); // a square
 	rotation = 0;
 	moveSpeed = 600; // global position per second
 	rotationSpeed = PI; // radians per second
@@ -86,7 +86,12 @@ ColorRGBA TestGameObject::GetColorAt(const float& u, const float& v) const {
 	color.r = (unsigned char)(uu * 255);
 	color.g = (unsigned char)(vv * 255);
 	color.b = (unsigned char)0;
-	color.a = (unsigned char)255;
+	color.a = GetAlphaAt(u, v);
 
 	return color;
+}
+
+unsigned char TestGameObject::GetAlphaAt(const float& u, const float&) const
+{
+	return 127;
 }

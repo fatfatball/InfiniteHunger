@@ -5,14 +5,22 @@
 #include "GamesEngineeringBase.h"
 #include <algorithm>
 #include "SmallStructs.h"
+#include <climits>
 
 class Camera
 {
 public:
 	Vector2 globalPosition;
+	short* depthGraph; // smaller means more to the front, only for objects less than 0x7F7F
 
 	Camera() {
 		globalPosition = Vector2();
+		depthGraph = new short[WINDOW_WIDTH * WINDOW_HEIGHT];
+		ClearDepthGraph();
+	}
+
+	~Camera() {
+		delete[] depthGraph;
 	}
 
 	inline AABB GetAABB() const {
@@ -67,5 +75,9 @@ public:
 		backBuffer[index] = color.r * alpha + r * beta;
 		backBuffer[index + 1] = color.g * alpha + g * beta;
 		backBuffer[index + 2] = color.b * alpha + b * beta;
+	}
+
+	void ClearDepthGraph() const {
+		memset(depthGraph, 0x7F, WINDOW_WIDTH * WINDOW_HEIGHT * sizeof(short));
 	}
 };

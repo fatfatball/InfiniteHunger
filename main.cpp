@@ -26,7 +26,6 @@ int main() {
 	float presentTime = 0;
 
 	Scene mainScene = Scene(canvas, camera);
-	mainScene.AddObject(std::make_shared<TestGameObject>(canvas));
 	bool prevBPressed = false;
 
 	while (running) {
@@ -50,8 +49,8 @@ int main() {
 		frameCounter += 1;
 #pragma endregion
 
-		if (frameTime > 0.1f) {
-			frameTime = 0.1f; // to avoid enormous dt
+		if (frameTime > 0.1f) { // to avoid enormous dt
+			frameTime = 0.1f;
 		}
 		frameTimeAccumulator += frameTime;
 

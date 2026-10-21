@@ -34,13 +34,29 @@ void Scene::VisualUpdateObjects(float dt) {
 
 void Scene::RenderObjects(const float& alpha) {
 	int size = objects.GetSize();
+	camera.ClearDepthGraph();
+	short depth = 0;
+	// depth test
+	for (int order = 2; order >= 0; --order) {
+		for (int i = size - 1; i >= 0; --i) {
+			if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
+				continue;
+			}
+			if (objects[i]->renderOrder == order) {
+				objects[i]->DepthTest(alpha, camera, depth);
+				++depth;
+			}
+		}
+	}
+
 	for (int order = 0; order < 3; ++order) {
 		for (int i = 0; i < size; ++i) {
 			if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 				continue;
 			}
 			if (objects[i]->renderOrder == order) {
-				objects[i]->RenderSelf(alpha, camera);
+				--depth;
+				objects[i]->RenderSelf(alpha, camera, depth);
 			}
 		}
 	}
@@ -56,4 +72,3 @@ void Scene::RecycleObjects() {
 		objects.Erase(i);
 	}
 }
-

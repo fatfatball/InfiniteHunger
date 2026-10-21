@@ -7,6 +7,8 @@ struct AABB {
 	// knwon issue: never check if max > min, or if AABB is so small that it can be ignored
     Vector2 min, max;
 
+	AABB() :min(), max() {}
+
     AABB(Vector2 min, Vector2 max){
 		this->min = min;
 		this->max = max;
@@ -32,6 +34,12 @@ struct AABB {
 			std::min(max.y, other.max.y)
 		);
 		return AABB(intersectionMin, intersectionMax);
+	}
+
+	bool IsInside(const Vector2 point) const {
+		bool xInside = (point.x <= max.x) && (point.x >= min.x);
+		bool yInside = (point.y <= max.y) && (point.y >= min.y);
+		return xInside && yInside;
 	}
 };
 
