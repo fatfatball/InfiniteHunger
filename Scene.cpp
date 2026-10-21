@@ -34,6 +34,8 @@ void Scene::VisualUpdateObjects(float dt) {
 
 void Scene::RenderObjects(const float& alpha) {
 	int size = objects.GetSize();
+	renderedItems.Clear();
+	renderedItems.Reserve(size);
 	camera.ClearDepthGraph();
 	short depth = 0;
 	// depth test
@@ -43,20 +45,25 @@ void Scene::RenderObjects(const float& alpha) {
 				continue;
 			}
 			if (objects[i]->renderOrder == order) {
+				objects[i]->UpdateRenderState(alpha);
 				objects[i]->DepthTest(alpha, camera, depth);
+				renderedItems.PushBack({ objects[i].get() , depth });
 				++depth;
 			}
 		}
 	}
 
-	for (int order = 0; order < 3; ++order) {
-		for (int i = 0; i < size; ++i) {
-			if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
-				continue;
-			}
-			if (objects[i]->renderOrder == order) {
-				--depth;
-				objects[i]->RenderSelf(alpha, camera, depth);
+	 // render in order
+	 // first slice screen into tiles, then render each tile
+	ScreenAABB renderTile = { 0, 0, 0, 0 };
+	for (short yPos = 0; yPos <= WINDOW_HEIGHT; yPos += RENDER_TILE_HEIGHT) {
+		for (short xPos = 0; xPos <= WINDOW_WIDTH; xPos += RENDER_TILE_WIDTH) {
+			renderTile.minX = xPos;
+			renderTile.maxX = std::min(xPos + RENDER_TILE_WIDTH - 1, WINDOW_WIDTH - 1);
+			renderTile.minY = yPos;
+			renderTile.maxY = std::min(yPos + RENDER_TILE_HEIGHT - 1, WINDOW_HEIGHT - 1);
+			for (int i = 0; i < renderedItems.GetSize(); ++i) {
+				renderedItems[i].objPtr->RenderSelf(alpha, camera, renderedItems[i].depth, renderTile);
 			}
 		}
 	}

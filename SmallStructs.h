@@ -1,13 +1,14 @@
 #pragma once
 
+class BaseGameObject;
+
 enum RenderOrder {
 	First,
 	Second,
 	Third,
 };
 
-class ColorRGBA {
-public:
+struct ColorRGBA {
 	unsigned char r = 0;
 	unsigned char g = 0;
 	unsigned char b = 0;
@@ -19,4 +20,9 @@ public:
 		b = 0;
 		a = 0;
 	}
+};
+
+struct RenderedItem {
+	BaseGameObject* objPtr = nullptr;
+	short depth = 0x7fff;
 };

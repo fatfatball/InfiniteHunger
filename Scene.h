@@ -4,6 +4,7 @@
 #include "List.h"
 #include "Camera.h"
 #include <memory>
+#include "SmallStructs.h"
 
 // a scene contains lots of objects, and manage their life circles
 class Scene{
@@ -11,6 +12,7 @@ private:
 	List<std::shared_ptr<BaseGameObject>> objects;
 	GamesEngineeringBase::Window& canvas;
 	Camera& camera;
+	List<RenderedItem> renderedItems;
 
 public:
 	Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(window), camera(camera) {}

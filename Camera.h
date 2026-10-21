@@ -39,7 +39,8 @@ public:
 			(short)std::clamp(minX, 0.f, (WINDOW_WIDTH - 1.f)),
 			(short)std::clamp(minY, 0.f, (WINDOW_HEIGHT - 1.f)),
 			(short)std::clamp(maxX, 0.f, (WINDOW_WIDTH - 1.f)),
-			(short)std::clamp(maxY, 0.f, (WINDOW_HEIGHT - 1.f)));
+			(short)std::clamp(maxY, 0.f, (WINDOW_HEIGHT - 1.f))
+		);
 		return screenAABB;
 	}
 
@@ -79,5 +80,12 @@ public:
 
 	void ClearDepthGraph() const {
 		memset(depthGraph, 0x7F, WINDOW_WIDTH * WINDOW_HEIGHT * sizeof(short));
+	}
+
+	AABB ScreenAABB2AABB(const ScreenAABB& screenAABB) const {
+		return AABB{
+			GetGlobalPosition(screenAABB.minX, screenAABB.minY),
+			GetGlobalPosition(screenAABB.maxX, screenAABB.maxY)
+		};
 	}
 };

@@ -26,6 +26,18 @@ int main() {
 	float presentTime = 0;
 
 	Scene mainScene = Scene(canvas, camera);
+#pragma region TestingObjects
+	// really a disaster when it's semi-transparent. as a ref, 13.3 fps
+	// fps can reach 77 when it's not transparent, good!
+	srand(time(0));
+	for (int i = 0; i < 500; ++i) {
+		auto obj = std::make_shared<TestGameObject>(canvas);
+		obj->globalPosition = { (float)(rand() % 1024 - 512), (float)(rand() % 768 - 384) };
+		mainScene.AddObject(std::move(obj));
+	}
+#pragma endregion
+
+
 	bool prevBPressed = false;
 
 	while (running) {

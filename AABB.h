@@ -51,4 +51,23 @@ struct ScreenAABB { // Screen AABB is the AABB in screen space, pixel coordinate
 		this->maxX = maxX;
 		this->maxY = maxY;
 	}
+
+	bool Intersects(const ScreenAABB& other) const {
+		bool xOverlap = (minX <= other.maxX) && (maxX >= other.minX);
+		bool yOverlap = (minY <= other.maxY) && (maxY >= other.minY);
+		return xOverlap && yOverlap;
+	}
+
+	ScreenAABB GetIntersectionScreenAABB(const ScreenAABB& other) const {
+		if (!Intersects(other)) {
+			return ScreenAABB{ 0,0,0,0 };
+		}
+
+		return ScreenAABB{ 
+			std::max(minX, other.minX),
+			std::max(minY, other.minY),
+			std::min(maxX, other.maxX),
+			std::min(maxY, other.maxY),
+		};
+	}
 };

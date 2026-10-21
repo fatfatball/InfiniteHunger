@@ -56,29 +56,20 @@ public:
 		curState.rotationS = rotation;
 	}
 
-	virtual void DepthTest(float alpha, const Camera& camera, const short& curDepth) {
-		State renderState = GetRenderState(alpha);
+	void DepthTest(float alpha, const Camera& camera, const short& curDepth) {
 		if (renderState.scaleS.Length() < 1) {
 			return;
 		}
 		// check if this object intersects with camera's view
-		AABB thisAABB = GetAABB(renderState);
-		AABB cameraAABB = camera.GetAABB();
-		if (!thisAABB.Intersects(cameraAABB)) {
+		ScreenAABB cameraScreenAABB = camera.GetScreenAABB(camera.GetAABB());
+		ScreenAABB renderScreenAABB = camera.GetScreenAABB(renderAABB);
+		if (!renderScreenAABB.Intersects(cameraScreenAABB)) {
 			return;
 		}
 
 		// get the intersected AABB, traverse every pixel to draw
-		AABB intersectionAABB = thisAABB.GetIntersectionAABB(cameraAABB);
-		ScreenAABB screenAABB = camera.GetScreenAABB(intersectionAABB);
+		ScreenAABB screenAABB = renderScreenAABB.GetIntersectionScreenAABB(cameraScreenAABB);
 		// pre calculate some values
-		const float cosTheta = std::cos(renderState.rotationS);
-		const float sinTheta = std::sin(renderState.rotationS);
-		Vector2 halfScale = {
-			std::abs(renderState.scaleS.x * 0.5f),
-			std::abs(renderState.scaleS.y * 0.5f)
-		};
-		Vector2 invScale = { 1 / renderState.scaleS.x , 1 / renderState.scaleS.y };
 		Vector2 beginPos = camera.GetGlobalPosition(screenAABB.minX, screenAABB.minY);
 		beginPos = beginPos - renderState.globalPositionS;
 
@@ -94,15 +85,15 @@ public:
 				offset.y = (j - screenAABB.minY) * STEP_Y;
 				localPos = beginPos + offset;
 				// rotate -theta to get to the pos on texture
-				rotatedPos.x = cosTheta * localPos.x + sinTheta * localPos.y;
-				rotatedPos.y = cosTheta * localPos.y - sinTheta * localPos.x;
+				rotatedPos.x = renderCosTheta * localPos.x + renderSinTheta * localPos.y;
+				rotatedPos.y = renderCosTheta * localPos.y - renderSinTheta * localPos.x;
 
-				if (std::abs(rotatedPos.x) > halfScale.x || std::abs(rotatedPos.y) > halfScale.y) {
+				if (std::abs(rotatedPos.x) > renderHalfScale.x || std::abs(rotatedPos.y) > renderHalfScale.y) {
 					continue;
 				}
 
-				u = rotatedPos.x * invScale.x + 0.5f;
-				v = rotatedPos.y * invScale.y + 0.5f;
+				u = rotatedPos.x * renderInvScale.x + 0.5f;
+				v = rotatedPos.y * renderInvScale.y + 0.5f;
 
 				// if the alpha is 255, it blocks all other things behind
 				colorAlpha = GetAlphaAt(u, v);
@@ -114,29 +105,20 @@ public:
 		return;
 	}
 
-	virtual void RenderSelf(float alpha, const Camera& camera, const short& curDepth) {
-		State renderState = GetRenderState(alpha);
+	void RenderSelf(float alpha, const Camera& camera, const short& curDepth) {
 		if (renderState.scaleS.Length() < 1) {
 			return;
 		}
 		// check if this object intersects with camera's view
-		AABB thisAABB = GetAABB(renderState);
-		AABB cameraAABB = camera.GetAABB();
-		if (!thisAABB.Intersects(cameraAABB)) {
+		ScreenAABB cameraScreenAABB = camera.GetScreenAABB(camera.GetAABB());
+		ScreenAABB renderScreenAABB = camera.GetScreenAABB(renderAABB);
+		if (!renderScreenAABB.Intersects(cameraScreenAABB)) {
 			return;
 		}
 
 		// get the intersected AABB, traverse every pixel to draw
-		AABB intersectionAABB = thisAABB.GetIntersectionAABB(cameraAABB);
-		ScreenAABB screenAABB = camera.GetScreenAABB(intersectionAABB);
+		ScreenAABB screenAABB = renderScreenAABB.GetIntersectionScreenAABB(cameraScreenAABB);
 		// pre calculate some values
-		const float cosTheta = std::cos(renderState.rotationS);
-		const float sinTheta = std::sin(renderState.rotationS);
-		Vector2 halfScale = {
-			std::abs(renderState.scaleS.x * 0.5f),
-			std::abs(renderState.scaleS.y * 0.5f)
-		};
-		Vector2 invScale = { 1 / renderState.scaleS.x , 1 / renderState.scaleS.y };
 		unsigned char* backBuffer = env.getBackBuffer();
 		Vector2 beginPos = camera.GetGlobalPosition(screenAABB.minX, screenAABB.minY);
 		beginPos = beginPos - renderState.globalPositionS;
@@ -153,15 +135,60 @@ public:
 				offset.y = (j - screenAABB.minY) * STEP_Y;
 				localPos = beginPos + offset;
 				// rotate -theta to get to the pos on texture
-				rotatedPos.x = cosTheta * localPos.x + sinTheta * localPos.y;
-				rotatedPos.y = cosTheta * localPos.y - sinTheta * localPos.x;
+				rotatedPos.x = renderCosTheta * localPos.x + renderSinTheta * localPos.y;
+				rotatedPos.y = renderCosTheta * localPos.y - renderSinTheta * localPos.x;
 
-				if (std::abs(rotatedPos.x) > halfScale.x || std::abs(rotatedPos.y) > halfScale.y) {
+				if (std::abs(rotatedPos.x) > renderHalfScale.x || std::abs(rotatedPos.y) > renderHalfScale.y) {
 					continue;
 				}
 
-				u = rotatedPos.x * invScale.x + 0.5f;
-				v = rotatedPos.y * invScale.y + 0.5f;
+				u = rotatedPos.x * renderInvScale.x + 0.5f;
+				v = rotatedPos.y * renderInvScale.y + 0.5f;
+				color = GetColorAt(u, v);
+				camera.DrawOnCanvas(env, backBuffer, i, j, color);
+			}
+		}
+	}
+
+	void RenderSelf(float alpha, const Camera& camera, const short& curDepth, const ScreenAABB& tile) {
+		// render self in a specific tile
+		if (renderState.scaleS.Length() < 1) {
+			return;
+		}
+		// check if this object intersects with current tile
+		ScreenAABB renderScreenAABB = camera.GetScreenAABB(renderAABB);
+		if (!renderScreenAABB.Intersects(tile)) {
+			return;
+		}
+		
+		// get the intersected AABB, traverse every pixel to draw
+		ScreenAABB screenAABB = renderScreenAABB.GetIntersectionScreenAABB(tile);
+		// pre calculate some values
+		unsigned char* backBuffer = env.getBackBuffer();
+		Vector2 beginPos = camera.GetGlobalPosition(screenAABB.minX, screenAABB.minY);
+		beginPos = beginPos - renderState.globalPositionS;
+
+		Vector2 localPos, rotatedPos, offset;
+		float u, v;
+		ColorRGBA color;
+		for (int j = screenAABB.minY; j <= screenAABB.maxY; ++j) {
+			for (int i = screenAABB.minX; i <= screenAABB.maxX; ++i) {
+				if (camera.depthGraph[j * WINDOW_WIDTH + i] < curDepth) {
+					continue;
+				}
+				offset.x = (i - screenAABB.minX) * STEP_X;
+				offset.y = (j - screenAABB.minY) * STEP_Y;
+				localPos = beginPos + offset;
+				// rotate -theta to get to the pos on texture
+				rotatedPos.x = renderCosTheta * localPos.x + renderSinTheta * localPos.y;
+				rotatedPos.y = renderCosTheta * localPos.y - renderSinTheta * localPos.x;
+
+				if (std::abs(rotatedPos.x) > renderHalfScale.x || std::abs(rotatedPos.y) > renderHalfScale.y) {
+					continue;
+				}
+
+				u = rotatedPos.x * renderInvScale.x + 0.5f;
+				v = rotatedPos.y * renderInvScale.y + 0.5f;
 				color = GetColorAt(u, v);
 				camera.DrawOnCanvas(env, backBuffer, i, j, color);
 			}
@@ -190,14 +217,24 @@ public:
 		return curState; 
 	}
 
-protected:
-	State prevState, curState;
-
-	State GetRenderState(const float& alpha) const {
-		State renderState;
+	void UpdateRenderState(const float& alpha) {
 		renderState.globalPositionS = Math::Lerp(prevState.globalPositionS, curState.globalPositionS, alpha);
 		renderState.scaleS = Math::Lerp(prevState.scaleS, curState.scaleS, alpha);
 		renderState.rotationS = Math::LerpAngle(prevState.rotationS, curState.rotationS, alpha);
-		return renderState;
+		renderAABB = GetAABB(renderState);
+		renderCosTheta = std::cos(renderState.rotationS);
+		renderSinTheta = std::sin(renderState.rotationS);
+		renderHalfScale = {
+			std::abs(renderState.scaleS.x * 0.5f),
+			std::abs(renderState.scaleS.y * 0.5f)
+		};
+		renderInvScale = { 1 / renderState.scaleS.x , 1 / renderState.scaleS.y };
 	}
+
+protected:
+	// record some params for rendering to decrease calculation
+	State prevState, curState, renderState;
+	AABB renderAABB;
+	float renderCosTheta = 0, renderSinTheta = 0;
+	Vector2 renderHalfScale, renderInvScale;
 };
