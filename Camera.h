@@ -82,10 +82,10 @@ public:
 		memset(depthGraph, 0x7F, WINDOW_WIDTH * WINDOW_HEIGHT * sizeof(short));
 	}
 
-	AABB ScreenAABB2AABB(const ScreenAABB& screenAABB) const {
-		return AABB{
-			GetGlobalPosition(screenAABB.minX, screenAABB.minY),
-			GetGlobalPosition(screenAABB.maxX, screenAABB.maxY)
-		};
-	}
+	//AABB ScreenAABB2AABB(const ScreenAABB& screenAABB) const {
+	//	return AABB{
+	//		GetGlobalPosition(screenAABB.minX, screenAABB.minY),
+	//		GetGlobalPosition(screenAABB.maxX, screenAABB.maxY)
+	//	};
+	//}
 };

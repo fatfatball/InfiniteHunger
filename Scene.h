@@ -12,10 +12,12 @@ private:
 	List<std::shared_ptr<BaseGameObject>> objects;
 	GamesEngineeringBase::Window& canvas;
 	Camera& camera;
-	List<RenderedItem> renderedItems;
-
+	//List<RenderedItem> renderedItems;
+	List<ScreenAABB> renderTiles;
+	List<List<RenderedItem>> renderedItemLists{ CO_RENDER_THREADS + 1 };
+	 
 public:
-	Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(window), camera(camera) {}
+	Scene(GamesEngineeringBase::Window& window, Camera& camera);
 
 	~Scene() {
 		for (int i = 0; i < objects.GetSize(); ++i) {
@@ -28,4 +30,7 @@ public:
 	void VisualUpdateObjects(float dt);
 	void RenderObjects(const float& alpha);
 	void RecycleObjects();
+
+private:
+	void RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems);
 };

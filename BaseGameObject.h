@@ -56,19 +56,21 @@ public:
 		curState.rotationS = rotation;
 	}
 
-	void DepthTest(float alpha, const Camera& camera, const short& curDepth) {
-		if (renderState.scaleS.Length() < 1) {
-			return;
+	bool DepthTest(float alpha, const Camera& camera, const short& curDepth) const {
+		return DepthTest(alpha, camera, curDepth, camera.GetScreenAABB(camera.GetAABB()));
+	}
+
+	bool DepthTest(float alpha, const Camera& camera, const short& curDepth, const ScreenAABB& tile) const {
+		if (!renderVisible) {
+			return false;
 		}
 		// check if this object intersects with camera's view
-		ScreenAABB cameraScreenAABB = camera.GetScreenAABB(camera.GetAABB());
-		ScreenAABB renderScreenAABB = camera.GetScreenAABB(renderAABB);
-		if (!renderScreenAABB.Intersects(cameraScreenAABB)) {
-			return;
+		if (!renderScreenAABB.Intersects(tile)) {
+			return false;
 		}
 
 		// get the intersected AABB, traverse every pixel to draw
-		ScreenAABB screenAABB = renderScreenAABB.GetIntersectionScreenAABB(cameraScreenAABB);
+		ScreenAABB screenAABB = renderScreenAABB.GetIntersectionScreenAABB(tile);
 		// pre calculate some values
 		Vector2 beginPos = camera.GetGlobalPosition(screenAABB.minX, screenAABB.minY);
 		beginPos = beginPos - renderState.globalPositionS;
@@ -102,61 +104,20 @@ public:
 				}
 			}
 		}
-		return;
+
+		return true;
 	}
 
-	void RenderSelf(float alpha, const Camera& camera, const short& curDepth) {
-		if (renderState.scaleS.Length() < 1) {
-			return;
-		}
-		// check if this object intersects with camera's view
-		ScreenAABB cameraScreenAABB = camera.GetScreenAABB(camera.GetAABB());
-		ScreenAABB renderScreenAABB = camera.GetScreenAABB(renderAABB);
-		if (!renderScreenAABB.Intersects(cameraScreenAABB)) {
-			return;
-		}
-
-		// get the intersected AABB, traverse every pixel to draw
-		ScreenAABB screenAABB = renderScreenAABB.GetIntersectionScreenAABB(cameraScreenAABB);
-		// pre calculate some values
-		unsigned char* backBuffer = env.getBackBuffer();
-		Vector2 beginPos = camera.GetGlobalPosition(screenAABB.minX, screenAABB.minY);
-		beginPos = beginPos - renderState.globalPositionS;
-
-		Vector2 localPos, rotatedPos, offset;
-		float u, v;
-		ColorRGBA color;
-		for (int j = screenAABB.minY; j <= screenAABB.maxY; ++j) {
-			for (int i = screenAABB.minX; i <= screenAABB.maxX; ++i) {
-				if (camera.depthGraph[j * WINDOW_WIDTH + i] < curDepth) {
-					continue;
-				}
-				offset.x = (i - screenAABB.minX) * STEP_X;
-				offset.y = (j - screenAABB.minY) * STEP_Y;
-				localPos = beginPos + offset;
-				// rotate -theta to get to the pos on texture
-				rotatedPos.x = renderCosTheta * localPos.x + renderSinTheta * localPos.y;
-				rotatedPos.y = renderCosTheta * localPos.y - renderSinTheta * localPos.x;
-
-				if (std::abs(rotatedPos.x) > renderHalfScale.x || std::abs(rotatedPos.y) > renderHalfScale.y) {
-					continue;
-				}
-
-				u = rotatedPos.x * renderInvScale.x + 0.5f;
-				v = rotatedPos.y * renderInvScale.y + 0.5f;
-				color = GetColorAt(u, v);
-				camera.DrawOnCanvas(env, backBuffer, i, j, color);
-			}
-		}
+	void RenderSelf(float alpha, const Camera& camera, const short& curDepth) const {
+		RenderSelf(alpha, camera, curDepth, camera.GetScreenAABB(camera.GetAABB()));
 	}
 
-	void RenderSelf(float alpha, const Camera& camera, const short& curDepth, const ScreenAABB& tile) {
+	void RenderSelf(float alpha, const Camera& camera, const short& curDepth, const ScreenAABB& tile) const {
 		// render self in a specific tile
-		if (renderState.scaleS.Length() < 1) {
+		if (!renderVisible) {
 			return;
 		}
 		// check if this object intersects with current tile
-		ScreenAABB renderScreenAABB = camera.GetScreenAABB(renderAABB);
 		if (!renderScreenAABB.Intersects(tile)) {
 			return;
 		}
@@ -217,7 +178,7 @@ public:
 		return curState; 
 	}
 
-	void UpdateRenderState(const float& alpha) {
+	void UpdateRenderState(const float& alpha, const Camera& camera) {
 		renderState.globalPositionS = Math::Lerp(prevState.globalPositionS, curState.globalPositionS, alpha);
 		renderState.scaleS = Math::Lerp(prevState.scaleS, curState.scaleS, alpha);
 		renderState.rotationS = Math::LerpAngle(prevState.rotationS, curState.rotationS, alpha);
@@ -229,6 +190,8 @@ public:
 			std::abs(renderState.scaleS.y * 0.5f)
 		};
 		renderInvScale = { 1 / renderState.scaleS.x , 1 / renderState.scaleS.y };
+		renderScreenAABB = camera.GetScreenAABB(renderAABB);
+		renderVisible = renderState.scaleS.Length() > 1;
 	}
 
 protected:
@@ -237,4 +200,6 @@ protected:
 	AABB renderAABB;
 	float renderCosTheta = 0, renderSinTheta = 0;
 	Vector2 renderHalfScale, renderInvScale;
+	ScreenAABB renderScreenAABB;
+	bool renderVisible;
 };

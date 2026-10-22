@@ -45,6 +45,9 @@ struct AABB {
 
 struct ScreenAABB { // Screen AABB is the AABB in screen space, pixel coordinates
 	short minX, minY, maxX, maxY;
+
+	ScreenAABB() : minX(), minY(), maxX(), maxY() {}
+
 	ScreenAABB(short minX, short minY, short maxX, short maxY) {
 		this->minX = minX;
 		this->minY = minY;

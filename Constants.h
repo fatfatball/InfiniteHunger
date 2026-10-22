@@ -15,3 +15,5 @@ const float STEP_Y = (float)FOV / WINDOW_HEIGHT;
 
 const short RENDER_TILE_WIDTH = 128;
 const short RENDER_TILE_HEIGHT = 128;
+
+const int CO_RENDER_THREADS = 7;

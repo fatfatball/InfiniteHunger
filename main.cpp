@@ -12,7 +12,9 @@ int main() {
 	canvas.create(WINDOW_WIDTH, WINDOW_HEIGHT, "test_window_name");
 	bool running = true;
 	Camera camera;
+	Scene mainScene = Scene(canvas, camera);
 
+#pragma region Timers
 	GamesEngineeringBase::Timer loopTimer;
 	float frameTime;
 	float frameTimeAccumulator = 0;
@@ -24,19 +26,26 @@ int main() {
 	float clearTime = 0;
 	float renderTime = 0;
 	float presentTime = 0;
-
-	Scene mainScene = Scene(canvas, camera);
-#pragma region TestingObjects
-	// really a disaster when it's semi-transparent. as a ref, 13.3 fps
-	// fps can reach 77 when it's not transparent, good!
-	srand(time(0));
-	for (int i = 0; i < 500; ++i) {
-		auto obj = std::make_shared<TestGameObject>(canvas);
-		obj->globalPosition = { (float)(rand() % 1024 - 512), (float)(rand() % 768 - 384) };
-		mainScene.AddObject(std::move(obj));
-	}
 #pragma endregion
 
+#pragma region TestingObjects
+	// single-thread performance:
+	// really a disaster when it's semi-transparent. as a ref, 13.3 fps
+	// fps can reach 77 when it's not transparent, good!
+	// ------
+	// 4-thread performance:
+	// semi-transparent: 48 fps
+	// non-transparent: 219 fps
+	// ------
+	// 8-thread performance:
+	// semi-transparent: 77 fps
+	// non-transparent: 215 fps
+	//for (int i = 0; i < 500; ++i) {
+	//	auto obj = std::make_shared<TestGameObject>(canvas);
+	//	obj->globalPosition = { rand() % 1024 - 512.f, rand() % 768 - 384.f };
+	//	mainScene.AddObject(std::move(obj));
+	//}
+#pragma endregion
 
 	bool prevBPressed = false;
 
