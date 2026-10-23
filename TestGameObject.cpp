@@ -91,7 +91,7 @@ ColorRGBA TestGameObject::GetColorAt(const float& u, const float& v) const {
 	return color;
 }
 
-unsigned char TestGameObject::GetAlphaAt(const float& u, const float&) const
+unsigned char TestGameObject::GetAlphaAt(const float& u, const float& v) const
 {
 	return 64;
 }

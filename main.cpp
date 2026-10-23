@@ -6,6 +6,7 @@
 #include "List.h"
 #include "Scene.h"
 #include <memory>
+#include "TestPhysicalObject.h"
 
 int main() {
 	GamesEngineeringBase::Window canvas;
@@ -13,6 +14,7 @@ int main() {
 	bool running = true;
 	Camera camera;
 	Scene mainScene = Scene(canvas, camera);
+	mainScene.AddObject(std::make_shared<TestPhysicalObject>(canvas));
 
 #pragma region Timers
 	GamesEngineeringBase::Timer loopTimer;

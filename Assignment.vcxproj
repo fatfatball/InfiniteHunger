@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="BaseGameObject.h" />
+    <ClInclude Include="BasePhysicalObject.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
@@ -149,12 +150,14 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SmallStructs.h" />
     <ClInclude Include="TestGameObject.h" />
+    <ClInclude Include="TestPhysicalObject.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TestGameObject.cpp" />
+    <ClCompile Include="TestPhysicalObject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

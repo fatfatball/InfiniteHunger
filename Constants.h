@@ -13,7 +13,7 @@ const float INV_WINDOW_HEIGHT = 1.f / WINDOW_HEIGHT;
 const float STEP_X = (float)FOV * ASPECT_RATIO / WINDOW_WIDTH;
 const float STEP_Y = (float)FOV / WINDOW_HEIGHT;
 
-const short RENDER_TILE_WIDTH = 128;
-const short RENDER_TILE_HEIGHT = 128;
+const short RENDER_TILE_WIDTH = 64;
+const short RENDER_TILE_HEIGHT = 64;
 
 const int CO_RENDER_THREADS = 7;

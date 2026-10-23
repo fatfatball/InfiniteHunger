@@ -17,7 +17,7 @@ protected:
 		Vector2 globalPositionS;
 		Vector2 scaleS;
 		float rotationS = 0.f;
-	};
+	}prevState, curState;
 
 public:
 	bool isActive = true;
@@ -38,6 +38,7 @@ public:
 		globalPosition = Vector2();
 		scale = Vector2();
 		rotation = 0.f;
+		renderVisible = false;
 	}
 	virtual ~BaseGameObject() = default;
 
@@ -46,8 +47,8 @@ public:
 	virtual void VisualUpdate(const float& dt) = 0;
 	virtual void OnDestroy() = 0;
 
-	virtual inline ColorRGBA GetColorAt(const float& u, const float& v) const = 0; // sample the texture
-	virtual inline unsigned char GetAlphaAt(const float& u, const float&) const = 0;
+	virtual ColorRGBA GetColorAt(const float& u, const float& v) const = 0; // sample the texture
+	virtual unsigned char GetAlphaAt(const float& u, const float& v) const = 0;
 
 	void UpdateStates() { // to store the pos and scale into curState, and move the old curState to prevState
 		prevState = curState;
@@ -196,7 +197,7 @@ public:
 
 protected:
 	// record some params for rendering to decrease calculation
-	State prevState, curState, renderState;
+	State renderState;
 	AABB renderAABB;
 	float renderCosTheta = 0, renderSinTheta = 0;
 	Vector2 renderHalfScale, renderInvScale;

@@ -52,6 +52,11 @@ public:
 		return Vector2(x * val, y * val);
 	}
 
+	template<typename T>
+	Vector2 operator/(const T& val) const {
+		return Vector2(x / val, y / val);
+	}
+
 	float Length() const {
 		return std::sqrt(x * x + y * y);
 	}
