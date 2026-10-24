@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include <memory>
 #include "TestPhysicalObject.h"
+#include "PolyLine2D.h"
 
 int main() {
 	GamesEngineeringBase::Window canvas;

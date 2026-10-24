@@ -88,4 +88,11 @@ public:
 	//		GetGlobalPosition(screenAABB.maxX, screenAABB.maxY)
 	//	};
 	//}
+
+	Vector2 World2ScreenNoClamp(const Vector2& globalPos) const {
+		return Vector2(
+			(globalPos.x - globalPosition.x) / (FOV * ASPECT_RATIO) * WINDOW_WIDTH + WINDOW_WIDTH / 2,
+			(globalPos.y - globalPosition.y) / FOV * WINDOW_HEIGHT + WINDOW_HEIGHT / 2
+		);
+	}
 };

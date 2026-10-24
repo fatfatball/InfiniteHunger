@@ -147,17 +147,21 @@
     <ClInclude Include="GamesEngineeringBase.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="PolyLine2D.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SmallStructs.h" />
     <ClInclude Include="TestGameObject.h" />
     <ClInclude Include="TestPhysicalObject.h" />
+    <ClInclude Include="TestPhysicalTail.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PolyLine2D.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TestGameObject.cpp" />
     <ClCompile Include="TestPhysicalObject.cpp" />
+    <ClCompile Include="TestPhysicalTail.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

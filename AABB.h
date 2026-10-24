@@ -73,4 +73,8 @@ struct ScreenAABB { // Screen AABB is the AABB in screen space, pixel coordinate
 			std::min(maxY, other.maxY),
 		};
 	}
+
+	bool IsInside(const int&x, const int& y) const {
+		return x >= minX && x <= maxX && y >= minY && y <= maxY;
+	}
 };

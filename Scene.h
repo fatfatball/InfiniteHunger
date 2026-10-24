@@ -25,7 +25,7 @@ public:
 		}
 	}
 
-	void AddObject(std::shared_ptr<BaseGameObject>&& obj);
+	void AddObject(std::shared_ptr<BaseGameObject> obj);
 	void FixedUpdateObjects(float dt);
 	void VisualUpdateObjects(float dt);
 	void RenderObjects(const float& alpha);

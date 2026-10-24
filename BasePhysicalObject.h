@@ -15,17 +15,32 @@ protected:
 public:
 	float dampValue; // without force input, the velocity decrease to velocity * dampValue per second
 	float mass;
+	float maxVelocity;
+	float maxForce;
+	float isFixed; // if it can be moved by constraints
 
 	BasePhysicalObject(GamesEngineeringBase::Window& canvas) : BaseGameObject(canvas) {
-		dampValue = 0.75f;
+		dampValue = 0.04f;
 		mass = 1;
+		maxVelocity = 0;
+		maxForce = 0;
+		isFixed = false;
 	}
 
-	void UpdatePhysicStates(const float& dt) {
-		// update position using Verlet algorithm
-		velocity = (curState.globalPositionS - prevState.globalPositionS) / dt;
+	virtual void UpdatePhysicPosition(const float& dt) {
+		// update position using Verlet algorithm + Position Based Dynamics
+		// calculate velocity approximately
+		velocity = (curState.globalPositionS - prevState.globalPositionS) / dt + force / mass * dt;
+		// clamp velocity to maxVelocity
+		if (velocity.Length() > maxVelocity) {
+			velocity = velocity.Normalized() * maxVelocity;
+		}
+
+		// calculate damping
 		float damping = std::powf(dampValue, dt);
-		globalPosition = curState.globalPositionS + velocity * dt * damping + force / mass * dt * dt;
+		velocity = velocity * damping;
+		// apply velocity
+		globalPosition = curState.globalPositionS + velocity * dt;
 
 		prevPhysicState = curPhysicState;
 		curPhysicState = { velocity, force };

@@ -6,10 +6,10 @@
 #include "Math.h"
 #include "SmallStructs.h"
 
-// base class for all game objects, including:
-// trigger / renderable objects / spawner
 class Scene;
 
+// base class for all game objects, including:
+// trigger / renderable objects / spawner
 class BaseGameObject
 {
 protected:
@@ -25,6 +25,7 @@ public:
 	GamesEngineeringBase::Window& env;
 	Scene* scene;
 	RenderOrder renderOrder;
+	State renderState;
 
 	Vector2 globalPosition = {};
 	Vector2 scale = {}; // negative means flipped; directly represents the volume by global axis
@@ -44,6 +45,7 @@ public:
 
 	virtual void OnStart() = 0;
 	virtual void FixedUpdate(const float& dt) = 0;
+	virtual void SolveConstraints() {} // for physical objects to override
 	virtual void VisualUpdate(const float& dt) = 0;
 	virtual void OnDestroy() = 0;
 
@@ -57,11 +59,11 @@ public:
 		curState.rotationS = rotation;
 	}
 
-	bool DepthTest(float alpha, const Camera& camera, const short& curDepth) const {
+	virtual bool DepthTest(float alpha, const Camera& camera, const short& curDepth) const {
 		return DepthTest(alpha, camera, curDepth, camera.GetScreenAABB(camera.GetAABB()));
 	}
 
-	bool DepthTest(float alpha, const Camera& camera, const short& curDepth, const ScreenAABB& tile) const {
+	virtual bool DepthTest(float alpha, const Camera& camera, const short& curDepth, const ScreenAABB& tile) const {
 		if (!renderVisible) {
 			return false;
 		}
@@ -109,11 +111,11 @@ public:
 		return true;
 	}
 
-	void RenderSelf(float alpha, const Camera& camera, const short& curDepth) const {
+	virtual void RenderSelf(float alpha, const Camera& camera, const short& curDepth) const {
 		RenderSelf(alpha, camera, curDepth, camera.GetScreenAABB(camera.GetAABB()));
 	}
 
-	void RenderSelf(float alpha, const Camera& camera, const short& curDepth, const ScreenAABB& tile) const {
+	virtual void RenderSelf(float alpha, const Camera& camera, const short& curDepth, const ScreenAABB& tile) const {
 		// render self in a specific tile
 		if (!renderVisible) {
 			return;
@@ -179,7 +181,7 @@ public:
 		return curState; 
 	}
 
-	void UpdateRenderState(const float& alpha, const Camera& camera) {
+	virtual void UpdateRenderState(const float& alpha, const Camera& camera) {
 		renderState.globalPositionS = Math::Lerp(prevState.globalPositionS, curState.globalPositionS, alpha);
 		renderState.scaleS = Math::Lerp(prevState.scaleS, curState.scaleS, alpha);
 		renderState.rotationS = Math::LerpAngle(prevState.rotationS, curState.rotationS, alpha);
@@ -197,7 +199,6 @@ public:
 
 protected:
 	// record some params for rendering to decrease calculation
-	State renderState;
 	AABB renderAABB;
 	float renderCosTheta = 0, renderSinTheta = 0;
 	Vector2 renderHalfScale, renderInvScale;

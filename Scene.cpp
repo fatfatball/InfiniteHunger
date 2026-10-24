@@ -15,7 +15,7 @@ Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(wind
 	}
 }
 
-void Scene::AddObject(std::shared_ptr<BaseGameObject>&& obj) {
+void Scene::AddObject(std::shared_ptr<BaseGameObject> obj) {
 	// no checking if already exists
 	if (!obj) {
 		return;
@@ -33,6 +33,13 @@ void Scene::FixedUpdateObjects(float dt) {
 			continue;
 		}
 		objects[i]->FixedUpdate(dt);
+	}
+
+	for (int i = 0; i < size; ++i) {
+		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
+			continue;
+		}
+		objects[i]->SolveConstraints();
 		objects[i]->UpdateStates();
 	}
 }
