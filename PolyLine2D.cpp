@@ -72,7 +72,8 @@ bool PolyLine2D::DepthTest(float alpha, const Camera& camera, const short& curDe
             continue;
         }
 
-        DrawLineBresenham(a, b, tile, thicknessPixel, [&](int x, int y, const ScreenAABB tile) {
+        DrawLineBresenham(a, b, tile, thicknessPixel,
+            [&](int x, int y, const ScreenAABB tile) {
                 if (!tile.IsInside(x, y)) {
                     return;
                 }
@@ -135,9 +136,16 @@ void PolyLine2D::DrawLineBresenham(const Vector2& a, const Vector2& b, const Scr
 
     int err = dx + dy;
 
+    DrawFilledCricleMidpoint(x0, y0, tile, raduis, plot);
+    DrawFilledCricleMidpoint(x1, y1, tile, raduis, plot);
     while (true) {
         // originally, just plot. here I want thickness so plot a circle here.
-         DrawCricleMidpoint(x0, y0, tile, raduis, plot);
+        //DrawCricleMidpoint(x0, y0, tile, raduis, plot);
+        // circle is not enough. draw a filled circle instead.
+        //DrawFilledCricleMidpoint(x0, y0, tile, raduis, plot);
+        // maybe an unfilled circle and a cross would be ok
+        DrawCricleMidpoint(x0, y0, tile, raduis, plot);
+        DrawCross(x0, y0, tile, raduis - 1, plot);
 
         if (x0 == x1 && y0 == y1) {
             break;
@@ -157,12 +165,22 @@ void PolyLine2D::DrawLineBresenham(const Vector2& a, const Vector2& b, const Scr
 template<typename Plot>
 void PolyLine2D::DrawCricleMidpoint(int x, int y, const ScreenAABB& tile, int raduis, Plot&& plot) const {
     int tx = 0;
-    int ty = -raduis;
-    int p = -raduis;
-    while (tx < -ty) {
+    int ty = raduis;
+    int p = 1 - raduis;
+    plot(x + tx, y + ty, tile);
+    plot(x - tx, y + ty, tile);
+    plot(x + tx, y - ty, tile);
+    plot(x - tx, y - ty, tile);
+    plot(x + ty, y + tx, tile);
+    plot(x - ty, y + tx, tile);
+    plot(x + ty, y - tx, tile);
+    plot(x - ty, y - tx, tile);
+
+    while (tx < ty) {
+        ++tx;
         if (p > 0) {
-            ty += 1;
-            p += 2 * (tx + ty) + 1;
+            --ty;
+            p += 2 * (tx - ty) + 1;
         }
         else {
             p += 2 * tx + 1;
@@ -199,5 +217,41 @@ void PolyLine2D::DrawThickLine(const Vector2& a, const Vector2& b,
         Vector2 a2 = a + normal * k;
         Vector2 b2 = b + normal * k;
         DrawLineBresenham(a2, b2, tile, radius, plot);
+    }
+}
+
+template<typename Plot>
+void PolyLine2D::DrawFilledCricleMidpoint(int x, int y,
+    const ScreenAABB& tile, int raduis, Plot&& plot) const {
+    int tx = 0;
+    int ty = raduis;
+    int p = 1 - raduis;
+    DrawHorizontalLine(y + ty, x - tx, x + tx, tile, plot);
+    DrawHorizontalLine(y - ty, x - tx, x + tx, tile, plot);
+    DrawHorizontalLine(y + tx, x - ty, x + ty, tile, plot);
+    DrawHorizontalLine(y - tx, x - ty, x + ty, tile, plot);
+
+    while (tx < ty) {
+        ++tx;
+        if (p > 0) {
+            --ty;
+            p += 2 * (tx - ty) + 1;
+        }
+        else {
+            p += 2 * tx + 1;
+        }
+
+        DrawHorizontalLine(y + ty, x - tx, x + tx, tile, plot);
+        DrawHorizontalLine(y - ty, x - tx, x + tx, tile, plot);
+        DrawHorizontalLine(y + tx, x - ty, x + ty, tile, plot);
+        DrawHorizontalLine(y - tx, x - ty, x + ty, tile, plot);
+    }
+}
+
+template<typename Plot>
+void PolyLine2D::DrawHorizontalLine(int y, int x1, int x2,
+    const ScreenAABB& tile, Plot&& plot) const {
+    for (int i = x1; i <= x2; ++i) {
+        plot(i, y, tile);
     }
 }

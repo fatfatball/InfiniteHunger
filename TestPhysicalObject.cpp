@@ -1,6 +1,5 @@
 #include "TestPhysicalObject.h"
 #include "Scene.h"
-#include <iostream>
 
 TestPhysicalObject::TestPhysicalObject(GamesEngineeringBase::Window& canvas) : BasePhysicalObject(canvas) {
 	scale = Vector2(70, 70);
@@ -18,8 +17,10 @@ TestPhysicalObject::TestPhysicalObject(GamesEngineeringBase::Window& canvas) : B
 
 void TestPhysicalObject::OnStart() {
 	// test, add 4 body nodes manually
-	auto ptr = std::make_shared<TestPhysicalTail>(env);
-	Vector2 startPos = { -100, 0 };
+#pragma region TempTest
+	Vector2 startPos = { 0, 0 };
+	auto ptr = std::make_shared<TestPhysicalTail>(env, startPos);
+	startPos.x = -100;
 	auto ptr1 = std::make_shared<TestPhysicalTail>(env, startPos);
 	startPos.x = -200;
 	auto ptr2 = std::make_shared<TestPhysicalTail>(env, startPos);
@@ -48,6 +49,7 @@ void TestPhysicalObject::OnStart() {
 	ptr4->SetThickness(25);
 	polyLine2DPtr = ptr4.get();
 	scene->AddObject(ptr4);
+#pragma endregion
 }
 
 void TestPhysicalObject::FixedUpdate(const float& dt) {
@@ -107,7 +109,6 @@ void TestPhysicalObject::OnDestroy() {
 	for (int i = 0; i < size; ++i) {
 		listTails[i]->isPendingDestroy = true;
 	}
-	std::cout << "I'm destroyed!" << std::endl;
 }
 
 ColorRGBA TestPhysicalObject::GetColorAt(const float& u, const float& v) const {

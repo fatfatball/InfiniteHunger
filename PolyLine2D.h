@@ -4,6 +4,7 @@
 #include "Vector2.h"
 #include "SmallStructs.h"
 
+// this is a specially rendered object. because it might cover huge AABB, but only render few pixels.
 class PolyLine2D : public BaseGameObject {
 private:
 	List<Vector2> screenPoints; // only for rendering, update every visual frame
@@ -36,16 +37,35 @@ public:
 	}
 
 private:
+	// several functions trying to render the line correctly and efficiently
+	// the final solution is DrawLineBresenham + DrawCricleMidpoint + DrawCross
+	// this method has fault in ends of the segments (**semi-circle** + rectangle + **semi-circle**),
+	// so just draw two filled circles at the ends.
+
+	// basic pixel line drawing function
 	template<typename Plot>
 	void DrawLineBresenham(const Vector2& a, const Vector2& b, const ScreenAABB& tile, int raduis, Plot&& plot) const;
 
+	// performs well (O(n)), but there are pixels within the line but not drawn.
 	template<typename Plot>
 	void DrawCricleMidpoint(int x, int y, const ScreenAABB& tile, int raduis,Plot&& plot) const;
 
+	// performs well (O(n)), but the thickness changes in different directions.
 	template<typename Plot>
 	void DrawCross(int x, int y, const ScreenAABB& tile, int raduis, Plot&& plot) const;
 
+	// like DrawCricleMidpoint, have some faults.
 	template<typename Plot>
 	void DrawThickLine(const Vector2& a, const Vector2& b,
 		const ScreenAABB& tile, int radius, Plot&& plot) const;
+
+	// correct, but performs worse (O(n^2))
+	template<typename Plot>
+	void DrawFilledCricleMidpoint(int x, int y,
+		const ScreenAABB& tile, int raduis, Plot&& plot) const;
+
+	// helper function
+	template<typename Plot>
+	void DrawHorizontalLine(int y, int x1, int x2,
+		const ScreenAABB& tile, Plot&& plot) const;
 };
