@@ -46,4 +46,5 @@ struct Constraint {
 	BasePhysicalObject* o3;
 	float constraint1;
 	float constraint2;
+	float stiffness;
 };

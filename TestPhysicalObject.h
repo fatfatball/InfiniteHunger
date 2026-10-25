@@ -27,6 +27,7 @@ private:
 	PolyLine2D* polyLine2DPtr;
 
 	void UpdateConstraints();
-	void UpdateDistanceConstraint(BasePhysicalObject* o1, BasePhysicalObject* o2, const float& targetDist);
+	void UpdateDistanceConstraint(BasePhysicalObject* o1, BasePhysicalObject* o2,
+		const float& targetDist, const float& stiffness);
 };
 

@@ -33,10 +33,10 @@ void TestPhysicalObject::OnStart() {
 	scene->AddObject(ptr1);
 	scene->AddObject(ptr2);
 	scene->AddObject(ptr3);
-	constraints.PushBack({ ConstraintType::Distance, this, ptr.get(), nullptr, 100.f, 0.f });
-	constraints.PushBack({ ConstraintType::Distance, ptr.get(), ptr1.get(), nullptr, 100.f, 0.f });
-	constraints.PushBack({ ConstraintType::Distance, ptr1.get(), ptr2.get(), nullptr, 100.f, 0.f });
-	constraints.PushBack({ ConstraintType::Distance, ptr2.get(), ptr3.get(), nullptr, 100.f, 0.f });
+	constraints.PushBack({ ConstraintType::Distance, this, ptr.get(), nullptr, 100.f, 0.f, 0.8f });
+	constraints.PushBack({ ConstraintType::Distance, ptr.get(), ptr1.get(), nullptr, 100.f, 0.f, 0.8f });
+	constraints.PushBack({ ConstraintType::Distance, ptr1.get(), ptr2.get(), nullptr, 100.f, 0.f, 0.8f });
+	constraints.PushBack({ ConstraintType::Distance, ptr2.get(), ptr3.get(), nullptr, 100.f, 0.f, 0.8f });
 
 	auto ptr4 = std::make_shared<PolyLine2D>(env);
 	ptr4->points.PushBack(globalPosition);
@@ -45,6 +45,7 @@ void TestPhysicalObject::OnStart() {
 	ptr4->points.PushBack(ptr2->globalPosition);
 	ptr4->points.PushBack(ptr3->globalPosition);
 	ptr4->lineColor = { 127, 127, 127, 255};
+	ptr4->SetThickness(25);
 	polyLine2DPtr = ptr4.get();
 	scene->AddObject(ptr4);
 }
@@ -130,11 +131,17 @@ unsigned char TestPhysicalObject::GetAlphaAt(const float& u, const float& v) con
 }
 
 void TestPhysicalObject::UpdateConstraints() {
+	// Gauss-Seidel method, update the constraints one by one
+	// here is from head to tail
+	// Jacobi method will first calculate all constraints and the gradient, then move them all.
+	// but it's just too complicated to imply
 	int size = constraints.GetSize();
+	// only iterate one time here. the more iteration, the stiffer it would be
 	for (int i = 0; i < size; ++i) {
 		switch (constraints[i].type) {
 		case ConstraintType::Distance:
-			UpdateDistanceConstraint(constraints[i].o1, constraints[i].o2, constraints[i].constraint1);
+			UpdateDistanceConstraint(constraints[i].o1, constraints[i].o2,
+				constraints[i].constraint1, constraints[i].stiffness);
 			break;
 		default:
 			break;
@@ -142,7 +149,8 @@ void TestPhysicalObject::UpdateConstraints() {
 	}
 }
 
-void TestPhysicalObject::UpdateDistanceConstraint(BasePhysicalObject* o1, BasePhysicalObject* o2, const float& targetDist) {
+void TestPhysicalObject::UpdateDistanceConstraint(BasePhysicalObject* o1, BasePhysicalObject* o2,
+	const float& targetDist, const float& stiffness) {
 	if (o1->isFixed && o2->isFixed) {
 		return;
 	}
@@ -152,7 +160,7 @@ void TestPhysicalObject::UpdateDistanceConstraint(BasePhysicalObject* o1, BasePh
 	if (dist < 1e-4) { // that's an error, just wait for the objects to split up
 		return;
 	}
-	float diff = dist - targetDist;
+	float diff = (dist - targetDist) * stiffness;
 
 	if (o1->isFixed) {
 		o2->globalPosition = o2->globalPosition - vec.Normalized() * diff;
@@ -161,7 +169,16 @@ void TestPhysicalObject::UpdateDistanceConstraint(BasePhysicalObject* o1, BasePh
 		o1->globalPosition = o1->globalPosition + vec.Normalized() * diff;
 	}
 	else {
-		o1->globalPosition = o1->globalPosition + vec.Normalized() * diff * 0.5f;
-		o2->globalPosition = o2->globalPosition - vec.Normalized() * diff * 0.5f;
+		if (o1->mass < 1e-4 || o2->mass < 1e-4) {
+			o1->globalPosition = o1->globalPosition + vec.Normalized() * diff * 0.5f;
+			o2->globalPosition = o2->globalPosition - vec.Normalized() * diff * 0.5f;
+		}
+		else {
+			// to make sure momentum stays the same
+			float w1 = 1.f / o1->mass;
+			float w2 = 1.f / o2->mass;
+			o1->globalPosition = o1->globalPosition + vec.Normalized() * diff * (w1 / (w1 + w2));
+			o2->globalPosition = o2->globalPosition - vec.Normalized() * diff * (w2 / (w1 + w2));
+		}
 	}
 }
