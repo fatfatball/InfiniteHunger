@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include <thread>
+#include <functional>
 
 Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(window), camera(camera) {
 	// slice the canvas into tiles, for rendering
@@ -40,6 +41,12 @@ void Scene::FixedUpdateObjects(float dt) {
 			continue;
 		}
 		objects[i]->SolveConstraints();
+	}
+
+	for (int i = 0; i < size; ++i) {
+		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
+			continue;
+		}
 		objects[i]->UpdateStates();
 	}
 }

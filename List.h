@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <utility>
 #include <initializer_list>
+#include <type_traits>
 
 template<typename T, typename Allocator = std::allocator<T>>
 class List { // build a vector<> myself, still working

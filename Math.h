@@ -1,4 +1,8 @@
 #pragma once
+#include <cmath>
+#include "Constants.h"
+#include "Vector2.h"
+#include "AABB.h"
 
 class Vector2;
 struct ScreenAABB;

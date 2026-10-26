@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include <memory>
 #include "SmallStructs.h"
+#include <atomic>
 
 // a scene contains lots of objects, and manage their life circles
 class Scene{

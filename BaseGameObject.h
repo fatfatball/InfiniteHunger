@@ -10,8 +10,7 @@ class Scene;
 
 // base class for all game objects, including:
 // trigger / renderable objects / spawner
-class BaseGameObject
-{
+class BaseGameObject {
 protected:
 	struct State {
 		Vector2 globalPositionS;
@@ -29,7 +28,7 @@ public:
 
 	Vector2 globalPosition = {};
 	Vector2 scale = {}; // negative means flipped; directly represents the volume by global axis
-	float rotation = 0.f; // in rad, 0 is facing right, pi/2 is facing up
+	float rotation = 0.f; // in rad, 0 is facing right, pi/2 is facing down
 
 	BaseGameObject(GamesEngineeringBase::Window& canvas) : env(canvas) {
 		isActive = true;
@@ -48,6 +47,11 @@ public:
 	virtual void SolveConstraints() {} // for physical objects to override
 	virtual void VisualUpdate(const float& dt) = 0;
 	virtual void OnDestroy() = 0;
+
+	void SetRotation(const float& angle) {
+		rotation = Math::WrapAngle(angle);
+		curState.rotationS = rotation;
+	}
 
 	virtual ColorRGBA GetColorAt(const float& u, const float& v) const = 0; // sample the texture
 	virtual unsigned char GetAlphaAt(const float& u, const float& v) const = 0;
@@ -192,9 +196,9 @@ public:
 			std::abs(renderState.scaleS.x * 0.5f),
 			std::abs(renderState.scaleS.y * 0.5f)
 		};
-		renderInvScale = { 1 / renderState.scaleS.x , 1 / renderState.scaleS.y };
+		renderVisible = renderState.scaleS.x > 1 && renderState.scaleS.y > 1;
+		if (renderVisible) renderInvScale = { 1 / renderState.scaleS.x , 1 / renderState.scaleS.y };
 		renderScreenAABB = camera.GetScreenAABB(renderAABB);
-		renderVisible = renderState.scaleS.Length() > 1;
 	}
 
 protected:

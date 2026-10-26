@@ -64,11 +64,20 @@ public:
 	Vector2 Normalized() const {
 		Vector2 res = Vector2(x, y);
 		float l = res.Length();
-		if (l < 1e-6f) {
+		if (l < 1e-4f) {
 			return res;
 		}
 		res.x /= l;
 		res.y /= l;
 		return res;
+	}
+
+	float DotProduct(const Vector2& other) const {
+		return x * other.x + y * other.y;
+	}
+
+	// this X other, sign is the direction
+	float CrossProduct(const Vector2& other) const{
+		return x * other.y - other.x * y;
 	}
 };

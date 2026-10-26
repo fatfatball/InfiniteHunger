@@ -1,5 +1,7 @@
 #include "PolyLine2D.h"
 #include "Math.h"
+#include <cmath>
+#include <algorithm>
 
 PolyLine2D::PolyLine2D(GamesEngineeringBase::Window& canvas) : BaseGameObject(canvas) {
 	renderOrder = RenderOrder::Second;
@@ -65,26 +67,27 @@ bool PolyLine2D::DepthTest(float alpha, const Camera& camera, const short& curDe
     expandedTile.minY -= thicknessPixel;
     expandedTile.maxX += thicknessPixel;
     expandedTile.maxY += thicknessPixel;
+
+    auto f = [&](int x, int y, const ScreenAABB tile) {
+        if (!tile.IsInside(x, y)) {
+            return;
+        }
+        int index = y * WINDOW_WIDTH + x;
+        if (camera.depthGraph[index] < curDepth) {
+            return;
+        }
+        if (lineColor.a == 255) {
+            camera.depthGraph[index] = curDepth;
+        }
+        };
+
     for (int i = 0; i < screenPoints.GetSize() - 1; ++i) {
         Vector2 a = screenPoints[i];
         Vector2 b = screenPoints[i + 1];
         if (!Math::ClipLineToTile(a, b, expandedTile)) {
             continue;
         }
-
-        DrawLineBresenham(a, b, tile, thicknessPixel,
-            [&](int x, int y, const ScreenAABB tile) {
-                if (!tile.IsInside(x, y)) {
-                    return;
-                }
-                int index = y * WINDOW_WIDTH + x;
-                if (camera.depthGraph[index] <= curDepth) {
-                    return;
-                }
-                if (lineColor.a == 255) {
-                    camera.depthGraph[index] = curDepth;
-                }
-            });
+        DrawLineBresenham(a, b, tile, thicknessPixel, f);
     }
 
     return true;
@@ -102,23 +105,26 @@ void PolyLine2D::RenderSelf(float alpha, const Camera& camera, const short& curD
     expandedTile.minY -= thicknessPixel;
     expandedTile.maxX += thicknessPixel;
     expandedTile.maxY += thicknessPixel;
-    for (int i = 0; i < screenPoints.GetSize() - 1; ++i) {
+
+    auto f = [&](int x, int y, const ScreenAABB tile) {
+        if (!tile.IsInside(x, y)) {
+            return;
+        }
+        int index = y * WINDOW_WIDTH + x;
+        if (camera.depthGraph[index] < curDepth) {
+            return;
+        }
+        camera.DrawOnCanvas(env, backBuffer, x, y, lineColor);
+        };
+
+    int size = screenPoints.GetSize();
+    for (int i = 0; i < size - 1; ++i) {
         Vector2 a = screenPoints[i];
         Vector2 b = screenPoints[i + 1]; 
         if (!Math::ClipLineToTile(a, b, expandedTile)) {
             continue;
         }
-        DrawLineBresenham(a, b, tile, thicknessPixel,
-            [&](int x, int y, const ScreenAABB tile) {
-                if (!tile.IsInside(x, y)) {
-                    return;
-                }
-                int index = y * WINDOW_WIDTH + x;
-                if (camera.depthGraph[index] < curDepth) {
-                    return;
-                }
-                camera.DrawOnCanvas(env, backBuffer, x, y, lineColor);
-            });
+        DrawLineBresenham(a, b, tile, thicknessPixel, f);
     }
 }
 
@@ -136,8 +142,6 @@ void PolyLine2D::DrawLineBresenham(const Vector2& a, const Vector2& b, const Scr
 
     int err = dx + dy;
 
-    DrawFilledCricleMidpoint(x0, y0, tile, raduis, plot);
-    DrawFilledCricleMidpoint(x1, y1, tile, raduis, plot);
     while (true) {
         // originally, just plot. here I want thickness so plot a circle here.
         //DrawCricleMidpoint(x0, y0, tile, raduis, plot);

@@ -17,7 +17,7 @@ public:
 	float mass;
 	float maxVelocity;
 	float maxForce;
-	float isFixed; // if it can be moved by constraints
+	bool isFixed; // if it can be moved by constraints
 
 	BasePhysicalObject(GamesEngineeringBase::Window& canvas) : BaseGameObject(canvas) {
 		dampValue = 0.04f;
@@ -28,7 +28,7 @@ public:
 	}
 
 	virtual void UpdatePhysicPosition(const float& dt) {
-		// update position using Verlet algorithm + Position Based Dynamics
+		// update position using Verlet algorithm
 		// calculate velocity approximately
 		velocity = (curState.globalPositionS - prevState.globalPositionS) / dt + force / mass * dt;
 		// clamp velocity to maxVelocity

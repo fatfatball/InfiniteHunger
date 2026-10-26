@@ -37,6 +37,8 @@ struct RenderedItem {
 
 enum class ConstraintType {
 	Distance,
+	Angle,
+	DirectionAngle,
 };
 
 struct Constraint {

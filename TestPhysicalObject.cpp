@@ -1,5 +1,7 @@
 #include "TestPhysicalObject.h"
 #include "Scene.h"
+#include "Math.h"
+#include <memory>
 
 TestPhysicalObject::TestPhysicalObject(GamesEngineeringBase::Window& canvas) : BasePhysicalObject(canvas) {
 	scale = Vector2(70, 70);
@@ -18,6 +20,7 @@ TestPhysicalObject::TestPhysicalObject(GamesEngineeringBase::Window& canvas) : B
 void TestPhysicalObject::OnStart() {
 	// test, add 4 body nodes manually
 #pragma region TempTest
+	float stiffness = 0.3f;
 	Vector2 startPos = { 0, 0 };
 	auto ptr = std::make_shared<TestPhysicalTail>(env, startPos);
 	startPos.x = -100;
@@ -34,10 +37,10 @@ void TestPhysicalObject::OnStart() {
 	scene->AddObject(ptr1);
 	scene->AddObject(ptr2);
 	scene->AddObject(ptr3);
-	constraints.PushBack({ ConstraintType::Distance, this, ptr.get(), nullptr, 100.f, 0.f, 0.8f });
-	constraints.PushBack({ ConstraintType::Distance, ptr.get(), ptr1.get(), nullptr, 100.f, 0.f, 0.8f });
-	constraints.PushBack({ ConstraintType::Distance, ptr1.get(), ptr2.get(), nullptr, 100.f, 0.f, 0.8f });
-	constraints.PushBack({ ConstraintType::Distance, ptr2.get(), ptr3.get(), nullptr, 100.f, 0.f, 0.8f });
+	constraints.PushBack({ ConstraintType::Distance, this, ptr.get(), nullptr, 100.f, 0.f, stiffness });
+	constraints.PushBack({ ConstraintType::Distance, ptr.get(), ptr1.get(), nullptr, 100.f, 0.f, stiffness });
+	constraints.PushBack({ ConstraintType::Distance, ptr1.get(), ptr2.get(), nullptr, 100.f, 0.f, stiffness });
+	constraints.PushBack({ ConstraintType::Distance, ptr2.get(), ptr3.get(), nullptr, 100.f, 0.f, stiffness });
 
 	auto ptr4 = std::make_shared<PolyLine2D>(env);
 	ptr4->points.PushBack(globalPosition);
@@ -46,9 +49,15 @@ void TestPhysicalObject::OnStart() {
 	ptr4->points.PushBack(ptr2->globalPosition);
 	ptr4->points.PushBack(ptr3->globalPosition);
 	ptr4->lineColor = { 127, 127, 127, 255};
-	ptr4->SetThickness(25);
+	ptr4->SetThickness(20);
 	polyLine2DPtr = ptr4.get();
 	scene->AddObject(ptr4);
+
+	constraints.PushBack({ ConstraintType::Angle, this, ptr.get(), ptr1.get(), PI, PI / 4.f, stiffness });
+	constraints.PushBack({ ConstraintType::Angle, ptr.get(), ptr1.get(), ptr2.get(), PI, PI / 4.f, stiffness });
+	constraints.PushBack({ ConstraintType::Angle, ptr1.get(), ptr2.get(), ptr3.get(), PI, PI / 4.f, stiffness });
+
+	constraints.PushBack({ConstraintType::DirectionAngle, this, ptr.get(), nullptr, PI, PI / 6.f , stiffness });
 #pragma endregion
 }
 
@@ -72,13 +81,13 @@ void TestPhysicalObject::FixedUpdate(const float& dt) {
 		inputDir = inputDir.Normalized();
 	}
 
-	float inputAngle = 0;
-	if (env.keyPressed(0x51)) { // Q
-		inputAngle += 1;
-	}
-	if (env.keyPressed(0x45)) { // E
-		inputAngle -= 1;
-	}
+	//float inputAngle = 0;
+	//if (env.keyPressed(0x51)) { // Q
+	//	inputAngle -= 1;
+	//}
+	//if (env.keyPressed(0x45)) { // E
+	//	inputAngle += 1;
+	//}
 
 	if (env.keyPressed(0x20)) { // space
 		isPendingDestroy = true;
@@ -87,8 +96,8 @@ void TestPhysicalObject::FixedUpdate(const float& dt) {
 
 	// the force calculation algorithm is still naive
 	// TODO: make it more natural, use Steering Behaviors
-	force = inputDir * std::clamp(((inputDir * maxVelocity - curPhysicState.velocityS).Length() / maxVelocity), 0.f, 1.f) * maxForce;
-	rotation = Math::WrapAngle(rotation + inputAngle * rotationSpeed * dt);
+	force = Vector2(std::cos(rotation), std::sin(rotation)) * maxForce * -inputDir.y;
+	rotation = Math::WrapAngle(rotation + inputDir.x * rotationSpeed * dt);
 	// TODO: collision should be solved here
 	UpdatePhysicPosition(dt);
 }
@@ -102,6 +111,17 @@ void TestPhysicalObject::VisualUpdate(const float& dt) {
 	for (int i = 0; i < listTails.GetSize(); ++i) {
 		polyLine2DPtr->points[i + 1] = listTails[i]->renderState.globalPositionS;
 	}
+
+	for (int i = 0; i < listTails.GetSize(); ++i) {
+		Vector2 prev = (i == 0) ? globalPosition : listTails[i - 1]->globalPosition;
+		Vector2 next = (i < listTails.GetSize() - 1) ? listTails[i + 1]->globalPosition : listTails[i]->globalPosition;
+		Vector2 dir = prev - next;
+		if (dir.Length() < 1e-4f) {
+			continue;
+		}
+		float angle = std::atan2(dir.y, dir.x);
+		listTails[i]->SetRotation(angle);
+	}
 }
 
 void TestPhysicalObject::OnDestroy() {
@@ -109,6 +129,7 @@ void TestPhysicalObject::OnDestroy() {
 	for (int i = 0; i < size; ++i) {
 		listTails[i]->isPendingDestroy = true;
 	}
+	polyLine2DPtr->isPendingDestroy = true;
 }
 
 ColorRGBA TestPhysicalObject::GetColorAt(const float& u, const float& v) const {
@@ -144,6 +165,14 @@ void TestPhysicalObject::UpdateConstraints() {
 			UpdateDistanceConstraint(constraints[i].o1, constraints[i].o2,
 				constraints[i].constraint1, constraints[i].stiffness);
 			break;
+		case ConstraintType::Angle:
+			UpdateAngleConstraint(constraints[i].o1, constraints[i].o2, constraints[i].o3,
+				constraints[i].constraint1, constraints[i].constraint2, constraints[i].stiffness);
+			break;
+		case ConstraintType::DirectionAngle:
+			UpdateDirectionAngleConstraint(constraints[i].o1, constraints[i].o2, 
+				constraints[i].constraint1, constraints[i].constraint2, constraints[i].stiffness);
+			break;
 		default:
 			break;
 		}
@@ -158,7 +187,7 @@ void TestPhysicalObject::UpdateDistanceConstraint(BasePhysicalObject* o1, BasePh
 
 	Vector2 vec = o2->globalPosition - o1->globalPosition;
 	float dist = vec.Length();
-	if (dist < 1e-4) { // that's an error, just wait for the objects to split up
+	if (dist < 1e-4f) { // that's an error, just wait for the objects to split up
 		return;
 	}
 	float diff = (dist - targetDist) * stiffness;
@@ -170,7 +199,7 @@ void TestPhysicalObject::UpdateDistanceConstraint(BasePhysicalObject* o1, BasePh
 		o1->globalPosition = o1->globalPosition + vec.Normalized() * diff;
 	}
 	else {
-		if (o1->mass < 1e-4 || o2->mass < 1e-4) {
+		if (o1->mass < 1e-4f || o2->mass < 1e-4f) {
 			o1->globalPosition = o1->globalPosition + vec.Normalized() * diff * 0.5f;
 			o2->globalPosition = o2->globalPosition - vec.Normalized() * diff * 0.5f;
 		}
@@ -183,3 +212,85 @@ void TestPhysicalObject::UpdateDistanceConstraint(BasePhysicalObject* o1, BasePh
 		}
 	}
 }
+
+void TestPhysicalObject::UpdateAngleConstraint(BasePhysicalObject* o1, BasePhysicalObject* o2,
+	BasePhysicalObject* o3, const float& restAngle, const float& maxBend, const float& stiffness) {
+	Vector2 v1 = o1->globalPosition - o2->globalPosition;
+	Vector2 v2 = o3->globalPosition - o2->globalPosition;
+
+	float l1 = v1.Length();
+	float l2 = v2.Length();
+	if (l1 < 1e-4f || l2 < 1e-4f) { // that's also an error
+		return;
+	}
+
+	// calculate the angle from v1 to v2, [-pi, pi]
+	float angle = std::atan2(v1.CrossProduct(v2), v1.DotProduct(v2));
+	float delta = Math::AngleDifference(restAngle, angle); // [-pi, pi]
+
+	if (delta >= -maxBend && delta <= maxBend) {
+		return;
+	}
+
+	float targetDelta = std::clamp(delta, -maxBend, maxBend);
+	float errAngle = delta - targetDelta; // [-pi, pi]
+
+	// calculate grads so that points moves respectively
+	Vector2 gradA = Vector2(v1.y, -v1.x) / (l1 * l1);
+	Vector2 gradC = Vector2(-v2.y, v2.x) / (l2 * l2);
+	Vector2 gradB = Vector2(
+		-gradA.x - gradC.x,
+		-gradA.y - gradC.y
+	);
+
+	// use mass as weight, please don't be 0
+	float w1 = o1->isFixed ? 0.f : 1.f / o1->mass;
+	float w2 = o2->isFixed ? 0.f : 1.f / o2->mass;
+	float w3 = o3->isFixed ? 0.f : 1.f / o3->mass;
+
+	float denom =
+		w1 * (gradA.x * gradA.x + gradA.y * gradA.y) +
+		w2 * (gradB.x * gradB.x + gradB.y * gradB.y) +
+		w3 * (gradC.x * gradC.x + gradC.y * gradC.y);
+
+	if (denom < 1e-4f) {
+		return;
+	}
+
+	float lambda = stiffness * errAngle / denom;
+
+	o1->globalPosition = o1->globalPosition - gradA * (lambda * w1);
+	o2->globalPosition = o2->globalPosition - gradB * (lambda * w2);
+	o3->globalPosition = o3->globalPosition - gradC * (lambda * w3);
+}
+
+void TestPhysicalObject::UpdateDirectionAngleConstraint(BasePhysicalObject* head,
+	BasePhysicalObject* neckNode, const float& restAngle, const float& maxBend, const float& stiffness) {
+	Vector2 v1 = { std::cos(head->rotation), std::sin(head->rotation) };
+	Vector2 v2 = neckNode->globalPosition - head->globalPosition;
+
+	float l2 = v2.Length();
+	if (l2 < 1e-4f) { // that's also an error
+		return;
+	}
+
+	// calculate the angle from v1 to v2, [-pi, pi]
+	float angle = std::atan2(v1.CrossProduct(v2), v1.DotProduct(v2));
+	float delta = Math::AngleDifference(restAngle, angle); // [-pi, pi]
+
+	if (delta >= -maxBend && delta <= maxBend) {
+		return;
+	}
+
+	float targetDelta = std::clamp(delta, -maxBend, maxBend);
+	float errAngle = delta - targetDelta; // [-pi, pi]
+
+	// regard head as fixed, move neckNode
+	float a = -errAngle * stiffness;
+	Vector2 rotatedV2 = {
+		std::cos(a) * v2.x - std::sin(a) * v2.y,
+		std::cos(a) * v2.y + std::sin(a)* v2.x
+	};
+	neckNode->globalPosition = head->globalPosition + rotatedV2;
+}
+

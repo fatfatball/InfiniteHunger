@@ -41,6 +41,11 @@ private:
 	// the final solution is DrawLineBresenham + DrawCricleMidpoint + DrawCross
 	// this method has fault in ends of the segments (**semi-circle** + rectangle + **semi-circle**),
 	// so just draw two filled circles at the ends.
+	// L: length, T: thickness. O(L*T + T^2).
+	// so, when T<<L, this method performs better than Distance Capsule method (O(n^2)).
+	// ---
+	// but the filled circle is complex to draw, so just use the fault way:
+	// DrawLineBresenham + DrawCricleMidpoint + DrawCross
 
 	// basic pixel line drawing function
 	template<typename Plot>

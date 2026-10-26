@@ -45,12 +45,13 @@ ColorRGBA TestPhysicalTail::GetColorAt(const float& u, const float& v) const {
 	return color;
 }
 
-unsigned char TestPhysicalTail::GetAlphaAt(const float& u, const float& v) const {
-	if (sqrt(std::abs(u - 0.5f) * std::abs(u - 0.5f) + std::abs(v - 0.5f) * std::abs(v - 0.5f)) < 0.5f) {
+unsigned char TestPhysicalTail::GetAlphaAt(const float& u, const float& v) const
+{
+	// triangle facing right
+	if ((v - 0.577f * u > -0.077f) && (v + 0.577f * u < 1.077f) && (u > 0.134)) {
 		return 255;
 	}
 	else {
-		return 0; 
+		return 0;
 	}
 }
-

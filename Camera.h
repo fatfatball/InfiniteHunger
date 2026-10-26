@@ -19,6 +19,12 @@ public:
 		ClearDepthGraph();
 	}
 
+	// to avoid double free by copying
+	Camera(const Camera&) = delete;
+	Camera& operator=(const Camera&) = delete;
+	Camera(Camera&&) = delete;
+	Camera& operator=(Camera&&) = delete;
+
 	~Camera() {
 		delete[] depthGraph;
 	}
@@ -53,9 +59,10 @@ public:
 	}
 
 	void DrawOnCanvas(GamesEngineeringBase::Window& env, unsigned char*& backBuffer, const int& x, const int& y, const ColorRGBA& color) const {
-		//if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT) {
-		//	return;
-		//}
+		// question: do I need boundary check?
+		if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT) {
+			return;
+		}
 		if (color.a == 0) {
 			return;
 		}
