@@ -14,13 +14,12 @@ TestPhysicalObject::TestPhysicalObject(GamesEngineeringBase::Window& canvas) : B
 	prevState = { globalPosition, scale, rotation };
 	curState = { globalPosition, scale, rotation };
 	isFixed = true;
-	polyLine2DPtr = nullptr;
 }
 
 void TestPhysicalObject::OnStart() {
 	// test, add 4 body nodes manually
 #pragma region TempTest
-	float stiffness = 0.3f;
+	float stiffness = 0.5f;
 	Vector2 startPos = { 0, 0 };
 	auto ptr = std::make_shared<TestPhysicalTail>(env, startPos);
 	startPos.x = -100;
@@ -29,35 +28,65 @@ void TestPhysicalObject::OnStart() {
 	auto ptr2 = std::make_shared<TestPhysicalTail>(env, startPos);
 	startPos.x = -300;
 	auto ptr3 = std::make_shared<TestPhysicalTail>(env, startPos);
+	startPos.x = 0;
+	startPos.y = 100;
+	auto ptr4 = std::make_shared<TestPhysicalTail>(env, startPos);
+	startPos.x = -100;
+	startPos.y = 100;
+	auto ptr5 = std::make_shared<TestPhysicalTail>(env, startPos);
 	listTails.PushBack(ptr);
 	listTails.PushBack(ptr1);
 	listTails.PushBack(ptr2);
 	listTails.PushBack(ptr3);
+	listTails.PushBack(ptr4);
+	listTails.PushBack(ptr5);
 	scene->AddObject(ptr);
 	scene->AddObject(ptr1);
 	scene->AddObject(ptr2);
 	scene->AddObject(ptr3);
+	scene->AddObject(ptr4);
+	scene->AddObject(ptr5);
 	constraints.PushBack({ ConstraintType::Distance, this, ptr.get(), nullptr, 100.f, 0.f, stiffness });
 	constraints.PushBack({ ConstraintType::Distance, ptr.get(), ptr1.get(), nullptr, 100.f, 0.f, stiffness });
 	constraints.PushBack({ ConstraintType::Distance, ptr1.get(), ptr2.get(), nullptr, 100.f, 0.f, stiffness });
 	constraints.PushBack({ ConstraintType::Distance, ptr2.get(), ptr3.get(), nullptr, 100.f, 0.f, stiffness });
+	constraints.PushBack({ ConstraintType::Distance, ptr.get(), ptr4.get(), nullptr, 70.f, 0.f, stiffness });
+	constraints.PushBack({ ConstraintType::Distance, ptr4.get(), ptr5.get(), nullptr, 70.f, 0.f, stiffness });
 
-	auto ptr4 = std::make_shared<PolyLine2D>(env);
-	ptr4->points.PushBack(globalPosition);
-	ptr4->points.PushBack(ptr->globalPosition);
-	ptr4->points.PushBack(ptr1->globalPosition);
-	ptr4->points.PushBack(ptr2->globalPosition);
-	ptr4->points.PushBack(ptr3->globalPosition);
-	ptr4->lineColor = { 127, 127, 127, 255};
-	ptr4->SetThickness(20);
-	polyLine2DPtr = ptr4.get();
-	scene->AddObject(ptr4);
+	auto ptrLine = std::make_shared<PolyLine2D>(env);
+	ptrLine->lineColor = { 127, 127, 127, 255};
+	ptrLine->SetThickness(20);
+	ptrLine->points.Resize(5);
+	polyLine2Ds.PushBack(ptrLine);
+	scene->AddObject(ptrLine);
+	List<BasePhysicalObject*> temp;
+	temp.PushBack(this), temp.PushBack(ptr.get()), temp.PushBack(ptr1.get()), temp.PushBack(ptr2.get()), temp.PushBack(ptr3.get());
+	linedNodes.PushBack(std::move(temp));
+	
+	ptrLine = std::make_shared<PolyLine2D>(env);
+	ptrLine->lineColor = { 127, 127, 127, 255 };
+	ptrLine->SetThickness(20);
+	ptrLine->points.Resize(3);
+	polyLine2Ds.PushBack(ptrLine);
+	scene->AddObject(ptrLine);
+	temp = List<BasePhysicalObject*>();
+	temp.PushBack(ptr.get()), temp.PushBack(ptr4.get()), temp.PushBack(ptr5.get());
+	linedNodes.PushBack(std::move(temp));
 
-	constraints.PushBack({ ConstraintType::Angle, this, ptr.get(), ptr1.get(), PI, PI / 4.f, stiffness });
-	constraints.PushBack({ ConstraintType::Angle, ptr.get(), ptr1.get(), ptr2.get(), PI, PI / 4.f, stiffness });
-	constraints.PushBack({ ConstraintType::Angle, ptr1.get(), ptr2.get(), ptr3.get(), PI, PI / 4.f, stiffness });
+	constraints.PushBack({ ConstraintType::Angle, this, ptr.get(), ptr1.get(), PI, PI / 12.f, stiffness });
+	constraints.PushBack({ ConstraintType::Angle, ptr.get(), ptr1.get(), ptr2.get(), PI, PI / 6.f, stiffness });
+	constraints.PushBack({ ConstraintType::Angle, ptr1.get(), ptr2.get(), ptr3.get(), PI, PI / 6.f, stiffness });
+	constraints.PushBack({ ConstraintType::Angle, this, ptr.get(), ptr4.get(), PI * 2 / 3, PI / 6.f, stiffness });
+	constraints.PushBack({ ConstraintType::Angle, ptr.get(), ptr4.get(), ptr5.get(),PI, PI / 6.f, stiffness });
 
 	constraints.PushBack({ConstraintType::DirectionAngle, this, ptr.get(), nullptr, PI, PI / 6.f , stiffness });
+
+	rotationDefs.PushBack({ RotationDefType::PrevAndNext, this, ptr.get(), ptr1.get() });
+	rotationDefs.PushBack({ RotationDefType::PrevAndNext, ptr.get(), ptr1.get(), ptr2.get() });
+	rotationDefs.PushBack({ RotationDefType::PrevAndNext, ptr1.get(), ptr2.get(), ptr3.get() });
+	rotationDefs.PushBack({ RotationDefType::Prev, ptr2.get(), ptr3.get(), nullptr });
+	rotationDefs.PushBack({ RotationDefType::PrevAndNext, ptr.get(), ptr4.get(), ptr5.get()});
+	rotationDefs.PushBack({ RotationDefType::Prev, ptr4.get(), ptr5.get(), nullptr });
 #pragma endregion
 }
 
@@ -81,14 +110,6 @@ void TestPhysicalObject::FixedUpdate(const float& dt) {
 		inputDir = inputDir.Normalized();
 	}
 
-	//float inputAngle = 0;
-	//if (env.keyPressed(0x51)) { // Q
-	//	inputAngle -= 1;
-	//}
-	//if (env.keyPressed(0x45)) { // E
-	//	inputAngle += 1;
-	//}
-
 	if (env.keyPressed(0x20)) { // space
 		isPendingDestroy = true;
 	}
@@ -107,29 +128,47 @@ void TestPhysicalObject::SolveConstraints() {
 }
 
 void TestPhysicalObject::VisualUpdate(const float& dt) {
-	polyLine2DPtr->points[0] = renderState.globalPositionS;
-	for (int i = 0; i < listTails.GetSize(); ++i) {
-		polyLine2DPtr->points[i + 1] = listTails[i]->renderState.globalPositionS;
+	// update the polyline2D
+	for (int i = 0; i < linedNodes.GetSize(); ++i) {
+		for (int j = 0; j < linedNodes[i].GetSize(); ++j) {
+			polyLine2Ds[i]->points[j] = linedNodes[i][j]->renderState.globalPositionS;
+		}
 	}
 
-	for (int i = 0; i < listTails.GetSize(); ++i) {
-		Vector2 prev = (i == 0) ? globalPosition : listTails[i - 1]->globalPosition;
-		Vector2 next = (i < listTails.GetSize() - 1) ? listTails[i + 1]->globalPosition : listTails[i]->globalPosition;
-		Vector2 dir = prev - next;
-		if (dir.Length() < 1e-4f) {
-			continue;
+	// update the rotation of each body node
+	Vector2 dir;
+	float angle;
+	for (int i = 0; i < rotationDefs.GetSize(); ++i) {
+		switch (rotationDefs[i].type) {
+		case RotationDefType::PrevAndNext:
+			dir = rotationDefs[i].o1->globalPosition - rotationDefs[i].o3->globalPosition;
+			if (dir.Length() < 1e-4f) {
+				break;
+			}
+			angle = std::atan2(dir.y, dir.x);
+			rotationDefs[i].o2->SetRotation(angle);
+			break;
+		case RotationDefType::Prev:
+			dir = rotationDefs[i].o1->globalPosition - rotationDefs[i].o2->globalPosition;
+			if (dir.Length() < 1e-4f) {
+				break;
+			}
+			angle = std::atan2(dir.y, dir.x);
+			rotationDefs[i].o2->SetRotation(angle);
+			break;
+		default:
+			break;
 		}
-		float angle = std::atan2(dir.y, dir.x);
-		listTails[i]->SetRotation(angle);
 	}
 }
 
 void TestPhysicalObject::OnDestroy() {
-	int size = listTails.GetSize();
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < listTails.GetSize(); ++i) {
 		listTails[i]->isPendingDestroy = true;
 	}
-	polyLine2DPtr->isPendingDestroy = true;
+	for (int i = 0; i < polyLine2Ds.GetSize(); ++i) {
+		polyLine2Ds[i]->isPendingDestroy = true;
+	}
 }
 
 ColorRGBA TestPhysicalObject::GetColorAt(const float& u, const float& v) const {

@@ -2,7 +2,7 @@
 
 TestPhysicalTail::TestPhysicalTail(GamesEngineeringBase::Window& canvas)
 	: BasePhysicalObject(canvas) {
-	scale = Vector2(50, 50);
+	scale = Vector2(40, 40);
 	rotation = 0;
 	maxVelocity = 600; // global position per second
 	maxForce = 2000; // global position per second^2
@@ -13,7 +13,7 @@ TestPhysicalTail::TestPhysicalTail(GamesEngineeringBase::Window& canvas)
 
 TestPhysicalTail::TestPhysicalTail(GamesEngineeringBase::Window& canvas, const Vector2& pos)
 	: BasePhysicalObject(canvas){
-	scale = Vector2(50, 50);
+	scale = Vector2(40, 40);
 	rotation = 0;
 	maxVelocity = 600; // global position per second
 	maxForce = 2000; // global position per second^2

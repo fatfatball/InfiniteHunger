@@ -45,6 +45,7 @@ public:
 	virtual void OnStart() = 0;
 	virtual void FixedUpdate(const float& dt) = 0;
 	virtual void SolveConstraints() {} // for physical objects to override
+	virtual void UpdateVelocity(const float& dt) {} // for physical objects to override
 	virtual void VisualUpdate(const float& dt) = 0;
 	virtual void OnDestroy() = 0;
 
@@ -56,7 +57,7 @@ public:
 	virtual ColorRGBA GetColorAt(const float& u, const float& v) const = 0; // sample the texture
 	virtual unsigned char GetAlphaAt(const float& u, const float& v) const = 0;
 
-	void UpdateStates() { // to store the pos and scale into curState, and move the old curState to prevState
+	virtual void UpdateStates() { // to store the pos and scale into curState, and move the old curState to prevState
 		prevState = curState;
 		curState.globalPositionS = globalPosition;
 		curState.scaleS = scale;

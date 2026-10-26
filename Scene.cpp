@@ -47,6 +47,13 @@ void Scene::FixedUpdateObjects(float dt) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 			continue;
 		}
+		objects[i]->UpdateVelocity(dt);
+	}
+
+	for (int i = 0; i < size; ++i) {
+		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
+			continue;
+		}
 		objects[i]->UpdateStates();
 	}
 }

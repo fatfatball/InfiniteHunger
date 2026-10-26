@@ -6,6 +6,8 @@
 #include "PolyLine2D.h"
 
 // head for a spine monster
+// still working on this
+// TODO: add several legs to the main body
 class TestPhysicalObject : public BasePhysicalObject {
 public:
 	float rotationSpeed;
@@ -24,7 +26,10 @@ private:
 	// store the body nodes for this monster. and the constraints between nodes.
 	List<std::shared_ptr<BasePhysicalObject>> listTails;
 	List<Constraint> constraints;
-	PolyLine2D* polyLine2DPtr;
+	List<RotationDefiner> rotationDefs;
+	// these two are for updating the visual line
+	List<std::shared_ptr<PolyLine2D>> polyLine2Ds;
+	List<List<BasePhysicalObject*>> linedNodes;
 
 	// Solve constraints to establish physical effects.
 	// Position Based Dynamics, https://doi.org/10.1016/j.jvcir.2007.01.005

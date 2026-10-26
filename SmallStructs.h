@@ -50,3 +50,15 @@ struct Constraint {
 	float constraint2;
 	float stiffness;
 };
+
+enum class RotationDefType {
+	PrevAndNext,
+	Prev,
+};
+
+struct RotationDefiner { // adjusts the node's rotation within a body line, always rotate o2
+	RotationDefType type;
+	BasePhysicalObject* o1; // if exist, prev or head
+	BasePhysicalObject* o2; // to be rotated
+	BasePhysicalObject* o3; // if exist, next
+};
