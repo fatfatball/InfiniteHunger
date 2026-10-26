@@ -18,4 +18,3 @@ public:
 	void VisualUpdate(const float& dt) override;
 	void OnDestroy() override;
 };
-

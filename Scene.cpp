@@ -1,6 +1,8 @@
 #include "Scene.h"
 #include <thread>
 #include <functional>
+#include "BasePhysicalObject.h"
+#include "Vector2.h"
 
 Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(window), camera(camera) {
 	// slice the canvas into tiles, for rendering
@@ -36,6 +38,46 @@ void Scene::FixedUpdateObjects(float dt) {
 		objects[i]->FixedUpdate(dt);
 	}
 
+	// solve collision here
+	// 1. solve entity colliding entity.
+	// 2. solve entity colliding tilemap.
+	for (int i = 0; i < size; ++i) {
+		for (int j = i + 1; j < size; ++j) {
+			auto o1 = objects[i].get();
+			auto o2 = objects[j].get();
+			if (!o1->canCollide || !o2->canCollide) {
+				continue;
+			}
+			auto a = dynamic_cast<BasePhysicalObject*>(o1);
+			auto b = dynamic_cast<BasePhysicalObject*>(o2);
+			// maybe just let me know if there's an error
+			//if (!a || !b) {
+			//	continue;
+			//}
+
+			Vector2 delta = b->globalPosition - a->globalPosition;
+			float dist = delta.Length();
+			float minDist = b->collisionRadius + a->collisionRadius;
+
+			if (dist >= minDist || dist < 1e-4f) { // if too close, that's an error, just wait until they break up
+				continue;
+			}
+
+			float err = minDist - dist;
+			float wa = 1.f / a->mass; // please don't be 0
+			float wb = 1.f / b->mass;
+			float wSum = wa + wb; // and sum shouldn't be 0
+
+			Vector2 normal = delta.Normalized();
+			a->globalPosition = a->globalPosition - normal * err * (wa / wSum);
+			b->globalPosition = b->globalPosition + normal * err * (wb / wSum);
+
+			a->OnCollision(b, normal * -1);
+			b->OnCollision(a, normal);
+		}
+	}
+
+	// solve other constraints here
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 			continue;

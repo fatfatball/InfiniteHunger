@@ -14,6 +14,8 @@ TestPhysicalObject::TestPhysicalObject(GamesEngineeringBase::Window& canvas) : B
 	prevState = { globalPosition, scale, rotation };
 	curState = { globalPosition, scale, rotation };
 	isFixed = true;
+	canCollide = true;
+	collisionRadius = 35;
 }
 
 void TestPhysicalObject::OnStart() {
@@ -50,8 +52,8 @@ void TestPhysicalObject::OnStart() {
 	constraints.PushBack({ ConstraintType::Distance, ptr.get(), ptr1.get(), nullptr, 100.f, 0.f, stiffness });
 	constraints.PushBack({ ConstraintType::Distance, ptr1.get(), ptr2.get(), nullptr, 100.f, 0.f, stiffness });
 	constraints.PushBack({ ConstraintType::Distance, ptr2.get(), ptr3.get(), nullptr, 100.f, 0.f, stiffness });
-	constraints.PushBack({ ConstraintType::Distance, ptr.get(), ptr4.get(), nullptr, 70.f, 0.f, stiffness });
-	constraints.PushBack({ ConstraintType::Distance, ptr4.get(), ptr5.get(), nullptr, 70.f, 0.f, stiffness });
+	constraints.PushBack({ ConstraintType::Distance, ptr.get(), ptr4.get(), nullptr, 100.f, 0.f, stiffness });
+	constraints.PushBack({ ConstraintType::Distance, ptr4.get(), ptr5.get(), nullptr, 100.f, 0.f, stiffness });
 
 	auto ptrLine = std::make_shared<PolyLine2D>(env);
 	ptrLine->lineColor = { 127, 127, 127, 255};
@@ -73,13 +75,13 @@ void TestPhysicalObject::OnStart() {
 	temp.PushBack(ptr.get()), temp.PushBack(ptr4.get()), temp.PushBack(ptr5.get());
 	linedNodes.PushBack(std::move(temp));
 
-	constraints.PushBack({ ConstraintType::Angle, this, ptr.get(), ptr1.get(), PI, PI / 12.f, stiffness });
+	constraints.PushBack({ ConstraintType::Angle, this, ptr.get(), ptr1.get(), PI, PI / 6.f, stiffness });
 	constraints.PushBack({ ConstraintType::Angle, ptr.get(), ptr1.get(), ptr2.get(), PI, PI / 6.f, stiffness });
 	constraints.PushBack({ ConstraintType::Angle, ptr1.get(), ptr2.get(), ptr3.get(), PI, PI / 6.f, stiffness });
 	constraints.PushBack({ ConstraintType::Angle, this, ptr.get(), ptr4.get(), PI * 2 / 3, PI / 6.f, stiffness });
 	constraints.PushBack({ ConstraintType::Angle, ptr.get(), ptr4.get(), ptr5.get(),PI, PI / 6.f, stiffness });
 
-	constraints.PushBack({ConstraintType::DirectionAngle, this, ptr.get(), nullptr, PI, PI / 6.f , stiffness });
+	constraints.PushBack({ConstraintType::DirectionAngle, this, ptr.get(), nullptr, PI, PI / 12.f , stiffness });
 
 	rotationDefs.PushBack({ RotationDefType::PrevAndNext, this, ptr.get(), ptr1.get() });
 	rotationDefs.PushBack({ RotationDefType::PrevAndNext, ptr.get(), ptr1.get(), ptr2.get() });

@@ -14,4 +14,3 @@ public:
 	ColorRGBA GetColorAt(const float& u, const float& v) const override;
 	unsigned char GetAlphaAt(const float& u, const float& v) const override;
 };
-

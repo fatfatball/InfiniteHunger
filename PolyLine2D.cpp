@@ -84,7 +84,7 @@ bool PolyLine2D::DepthTest(float alpha, const Camera& camera, const short& curDe
     for (int i = 0; i < screenPoints.GetSize() - 1; ++i) {
         Vector2 a = screenPoints[i];
         Vector2 b = screenPoints[i + 1];
-        // TODO: add filled circle draw here
+        // ?: add filled circle draw here
         if (!Math::ClipLineToTile(a, b, expandedTile)) {
             continue;
         }
@@ -122,7 +122,7 @@ void PolyLine2D::RenderSelf(float alpha, const Camera& camera, const short& curD
     for (int i = 0; i < size - 1; ++i) {
         Vector2 a = screenPoints[i];
         Vector2 b = screenPoints[i + 1]; 
-        // TODO: add filled circle draw here
+        // ?: add filled circle draw here
         if (!Math::ClipLineToTile(a, b, expandedTile)) {
             continue;
         }

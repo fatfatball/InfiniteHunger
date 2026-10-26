@@ -29,6 +29,7 @@ public:
 	Vector2 globalPosition = {};
 	Vector2 scale = {}; // negative means flipped; directly represents the volume by global axis
 	float rotation = 0.f; // in rad, 0 is facing right, pi/2 is facing down
+	bool canCollide;
 
 	BaseGameObject(GamesEngineeringBase::Window& canvas) : env(canvas) {
 		isActive = true;
@@ -39,11 +40,13 @@ public:
 		scale = Vector2();
 		rotation = 0.f;
 		renderVisible = false;
+		canCollide = false;
 	}
 	virtual ~BaseGameObject() = default;
 
 	virtual void OnStart() = 0;
 	virtual void FixedUpdate(const float& dt) = 0;
+	virtual void GenerateCollisionConstraints() {} // for physical objects to override
 	virtual void SolveConstraints() {} // for physical objects to override
 	virtual void UpdateVelocity(const float& dt) {} // for physical objects to override
 	virtual void VisualUpdate(const float& dt) = 0;

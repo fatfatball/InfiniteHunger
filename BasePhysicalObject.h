@@ -17,7 +17,8 @@ public:
 	float mass;
 	float maxVelocity;
 	float maxForce;
-	bool isFixed; // if it can be moved by constraints
+	bool isFixed; // if it can be moved by constraints (not including collision)
+	float collisionRadius;
 
 	BasePhysicalObject(GamesEngineeringBase::Window& canvas) : BaseGameObject(canvas) {
 		dampValue = 0.1f;
@@ -25,6 +26,7 @@ public:
 		maxVelocity = 0;
 		maxForce = 0;
 		isFixed = false;
+		collisionRadius = 0;
 	}
 
 	virtual void UpdatePhysicPosition(const float& dt) {
@@ -56,4 +58,6 @@ public:
 		prevPhysicState = curPhysicState;
 		curPhysicState = { velocity, force };
 	}
+
+	virtual void OnCollision(const BasePhysicalObject* other, const Vector2& normal) {}
 };

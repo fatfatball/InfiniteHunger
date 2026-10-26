@@ -9,15 +9,17 @@ TestPhysicalTail::TestPhysicalTail(GamesEngineeringBase::Window& canvas)
 	renderOrder = RenderOrder::Third;
 	prevState = { globalPosition, scale, rotation };
 	curState = { globalPosition, scale, rotation };
+	canCollide = true;
+	collisionRadius = 20;
 }
 
 TestPhysicalTail::TestPhysicalTail(GamesEngineeringBase::Window& canvas, const Vector2& pos)
-	: BasePhysicalObject(canvas){
-	scale = Vector2(40, 40);
-	rotation = 0;
-	maxVelocity = 600; // global position per second
-	maxForce = 2000; // global position per second^2
-	renderOrder = RenderOrder::Third;
+	: TestPhysicalTail(canvas){
+	//scale = Vector2(40, 40);
+	//rotation = 0;
+	//maxVelocity = 600; // global position per second
+	//maxForce = 2000; // global position per second^2
+	//renderOrder = RenderOrder::Third;
 	globalPosition = pos;
 	prevState = { globalPosition, scale, rotation };
 	curState = { globalPosition, scale, rotation };
