@@ -148,6 +148,7 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="PolyLine2D.h" />
+    <ClInclude Include="Room0.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SmallStructs.h" />
     <ClInclude Include="TestGameObject.h" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PolyLine2D.cpp" />
+    <ClCompile Include="Room0.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TestGameObject.cpp" />
     <ClCompile Include="TestPhysicalObject.cpp" />

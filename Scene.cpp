@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "Tilemap.h"
 #include <thread>
 #include <functional>
 #include "BasePhysicalObject.h"
@@ -27,6 +28,13 @@ void Scene::AddObject(std::shared_ptr<BaseGameObject> obj) {
 	raw->scene = this;
 	objects.PushBack(std::move(obj));
 	raw->OnStart();
+}
+
+void Scene::AddTilemap(std::shared_ptr<Tilemap> tilemap) {
+	if (!tilemap) {
+		return;
+	}
+	tilemaps.PushBack(tilemap);
 }
 
 void Scene::FixedUpdateObjects(float dt) {
@@ -69,11 +77,27 @@ void Scene::FixedUpdateObjects(float dt) {
 			float wSum = wa + wb; // and sum shouldn't be 0
 
 			Vector2 normal = delta.Normalized();
+			Vector2 position = a->globalPosition * 0.5f + b->globalPosition * 0.5f;
 			a->globalPosition = a->globalPosition - normal * err * (wa / wSum);
 			b->globalPosition = b->globalPosition + normal * err * (wb / wSum);
 
-			a->OnCollision(b, normal * -1);
-			b->OnCollision(a, normal);
+			a->OnCollision(b, normal * -1, position);
+			b->OnCollision(a, normal, position);
+		}
+	}
+
+	Vector2 normal;
+	Vector2 position;
+	for (int i = 0; i < tilemaps.GetSize(); ++i) {
+		for (int j = 0; j < size; ++j) {
+			if (!objects[j]->canCollide) {
+				continue;
+			}
+			auto ptr = dynamic_cast<BasePhysicalObject*>(objects[j].get());
+			
+			if (tilemaps[i]->ResolveCollision(ptr, normal, position)) {
+				ptr->OnCollision(tilemaps[i].get(), normal, position);
+			}
 		}
 	}
 

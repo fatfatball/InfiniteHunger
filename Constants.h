@@ -16,4 +16,8 @@ const float STEP_Y = (float)FOV / WINDOW_HEIGHT;
 const short RENDER_TILE_WIDTH = 64;
 const short RENDER_TILE_HEIGHT = 64;
 
-const int CO_RENDER_THREADS = 7;
+const int CO_RENDER_THREADS = 3;
+
+const short ROOM_WIDTH = 19;
+const short ROOM_HEIGHT = 19;
+const short TILE_LENGTH = 64; // each tile's length of side in world axis

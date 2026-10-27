@@ -4,7 +4,7 @@
 //#include <iostream>
 
 TestGameObject::TestGameObject(GamesEngineeringBase::Window& canvas) 
-: BaseGameObject(canvas) {
+	: BaseGameObject(canvas) {
 	scale = Vector2(100, 100); // a square
 	rotation = 0;
 	moveSpeed = 600; // global position per second

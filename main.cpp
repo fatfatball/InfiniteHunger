@@ -8,6 +8,7 @@
 #include <memory>
 #include "TestPhysicalObject.h"
 #include "PolyLine2D.h"
+#include "Room0.h"
 
 int main() {
 	GamesEngineeringBase::Window canvas;
@@ -15,7 +16,10 @@ int main() {
 	bool running = true;
 	Camera camera;
 	Scene mainScene = Scene(canvas, camera);
-	mainScene.AddObject(std::make_shared<TestPhysicalObject>(canvas));
+	//mainScene.AddObject(std::make_shared<TestPhysicalObject>(canvas));
+	auto room0 = std::make_shared<Room0>(canvas);
+	mainScene.AddObject(room0);
+	mainScene.AddTilemap(std::move(room0));
 
 #pragma region Timers
 	GamesEngineeringBase::Timer loopTimer;

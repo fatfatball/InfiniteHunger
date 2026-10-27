@@ -89,12 +89,12 @@ public:
 		memset(depthGraph, 0x7F, WINDOW_WIDTH * WINDOW_HEIGHT * sizeof(short));
 	}
 
-	//AABB ScreenAABB2AABB(const ScreenAABB& screenAABB) const {
-	//	return AABB{
-	//		GetGlobalPosition(screenAABB.minX, screenAABB.minY),
-	//		GetGlobalPosition(screenAABB.maxX, screenAABB.maxY)
-	//	};
-	//}
+	AABB ScreenAABB2AABB(const ScreenAABB& screenAABB) const {
+		return AABB{
+			GetGlobalPosition(screenAABB.minX - 0.5f, screenAABB.minY - 0.5f),
+			GetGlobalPosition(screenAABB.maxX + 0.5f, screenAABB.maxY + 0.5f)
+		};
+	}
 
 	Vector2 World2ScreenNoClamp(const Vector2& globalPos) const {
 		return Vector2(

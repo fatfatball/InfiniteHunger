@@ -175,10 +175,12 @@ void TestPhysicalObject::OnDestroy() {
 
 ColorRGBA TestPhysicalObject::GetColorAt(const float& u, const float& v) const {
 	ColorRGBA color;
-	color.r = 255;
-	color.g = 255;
-	color.b = 255;
-	color.a = GetAlphaAt(u, v);
+	float uu = std::clamp(u, 0.0f, 1.0f);
+	float vv = std::clamp(v, 0.0f, 1.0f);
+	color.r = 0;
+	color.g = 0;
+	color.b = 0;
+	color.a = GetAlphaAt(uu, vv);
 	return color;
 }
 
