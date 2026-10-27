@@ -31,6 +31,12 @@
     <Filter Include="Source Files\GameObjects\Tilemap">
       <UniqueIdentifier>{70b154f7-d8f1-46bf-b7a7-1fa5b7ec5a76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameObjects\Tests">
+      <UniqueIdentifier>{69129113-fe12-4b8a-a0c7-fbf4346aba9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\Tests">
+      <UniqueIdentifier>{59afa817-85e8-4ce2-89f6-97706c20b658}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -63,16 +69,7 @@
     <ClInclude Include="BaseGameObject.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="TestGameObject.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="BasePhysicalObject.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="TestPhysicalObject.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="TestPhysicalTail.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="PolyLine2D.h">
@@ -84,6 +81,24 @@
     <ClInclude Include="Tilemap.h">
       <Filter>Header Files\GameObjects\Tilemap</Filter>
     </ClInclude>
+    <ClInclude Include="TestGameObject.h">
+      <Filter>Header Files\GameObjects\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="TestPhysicalObject.h">
+      <Filter>Header Files\GameObjects\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="TestPhysicalTail.h">
+      <Filter>Header Files\GameObjects\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCharacter.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Player0.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Player0TailNode.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -91,15 +106,6 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TestGameObject.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="TestPhysicalObject.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="TestPhysicalTail.cpp">
-      <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="PolyLine2D.cpp">
       <Filter>Source Files\GameObjects</Filter>
@@ -109,6 +115,24 @@
     </ClCompile>
     <ClCompile Include="Room0.cpp">
       <Filter>Source Files\GameObjects\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="TestGameObject.cpp">
+      <Filter>Source Files\GameObjects\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPhysicalObject.cpp">
+      <Filter>Source Files\GameObjects\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPhysicalTail.cpp">
+      <Filter>Source Files\GameObjects\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Player0.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player0TailNode.cpp">
+      <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

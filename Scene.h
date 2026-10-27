@@ -35,6 +35,8 @@ public:
 	void RenderObjects(const float& alpha);
 	void RecycleObjects();
 
+	void SetCameraTarget(BaseGameObject* target);
+
 private:
 	void RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems);
 };

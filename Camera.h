@@ -7,11 +7,14 @@
 #include "SmallStructs.h"
 #include <climits>
 
+class BaseGameObject;
+
 class Camera
 {
 public:
 	Vector2 globalPosition;
 	short* depthGraph; // smaller means more to the front, only for objects less than 0x7F7F
+	BaseGameObject* followTarget;
 
 	Camera() {
 		globalPosition = Vector2();
@@ -51,7 +54,7 @@ public:
 	}
 
 	// Get the global position of a pixel in the camera's view
-	inline Vector2 GetGlobalPosition(const int&x, const int&y) const {
+	inline Vector2 GetGlobalPosition(const float&x, const float&y) const {
 		Vector2 res;
 		res.x = ((float)x * INV_WINDOW_WIDTH - 0.5f) * FOV * ASPECT_RATIO + globalPosition.x;
 		res.y = ((float)y * INV_WINDOW_HEIGHT - 0.5f) * FOV + globalPosition.y;
@@ -80,9 +83,9 @@ public:
 		auto b = backBuffer[index + 2];
 		float alpha = color.a * INV255;
 		float beta = 1 - alpha;
-		backBuffer[index] = color.r * alpha + r * beta;
-		backBuffer[index + 1] = color.g * alpha + g * beta;
-		backBuffer[index + 2] = color.b * alpha + b * beta;
+		backBuffer[index] = (unsigned char)(color.r * alpha + r * beta);
+		backBuffer[index + 1] = (unsigned char)(color.g * alpha + g * beta);
+		backBuffer[index + 2] = (unsigned char)(color.b * alpha + b * beta);
 	}
 
 	void ClearDepthGraph() const {
@@ -101,5 +104,11 @@ public:
 			(globalPos.x - globalPosition.x) / (FOV * ASPECT_RATIO) * WINDOW_WIDTH + WINDOW_WIDTH / 2,
 			(globalPos.y - globalPosition.y) / FOV * WINDOW_HEIGHT + WINDOW_HEIGHT / 2
 		);
+	}
+
+	void VisualUpdate(const float& dt);
+
+	void SetFollowTarget(BaseGameObject* target) {
+		followTarget = target;
 	}
 };

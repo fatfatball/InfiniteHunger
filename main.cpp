@@ -6,7 +6,7 @@
 #include "List.h"
 #include "Scene.h"
 #include <memory>
-#include "TestPhysicalObject.h"
+#include "Player0.h"
 #include "PolyLine2D.h"
 #include "Room0.h"
 
@@ -16,7 +16,7 @@ int main() {
 	bool running = true;
 	Camera camera;
 	Scene mainScene = Scene(canvas, camera);
-	//mainScene.AddObject(std::make_shared<TestPhysicalObject>(canvas));
+	mainScene.AddObject(std::make_shared<Player0>(canvas));
 	auto room0 = std::make_shared<Room0>(canvas);
 	mainScene.AddObject(room0);
 	mainScene.AddTilemap(std::move(room0));
@@ -99,6 +99,7 @@ int main() {
 #pragma region VisualUpdate
 		// traverse the objects, update them by frameTime
 		mainScene.VisualUpdateObjects(frameTime);
+		camera.VisualUpdate(frameTime);
 #pragma endregion
 
 #pragma region Render

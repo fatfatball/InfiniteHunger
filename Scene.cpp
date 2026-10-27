@@ -171,6 +171,10 @@ void Scene::RecycleObjects() {
 	}
 }
 
+void Scene::SetCameraTarget(BaseGameObject* target) {
+	camera.SetFollowTarget(target);
+}
+
 void Scene::RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems) {
 	int tile;
 	while ((tile = nextTile.fetch_add(1, std::memory_order_relaxed)) < renderTiles.GetSize()) {

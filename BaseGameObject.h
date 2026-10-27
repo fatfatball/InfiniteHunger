@@ -2,9 +2,9 @@
 #include "Vector2.h"
 #include "GamesEngineeringBase.h"
 #include "AABB.h"
-#include "Camera.h"
 #include "Math.h"
 #include "SmallStructs.h"
+#include "Camera.h"
 
 class Scene;
 
