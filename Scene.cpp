@@ -51,6 +51,7 @@ void Scene::FixedUpdateObjects(float dt) {
 		objects[i]->FixedUpdate(dt);
 	}
 
+#pragma region CollisionSolving
 	// solve collision here
 	// 1. solve entity colliding entity.
 	// 2. solve entity colliding tilemap.
@@ -99,7 +100,7 @@ void Scene::FixedUpdateObjects(float dt) {
 				continue;
 			}
 			auto ptr = dynamic_cast<BasePhysicalObject*>(objects[j].get());
-			
+
 			if (roomManager->rooms[i]->ResolveCollision(ptr, normal, position)) {
 				ptr->OnCollision(roomManager->rooms[i].get(), normal, position);
 			}
@@ -113,6 +114,7 @@ void Scene::FixedUpdateObjects(float dt) {
 		}
 		objects[i]->SolveConstraints();
 	}
+#pragma endregion
 
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {

@@ -34,12 +34,13 @@ public:
 	}
 
 	void UpdateRenderState(const float& alpha, const Camera& camera) override {
-		if (!camera.followTarget) {
-			isFocused = false;
-		}
-		else {
-			isFocused = GetAABB().IsInside(camera.followTarget->globalPosition);
-		}
+		//if (!camera.followTarget) {
+		//	isFocused = false;
+		//}
+		//else {
+		//	isFocused = GetAABB().IsInside(camera.followTarget->globalPosition);
+		//}
+		isFocused = GetAABB().Intersects(camera.GetAABB());
 		renderAABB = GetAABB().GetIntersectionAABB(camera.GetAABB());
 		renderScreenAABB = camera.GetScreenAABB(renderAABB);
 	}

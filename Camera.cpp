@@ -2,11 +2,14 @@
 #include "BaseGameObject.h"
 #include "Constants.h"
 #include <cmath>
+#include "Math.h"
 
 void Camera::VisualUpdate(const float& dt) {
-	globalPosition = followTarget->renderState.globalPositionS;
-	globalPosition.x = std::clamp(globalPosition.x, boundary.min.x, boundary.max.x);
-	globalPosition.y  = std::clamp(globalPosition.y, boundary.min.y, boundary.max.y);
+	Vector2 tmpPos = followTarget->renderState.globalPositionS;
+	tmpPos.x = std::clamp(tmpPos.x, boundary.min.x, boundary.max.x);
+	tmpPos.y = std::clamp(tmpPos.y, boundary.min.y, boundary.max.y);
+
+	globalPosition = Math::Lerp(globalPosition, tmpPos, dt * 10);
 }
 
 void Camera::SetBoundary(const AABB& newBound) {
