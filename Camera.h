@@ -15,11 +15,16 @@ public:
 	Vector2 globalPosition;
 	short* depthGraph; // smaller means more to the front, only for objects less than 0x7F7F
 	BaseGameObject* followTarget;
+	AABB boundary;
 
 	Camera() {
 		globalPosition = Vector2();
 		depthGraph = new short[WINDOW_WIDTH * WINDOW_HEIGHT];
 		ClearDepthGraph();
+		boundary.min.x = -1000;
+		boundary.min.y = -1000;
+		boundary.max.x = 1000;
+		boundary.max.y = 1000;
 	}
 
 	// to avoid double free by copying
@@ -111,4 +116,6 @@ public:
 	void SetFollowTarget(BaseGameObject* target) {
 		followTarget = target;
 	}
+
+	void SetBoundary(const AABB& newBound);
 };

@@ -1,13 +1,9 @@
 #include "Room0.h"
+#include <string>
 
-std::string Room0::GetTileFolderPath() {
-	return "./Resources/Tiles";
-}
-
-std::string Room0::GetMapFolderPath() {
-	return "./Resources/Maps/Room0";
-}
-
-Room0::Room0(GamesEngineeringBase::Window& canvas) : Tilemap(canvas){
-
+Room0::Room0(GamesEngineeringBase::Window& canvas, const RoomCoord coord)
+	: Room(canvas, coord, "./Resources/Maps/Room0") {
+	globalPosition = Vector2{ (float)coord.x * ROOM_WIDTH * TILE_LENGTH, (float)coord.y * ROOM_HEIGHT * TILE_LENGTH };
+	curState.globalPositionS = globalPosition;
+	prevState.globalPositionS = globalPosition;
 }

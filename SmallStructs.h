@@ -62,3 +62,14 @@ struct RotationDefiner { // adjusts the node's rotation within a body line, alwa
 	BasePhysicalObject* o2; // to be rotated
 	BasePhysicalObject* o3; // if exist, next
 };
+
+struct RoomCoord {
+	int x = 0;
+	int y = 0;
+	bool operator==(const RoomCoord& other) const {
+		return x == other.x && y == other.y;
+	}
+	int DistanceTo(const RoomCoord& other) const {
+		return abs(x - other.x) + abs(y - other.y);
+	}
+};

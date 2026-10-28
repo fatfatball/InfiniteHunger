@@ -9,6 +9,7 @@
 #include "Player0.h"
 #include "PolyLine2D.h"
 #include "Room0.h"
+#include "SmallStructs.h"
 
 int main() {
 	GamesEngineeringBase::Window canvas;
@@ -17,9 +18,8 @@ int main() {
 	Camera camera;
 	Scene mainScene = Scene(canvas, camera);
 	mainScene.AddObject(std::make_shared<Player0>(canvas));
-	auto room0 = std::make_shared<Room0>(canvas);
-	mainScene.AddObject(room0);
-	mainScene.AddTilemap(std::move(room0));
+	//auto room0 = std::make_shared<Room0>(canvas, RoomCoord{ 0 ,0 });
+	//mainScene.AddRoom(std::move(room0));
 
 #pragma region Timers
 	GamesEngineeringBase::Timer loopTimer;
@@ -117,15 +117,6 @@ int main() {
 #pragma region OnlyForTest
 		if (canvas.keyPressed(0x1b)) { // esc to close
 			running = false;
-		}
-		if (canvas.keyPressed(0x42)) { // B to spawn another test object
-			if (prevBPressed == false) {
-				mainScene.AddObject(std::make_shared<TestGameObject>(canvas));
-			}
-			prevBPressed = true;
-		}
-		else {
-			prevBPressed = false;
 		}
 #pragma endregion
 	}

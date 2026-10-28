@@ -17,6 +17,9 @@ Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(wind
 			renderTiles.PushBack(renderTile);
 		}
 	}
+	roomManager = std::make_shared<RoomManager>(canvas);
+	roomManager->scene = this;
+	AddObject(roomManager);
 }
 
 void Scene::AddObject(std::shared_ptr<BaseGameObject> obj) {
@@ -26,15 +29,17 @@ void Scene::AddObject(std::shared_ptr<BaseGameObject> obj) {
 	}
 	BaseGameObject* raw = obj.get();
 	raw->scene = this;
-	objects.PushBack(std::move(obj));
+	objects.PushBack(obj);
 	raw->OnStart();
 }
 
-void Scene::AddTilemap(std::shared_ptr<Tilemap> tilemap) {
-	if (!tilemap) {
-		return;
-	}
-	tilemaps.PushBack(tilemap);
+void Scene::AddRoom(std::shared_ptr<Room> room) {
+	roomManager->AddRoom(room);
+	AddObject(room);
+}
+
+void Scene::RemoveRoom(const RoomCoord& coord) {
+	roomManager->RemoveRoom(coord);
 }
 
 void Scene::FixedUpdateObjects(float dt) {
@@ -88,15 +93,15 @@ void Scene::FixedUpdateObjects(float dt) {
 
 	Vector2 normal;
 	Vector2 position;
-	for (int i = 0; i < tilemaps.GetSize(); ++i) {
+	for (int i = 0; i < roomManager->rooms.GetSize(); ++i) {
 		for (int j = 0; j < size; ++j) {
 			if (!objects[j]->canCollide) {
 				continue;
 			}
 			auto ptr = dynamic_cast<BasePhysicalObject*>(objects[j].get());
 			
-			if (tilemaps[i]->ResolveCollision(ptr, normal, position)) {
-				ptr->OnCollision(tilemaps[i].get(), normal, position);
+			if (roomManager->rooms[i]->ResolveCollision(ptr, normal, position)) {
+				ptr->OnCollision(roomManager->rooms[i].get(), normal, position);
 			}
 		}
 	}
@@ -159,7 +164,6 @@ void Scene::RenderObjects(const float& alpha) {
 	}
 }
 
-
 void Scene::RecycleObjects() {
 	int size = objects.GetSize();
 	for (int i = size - 1; i >= 0; --i) {
@@ -173,6 +177,19 @@ void Scene::RecycleObjects() {
 
 void Scene::SetCameraTarget(BaseGameObject* target) {
 	camera.SetFollowTarget(target);
+}
+
+Vector2 Scene::GetCameraTargetPos() {
+	if (camera.followTarget) {
+		return camera.followTarget->globalPosition;
+	}
+	else {
+		return Vector2();
+	}
+}
+
+void Scene::SetCameraBoundary(const AABB& newBound) {
+	camera.SetBoundary(newBound);
 }
 
 void Scene::RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems) {

@@ -1,12 +1,8 @@
 #pragma once
-#include "Tilemap.h"
+#include "Room.h"
 #include "GamesEngineeringBase.h"
 
-class Room0 : public Tilemap{
-private:
-	std::string GetTileFolderPath() override;
-	std::string GetMapFolderPath() override;
+class Room0 : public Room {
 public:
-	Room0(GamesEngineeringBase::Window& canvas);
+	Room0(GamesEngineeringBase::Window& canvas, const RoomCoord coord);
 };
-

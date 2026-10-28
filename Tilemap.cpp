@@ -40,12 +40,9 @@ void Tilemap::OnDestroy() {
 }
 
 void Tilemap::UpdateRenderState(const float& alpha, const Camera& camera) {
-	if (!camera.followTarget) {
-		isFocused = false;
-	}
-	else {
-		isFocused = GetAABB().IsInside(camera.followTarget->globalPosition);
-	}
+	isFocused = GetAABB().Intersects(camera.GetAABB());
+	// only for test
+	//isFocused = true;
 	renderAABB = GetAABB().GetIntersectionAABB(camera.GetAABB());
 	renderScreenAABB = camera.GetScreenAABB(renderAABB);
 }

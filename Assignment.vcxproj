@@ -151,7 +151,9 @@
     <ClInclude Include="Player0.h" />
     <ClInclude Include="Player0TailNode.h" />
     <ClInclude Include="PolyLine2D.h" />
+    <ClInclude Include="Room.h" />
     <ClInclude Include="Room0.h" />
+    <ClInclude Include="RoomManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SmallStructs.h" />
     <ClInclude Include="TestGameObject.h" />
@@ -167,6 +169,7 @@
     <ClCompile Include="Player0TailNode.cpp" />
     <ClCompile Include="PolyLine2D.cpp" />
     <ClCompile Include="Room0.cpp" />
+    <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="TestGameObject.cpp" />
     <ClCompile Include="TestPhysicalObject.cpp" />
