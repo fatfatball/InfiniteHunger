@@ -7,6 +7,7 @@ Every fixed frame, traverse the objects to update the stats.
 Every visual frame, traverse the objects to update the visual stuffs.  
 At the end of every visual frame, render all objects.  
 At the end of every frame, recycle the objects that's pending destroy.  
+RoomManager: always instantiating current room and four nearby rooms, destroying others.
 
 ## Rendering
 Multi-thread cpu rendering.  
@@ -27,7 +28,7 @@ Using Position Based Dynamics for constriant updating.
 Using Steering Behaviours for ai moving (TODO). (possibly not doing this)  
 Still working on it. There is a test physical object.
 
-## Player-Enemy ideas
+## Player-Enemy ideas [in progress]
 All 3 sorts of player inherits the BasePlayer class (not newed yet).  
 Player's tail length represents health.  
 Hitting player's tail is the same as hitting the player.  

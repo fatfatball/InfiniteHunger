@@ -73,3 +73,9 @@ struct RoomCoord {
 		return abs(x - other.x) + abs(y - other.y);
 	}
 };
+
+enum class CharacterType {
+	Player,
+	Enemy,
+	None,
+};

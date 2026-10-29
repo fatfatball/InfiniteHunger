@@ -3,69 +3,16 @@
 #include "Player0TailNode.h"
 #include "PolyLine2D.h"
 #include "Vector2.h"
+#include <cmath>
+#include "SmallStructs.h"
 
-Player0::Player0(GamesEngineeringBase::Window& canvas) : BaseCharacter(canvas){
-	maxHealth = 100.f;
-	curHealth = maxHealth;
-	scale = Vector2(50, 50);
-	globalPosition = { 0, 0 };
-	rotation = 0.01f;
-	maxVelocity = 400; // global position per second
-	maxForce = 1000; // global position per second^2
-	rotationSpeed = PI; // radians per second
-	renderOrder = RenderOrder::Third;
-	prevState = { globalPosition, scale, rotation };
-	curState = { globalPosition, scale, rotation };
-	isFixed = true;
-	canCollide = true;
-	collisionRadius = 20;
-	invulnerableTime = 0.3;
-	invulnerableCounter = invulnerableTime;
-	isInvulnerable = false;
+Player0::Player0(GamesEngineeringBase::Window& canvas) : BasePlayer(canvas){
+
 }
 
 void Player0::OnStart() {
-	BaseCharacter::OnStart();
+	BasePlayer::OnStart();
 	scene->SetCameraTarget(this);
-
-	float stiffness = 0.5f;
-	Vector2 startPos = globalPosition - Vector2{ 35, 0 };
-	auto ptr = std::make_shared<Player0TailNode>(env, startPos);
-	listTails.PushBack(ptr);
-	scene->AddObject(ptr);
-
-	startPos = startPos - Vector2{ 30, 0 };
-	auto ptr1 = std::make_shared<Player0TailNode>(env, startPos);
-	listTails.PushBack(ptr1);
-	scene->AddObject(ptr1);
-
-	startPos = startPos - Vector2{ 30, 0 };
-	auto ptr2 = std::make_shared<Player0TailNode>(env, startPos);
-	listTails.PushBack(ptr2);
-	scene->AddObject(ptr2);
-
-	auto ptrLine = std::make_shared<PolyLine2D>(env);
-	ptrLine->lineColor = { 210, 210, 210, 255 };
-	ptrLine->SetThickness(5);
-	ptrLine->points.Resize(4);
-	polyLine2Ds.PushBack(ptrLine);
-	scene->AddObject(ptrLine);
-	List<BasePhysicalObject*> temp;
-	temp.PushBack(this), temp.PushBack(ptr.get()), temp.PushBack(ptr1.get()), temp.PushBack(ptr2.get());
-	linedNodes.PushBack(std::move(temp));
-
-	constraints.PushBack({ ConstraintType::Distance, this, ptr.get(), nullptr, 35.f, 0.f, stiffness }); 
-	constraints.PushBack({ ConstraintType::Distance, ptr.get(), ptr1.get(), nullptr, 30.f, 0.f, stiffness });
-	constraints.PushBack({ ConstraintType::Distance, ptr1.get(), ptr2.get(), nullptr, 30.f, 0.f, stiffness });
-	
-	constraints.PushBack({ ConstraintType::DirectionAngle, this, ptr.get(), nullptr, PI, PI / 12.f , stiffness });
-	
-	constraints.PushBack({ ConstraintType::Angle, this, ptr.get(), ptr1.get(), PI, PI / 6.f, stiffness });
-	constraints.PushBack({ ConstraintType::Angle, ptr.get(), ptr1.get(), ptr2.get(), PI, PI / 4.f, stiffness });
-
-	rotationDefs.PushBack({ RotationDefType::PrevAndNext, this, ptr.get(), ptr1.get() });
-	rotationDefs.PushBack({ RotationDefType::PrevAndNext, ptr.get(), ptr1.get(), ptr2.get() });
-	rotationDefs.PushBack({ RotationDefType::Prev, ptr1.get(), ptr2.get(), nullptr });
 }
 
 void Player0::FixedUpdate(const float& dt) {
@@ -83,8 +30,9 @@ void Player0::FixedUpdate(const float& dt) {
 		inputDir.x += 1;
 	}
 
+	// for test 
 	if (env.keyPressed(0x20)) { // space
-		isPendingDestroy = true;
+		Add1BodyNode();
 	}
 
 	// the force calculation algorithm is still naive
@@ -94,12 +42,57 @@ void Player0::FixedUpdate(const float& dt) {
 	BaseCharacter::FixedUpdate(dt);
 }
 
-void Player0::VisualUpdate(const float& dt) {
-	
-	BaseCharacter::VisualUpdate(dt);
+void Player0::TakeDamage(const float& damage) {
+	if (isDead || isInvulnerable || isPendingDestroy) {
+		return;
+	}
+	if (listTails.GetSize() == 0) {
+		return;
+	}
+	// the player only takes int damage, as it refer to the body length
+	int damageVal = (int)std::round(damage);
+	for (int i = 0; i < damageVal; ++i) {
+		if (listTails.GetSize() > 0) {
+			Remove1BodyNode();
+		}
+	}
+	curHealth = listTails.GetSize();
+	isInvulnerable = true;
+	invulnerableCounter = invulnerableTime;
+
+	if (listTails.GetSize() > 0) {
+		OnHurt();
+	}
+	else {
+		OnDie();
+	}
+}
+
+void Player0::Heal(const float& val) {
+	if (isDead || isPendingDestroy) {
+		return;
+	}
+	if (listTails.GetSize() == maxHealth) {
+		return;
+	}
+	// also the heal val should be int
+	int healVal = (int)std::round(val);
+
+	for (int i = 0; i < healVal; ++i) {
+		if (listTails.GetSize() < maxHealth) {
+			Add1BodyNode();
+		}
+	}
+	curHealth = listTails.GetSize();
+	OnHeal();
 }
 
 std::string Player0::GetSpritePath()
 {
 	return "./Resources/Characters/red_character.png";
+}
+
+std::shared_ptr<BaseBodyNode> Player0::GetBodyNode(
+	GamesEngineeringBase::Window& env, const Vector2& pos) {
+	return std::make_shared<Player0TailNode>(env, pos, this, CharacterType::Player);
 }

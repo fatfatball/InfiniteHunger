@@ -19,7 +19,8 @@ protected:
 	bool isInvulnerable;
 
 	List<std::shared_ptr<BasePhysicalObject>> listTails;
-	List<Constraint> constraints;
+	List<Constraint> distConstraints;
+	List<Constraint> angleConstraints;
 	List<RotationDefiner> rotationDefs;
 	// these two are for updating the visual line
 	List<std::shared_ptr<PolyLine2D>> polyLine2Ds;
@@ -148,6 +149,8 @@ protected:
 	virtual std::string GetSpritePath() = 0;
 
 public:
+	bool isDead; // sometimes the character is dead but should stay for a while
+
 	BaseCharacter(GamesEngineeringBase::Window& canvas) : BasePhysicalObject(canvas) {
 		maxHealth = 100.f;
 		curHealth = maxHealth;
@@ -166,6 +169,7 @@ public:
 		invulnerableTime = 0.3;
 		invulnerableCounter = invulnerableTime;
 		isInvulnerable = false;
+		isDead = false;
 	}
 
 	void OnStart() override {
@@ -182,21 +186,24 @@ public:
 		// here is from head to tail
 		// Jacobi method will first calculate all constraints and the gradient, then move them all.
 		// but it's just too complicated to imply
-		int size = constraints.GetSize();
+		
 		// only iterate one time here. the more iteration, the stiffer it would be
+		int size = distConstraints.GetSize();
 		for (int i = 0; i < size; ++i) {
-			switch (constraints[i].type) {
-			case ConstraintType::Distance:
-				UpdateDistanceConstraint(constraints[i].o1, constraints[i].o2,
-					constraints[i].constraint1, constraints[i].stiffness);
-				break;
+			UpdateDistanceConstraint(distConstraints[i].o1, distConstraints[i].o2,
+				distConstraints[i].constraint1, distConstraints[i].stiffness);
+
+		}
+		size = angleConstraints.GetSize();
+		for (int i = 0; i < size; ++i) {
+			switch (angleConstraints[i].type) {
 			case ConstraintType::Angle:
-				UpdateAngleConstraint(constraints[i].o1, constraints[i].o2, constraints[i].o3,
-					constraints[i].constraint1, constraints[i].constraint2, constraints[i].stiffness);
+				UpdateAngleConstraint(angleConstraints[i].o1, angleConstraints[i].o2, angleConstraints[i].o3,
+					angleConstraints[i].constraint1, angleConstraints[i].constraint2, angleConstraints[i].stiffness);
 				break;
 			case ConstraintType::DirectionAngle:
-				UpdateDirectionAngleConstraint(constraints[i].o1, constraints[i].o2,
-					constraints[i].constraint1, constraints[i].constraint2, constraints[i].stiffness);
+				UpdateDirectionAngleConstraint(angleConstraints[i].o1, angleConstraints[i].o2,
+					angleConstraints[i].constraint1, angleConstraints[i].constraint2, angleConstraints[i].stiffness);
 				break;
 			default:
 				break;
@@ -209,7 +216,7 @@ public:
 		for (int i = 0; i < linedNodes.GetSize(); ++i) {
 			for (int j = 0; j < linedNodes[i].GetSize(); ++j) {
 				polyLine2Ds[i]->points[j] = linedNodes[i][j]->renderState.globalPositionS 
-					+ linedNodes[i][j]->GetVelocity() * dt * 2;
+					+ linedNodes[i][j]->GetVelocity() * dt * 1.5f;
 			}
 		}
 
@@ -269,7 +276,7 @@ public:
 	}
 
 	virtual void TakeDamage(const float& damage) {
-		if (isPendingDestroy || isInvulnerable || curHealth <= 0.f) {
+		if (isPendingDestroy || isInvulnerable || curHealth <= 0.f || isDead) {
 			return;
 		}
 
@@ -281,23 +288,32 @@ public:
 			curHealth = 0.f;
 			OnDie();
 		}
+		else {
+			OnHurt();
+		}
 
 		return;
 	}
 
 	virtual void Heal(const float& val) {
-		if (isPendingDestroy || curHealth <= 0.f) {
+		if (isPendingDestroy || curHealth <= 0.f || isDead) {
 			return;
 		}
 		curHealth += val;
 		if (curHealth > maxHealth) {
 			curHealth = maxHealth;
 		}
+		OnHeal();
 	}
 	
+	virtual void OnHurt() {};
+
 	virtual void OnDie() {
 		isPendingDestroy = true;
+		isDead = true;
 	}
+
+	virtual void OnHeal() {};
 
 	virtual void InvulnerableTick(const float& dt) {
 		if (isInvulnerable) {

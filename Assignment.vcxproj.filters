@@ -37,6 +37,12 @@
     <Filter Include="Source Files\GameObjects\Tests">
       <UniqueIdentifier>{59afa817-85e8-4ce2-89f6-97706c20b658}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GameObjects\Characters">
+      <UniqueIdentifier>{e1691b9c-bf43-4df9-a880-e05fb59e4383}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\Characters">
+      <UniqueIdentifier>{863c060b-7978-4d93-9194-bf5d94824d58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -90,19 +96,25 @@
     <ClInclude Include="TestPhysicalTail.h">
       <Filter>Header Files\GameObjects\Tests</Filter>
     </ClInclude>
-    <ClInclude Include="BaseCharacter.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Player0.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Player0TailNode.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Room.h">
       <Filter>Header Files\GameObjects\Tilemap</Filter>
     </ClInclude>
     <ClInclude Include="RoomManager.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Player0.h">
+      <Filter>Header Files\GameObjects\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Player0TailNode.h">
+      <Filter>Header Files\GameObjects\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCharacter.h">
+      <Filter>Header Files\GameObjects\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="BasePlayer.h">
+      <Filter>Header Files\GameObjects\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseBodyNode.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -131,17 +143,17 @@
     <ClCompile Include="TestPhysicalTail.cpp">
       <Filter>Source Files\GameObjects\Tests</Filter>
     </ClCompile>
-    <ClCompile Include="Player0.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player0TailNode.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="RoomManager.cpp">
       <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Player0.cpp">
+      <Filter>Source Files\GameObjects\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Player0TailNode.cpp">
+      <Filter>Source Files\GameObjects\Characters</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
