@@ -10,15 +10,20 @@
 
 Tilemap::Tilemap(GamesEngineeringBase::Window& canvas)
 	: BaseGameObject(canvas) {
-	for (int i = 0; i < ROOM_HEIGHT; ++i) {
-		for (int j = 0; j < ROOM_WIDTH; ++j) {
-			tileIds[j][i] = 0;
-			tileCollisions[j][i] = false;
+	tileWidth = 1;
+	tileHeight = 1;
+	tileIds.Resize(tileWidth * tileHeight);
+	tileCollisions.Resize(tileWidth * tileHeight);
+	for (int i = 0; i < tileHeight; ++i) {
+		for (int j = 0; j < tileWidth; ++j) {
+			GetTileIds(j, i) = 0;
+			GetTileCollisions(j, i) = false;
 		}
 	}
 	renderOrder = RenderOrder::First;
 	isLoaded = false;
 	isFocused = false;
+	canCollide = false;
 }
 
 void Tilemap::OnStart() {
@@ -94,7 +99,7 @@ void Tilemap::RenderSelf(float alpha, const Camera& camera, const short& curDept
 			localPos.x -= tileX * TILE_LENGTH;
 			localPos.y -= tileY * TILE_LENGTH;
 			
-			env.draw(i, j, tiles[tileIds[tileX][tileY]].image->atUnchecked(localPos.x, localPos.y));
+			env.draw(i, j, tiles[GetTileIds(tileX, tileY)].image->atUnchecked(localPos.x, localPos.y));
 		}
 	}
 }
@@ -123,7 +128,7 @@ bool Tilemap::IsSolid(const int& tileX, const int& tileY) const
 	if (tileX < 0 || tileX > ROOM_WIDTH - 1 || tileY < 0 || tileY > ROOM_HEIGHT - 1) {
 		return false;
 	}
-	return tileCollisions[tileX][tileY];
+	return GetTileCollisions(tileX, tileY);
 }
 
 AABB Tilemap::GetAABB() const
@@ -145,7 +150,7 @@ AABB Tilemap::GetTileLocalAABB(const int& tileX, const int& tileY) const
 
 bool Tilemap::ResolveCollision(BasePhysicalObject* obj, Vector2& normal, Vector2& position) const
 {
-	if (!isLoaded) {
+	if (!canCollide || !isLoaded) {
 		return false;
 	}
 
@@ -253,8 +258,8 @@ void Tilemap::LoadMap(const std::string & folderPath) {
 
 	for (int i = 0; i < ROOM_HEIGHT; ++i) {
 		for (int j = 0; j < ROOM_WIDTH; ++j) {
-			infile >> tileIds[j][i];
-			tileCollisions[j][i] = tiles[tileIds[j][i]].isSolid;
+			infile >> GetTileIds(j, i);
+			GetTileCollisions(j, i) = tiles[GetTileIds(j, i)].isSolid;
 		}
 	}
 }

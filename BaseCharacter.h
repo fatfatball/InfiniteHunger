@@ -208,7 +208,8 @@ public:
 		// update the polyline2D
 		for (int i = 0; i < linedNodes.GetSize(); ++i) {
 			for (int j = 0; j < linedNodes[i].GetSize(); ++j) {
-				polyLine2Ds[i]->points[j] = linedNodes[i][j]->renderState.globalPositionS;
+				polyLine2Ds[i]->points[j] = linedNodes[i][j]->renderState.globalPositionS 
+					+ linedNodes[i][j]->GetVelocity() * dt * 2;
 			}
 		}
 

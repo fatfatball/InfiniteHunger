@@ -4,6 +4,7 @@
 #include "SmallStructs.h"
 #include "Vector2.h"
 #include "Constants.h"
+#include "Constants.h"
 
 class Room : public Tilemap {
 protected:
@@ -27,6 +28,18 @@ public:
 		curState.globalPositionS = globalPosition;
 		prevState.globalPositionS = globalPosition;
 		//focusChanged = 0;
+		canCollide = true;
+
+		tileWidth = ROOM_WIDTH;
+		tileHeight = ROOM_HEIGHT;
+		tileIds.Resize(tileWidth * tileHeight);
+		tileCollisions.Resize(tileWidth * tileHeight);
+		for (int i = 0; i < tileHeight; ++i) {
+			for (int j = 0; j < tileWidth; ++j) {
+				GetTileIds(j, i) = 0;
+				GetTileCollisions(j, i) = false;
+			}
+		}
 	}
 
 	RoomCoord GetCoord() const {

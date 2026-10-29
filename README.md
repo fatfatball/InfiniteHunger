@@ -27,9 +27,17 @@ Using Position Based Dynamics for constriant updating.
 Using Steering Behaviours for ai moving (TODO). (possibly not doing this)  
 Still working on it. There is a test physical object.
 
-## TODO list
-1. add some legs to the TestPhysicalObject to make it more vivid.
-2. build up Tilemap and Room (not newed yet), to make the world run.
-3. make an input tool for input edge detection.
----
-next phase: player, enemy, skills, hud...
+## Player-Enemy ideas
+All 3 sorts of player inherits the BasePlayer class (not newed yet).  
+Player's tail length represents health.  
+Hitting player's tail is the same as hitting the player.  
+Player's health decreases by time (quicker and quicker).  
+BasePlayer has a BaseAttack and BaseSkill to cast (not exist yet).  
+BaseAttack can be used without any cost, with a cool down.  
+BaseSkill can be used without a cool down, but would cost health.
+***
+All 3 sorts of enemy inhertis the BaseEnemy class (not exist).  
+Hitting enemy's tail is the same as hitting the enemy.  
+When killed, the enemies' head despawns, but the body nodes still exist for a while for players to eat.  
+Eating red nodes would restore player's health, and grey nodes just have no effect.  
+

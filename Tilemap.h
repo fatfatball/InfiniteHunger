@@ -16,6 +16,7 @@
 class Tilemap : public BaseGameObject {
 public:
 	bool isFocused; // only the tilemap with camera inside is focused
+	bool canCollide;
 
 	Tilemap(GamesEngineeringBase::Window& canvas);
 
@@ -44,9 +45,29 @@ protected:
 		bool isSolid = false;
 	};
 	List<ImgTile> tiles;
-	int tileIds[ROOM_WIDTH][ROOM_HEIGHT]; // tile id in each position, width * height
-	bool tileCollisions[ROOM_WIDTH][ROOM_HEIGHT]; // tile collision in each position, width * height
+	int tileWidth;
+	int tileHeight;
+	//int tileIds[ROOM_WIDTH][ROOM_HEIGHT]; // tile id in each position, width * height
+	//bool tileCollisions[ROOM_WIDTH][ROOM_HEIGHT]; // tile collision in each position, width * height
+	List<int> tileIds;
+	List<bool> tileCollisions;
 	bool isLoaded;
+
+	int& GetTileIds(const int& x, const int& y) {
+		return tileIds[y * tileWidth + x];
+	}
+
+	int GetTileIds(const int& x, const int& y) const {
+		return tileIds[y * tileWidth + x];
+	}
+
+	bool& GetTileCollisions(const int& x, const int& y) {
+		return tileCollisions[y * tileWidth + x];
+	}
+
+	bool GetTileCollisions(const int& x, const int& y) const {
+		return tileCollisions[y * tileWidth + x];
+	}
 
 	void LoadTiles(const std::string& folderPath);
 	void LoadMap(const std::string& folderPath);

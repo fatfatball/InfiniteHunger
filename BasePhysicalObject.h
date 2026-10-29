@@ -59,5 +59,9 @@ public:
 		curPhysicState = { velocity, force };
 	}
 
+	Vector2 GetVelocity() const {
+		return velocity;
+	}
+
 	virtual void OnCollision(const BaseGameObject* other, const Vector2& normal, const Vector2& position) {}
 };
