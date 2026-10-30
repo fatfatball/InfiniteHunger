@@ -9,6 +9,8 @@ class BaseBodyNode : public BasePhysicalObject {
 public:
 	BaseCharacter* owner;
 	CharacterType ownerType;
+	BodyNodeType nodeType;
+	float selfVanishTime;
 
 	BaseBodyNode(GamesEngineeringBase::Window& canvas) : BasePhysicalObject(canvas) {
 		scale = Vector2(50, 50);
@@ -24,10 +26,13 @@ public:
 		owner = nullptr;
 		ownerType = CharacterType::None;
 		renderState = curState;
+		nodeType = BodyNodeType::Normal;
+		isOwnerDead = false;
+		selfVanishTime = 5.f;
 	}
 
 	BaseBodyNode(GamesEngineeringBase::Window& canvas, const Vector2& pos,
-		BaseCharacter* owner, const CharacterType& type) :
+		BaseCharacter* owner, const CharacterType& type, const BodyNodeType& nodeType) :
 		BaseBodyNode(canvas) {
 		this->owner = owner;
 		ownerType = type;
@@ -35,6 +40,7 @@ public:
 		prevState = { globalPosition, scale, rotation };
 		curState = { globalPosition, scale, rotation };
 		renderState = curState;
+		this->nodeType = nodeType;
 	}
 
 	void OnStart() override {
@@ -42,6 +48,7 @@ public:
 	}
 
 	void FixedUpdate(const float& dt) override {
+		TickSelfVanish(dt);
 		UpdatePhysicPosition(dt);
 	}
 
@@ -64,14 +71,33 @@ public:
 		return sprite.alphaAtUnchecked(x, y);
 	}
 
-	void TakeDamage(const float& damage) {
+	bool TakeDamage(const float& damage) {
 		if (owner) {
-			owner->TakeDamage(damage);
+			return owner->TakeDamage(damage);
+		}
+		return false;
+	}
+
+	void TriggerWhenOwnerDie() {
+		owner = nullptr;
+		isOwnerDead = true;
+		selfVanishCounter = selfVanishTime;
+	}
+
+	void TickSelfVanish(const float& dt) {
+		if (isOwnerDead) {
+			selfVanishCounter -= dt;
+			if (selfVanishCounter <= 0) {
+				isPendingDestroy = true;
+			}
 		}
 	}
 
 protected:
 	GamesEngineeringBase::Image sprite;
+	bool isOwnerDead;
+	float selfVanishCounter;
+
 	virtual std::string GetSpritePath() const = 0;
 };
 

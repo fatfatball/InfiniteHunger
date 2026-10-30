@@ -1,10 +1,12 @@
 #include "Player0.h"
 #include "Scene.h"
-#include "Player0TailNode.h"
 #include "PolyLine2D.h"
 #include "Vector2.h"
 #include <cmath>
 #include "SmallStructs.h"
+#include "BaseBodyNode.h"
+#include "BasePlayer.h"
+#include "Player0TailNode.h"
 
 Player0::Player0(GamesEngineeringBase::Window& canvas) : BasePlayer(canvas){
 
@@ -15,38 +17,39 @@ void Player0::OnStart() {
 }
 
 void Player0::FixedUpdate(const float& dt) {
-	Vector2 inputDir = Vector2();
-	if (env.keyPressed(0x57)) { // W
-		inputDir.y += -1;
-	}
-	if (env.keyPressed(0x41)) { // A
-		inputDir.x += -1;
-	}
-	if (env.keyPressed(0x53)) { // S
-		inputDir.y += 1;
-	}
-	if (env.keyPressed(0x44)) { // D
-		inputDir.x += 1;
-	}
+	if (!isDead) {
+		Vector2 inputDir = Vector2();
+		if (env.keyPressed(0x57)) { // W
+			inputDir.y += -1;
+		}
+		if (env.keyPressed(0x41)) { // A
+			inputDir.x += -1;
+		}
+		if (env.keyPressed(0x53)) { // S
+			inputDir.y += 1;
+		}
+		if (env.keyPressed(0x44)) { // D
+			inputDir.x += 1;
+		}
 
-	// for test 
-	if (env.keyPressed(0x20)) { // space
-		Add1BodyNode();
+		// for test 
+		if (env.keyPressed(0x20)) { // space
+			Add1BodyNode();
+		}
+
+		// the force calculation algorithm is still naive
+		force = Vector2(std::cos(rotation), std::sin(rotation)) * maxForce * -inputDir.y;
+		rotation = Math::WrapAngle(rotation + inputDir.x * rotationSpeed * dt);
 	}
-
-	// the force calculation algorithm is still naive
-	force = Vector2(std::cos(rotation), std::sin(rotation)) * maxForce * -inputDir.y;
-	rotation = Math::WrapAngle(rotation + inputDir.x * rotationSpeed * dt);
-
 	BaseCharacter::FixedUpdate(dt);
 }
 
-void Player0::TakeDamage(const float& damage) {
+bool Player0::TakeDamage(const float& damage) {
 	if (isDead || isInvulnerable || isPendingDestroy) {
-		return;
+		return false;
 	}
 	if (listTails.GetSize() == 0) {
-		return;
+		return false;
 	}
 	// the player only takes int damage, as it refer to the body length
 	int damageVal = (int)std::round(damage);
@@ -65,6 +68,7 @@ void Player0::TakeDamage(const float& damage) {
 	else {
 		OnDie();
 	}
+	return true;
 }
 
 void Player0::Heal(const float& val) {
@@ -86,6 +90,11 @@ void Player0::Heal(const float& val) {
 	OnHeal();
 }
 
+void Player0::OnDie() {
+	force = {};
+	isDead = true;
+}
+
 std::string Player0::GetSpritePath()
 {
 	return "./Resources/Characters/red_character.png";
@@ -93,5 +102,5 @@ std::string Player0::GetSpritePath()
 
 std::shared_ptr<BaseBodyNode> Player0::GetBodyNode(
 	GamesEngineeringBase::Window& env, const Vector2& pos) {
-	return std::make_shared<Player0TailNode>(env, pos, this, CharacterType::Player);
+	return std::make_shared<Player0TailNode>(env, pos, this, CharacterType::Player, BodyNodeType::Normal);
 }

@@ -148,6 +148,8 @@
     <ClInclude Include="BasePlayer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="EnemyFast.h" />
+    <ClInclude Include="EnemyBodyNode.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Math.h" />
@@ -166,7 +168,10 @@
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseCharacter.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="EnemyBodyNode.cpp" />
+    <ClCompile Include="EnemyFast.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player0.cpp" />
     <ClCompile Include="Player0TailNode.cpp" />

@@ -10,8 +10,8 @@ private:
 public:
 	Player0TailNode(GamesEngineeringBase::Window& canvas) : BaseBodyNode(canvas) {}
 	Player0TailNode(GamesEngineeringBase::Window& canvas, const Vector2& pos,
-		BaseCharacter* owner, const CharacterType& type) :
-		BaseBodyNode(canvas, pos, owner, type) {}
+		BaseCharacter* owner, const CharacterType& type, const BodyNodeType& nodeType) :
+		BaseBodyNode(canvas, pos, owner, type, nodeType) {}
 	void VisualUpdate(const float& dt) override {}
 	void OnDestroy() override {}
 };

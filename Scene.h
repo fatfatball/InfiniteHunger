@@ -50,6 +50,7 @@ public:
 	BasePlayer* GetFirstPlayer();
 	BasePlayer* GetClosestPlayer(const Vector2& pos); // find the closest player for enemy
 	bool IsInRoom(Vector2& pos); // is a pos is inside of an instantiated room
+	int GetObjectCount() const;
 
 private:
 	void RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems);

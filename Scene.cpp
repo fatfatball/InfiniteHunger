@@ -6,6 +6,7 @@
 #include "Vector2.h"
 #include "Player0.h"
 #include "BasePlayer.h"
+#include <iostream>
 
 Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(window), camera(camera) {
 	// slice the canvas into tiles, for rendering
@@ -36,8 +37,9 @@ void Scene::AddObject(std::shared_ptr<BaseGameObject> obj) {
 }
 
 void Scene::AddRoom(std::shared_ptr<Room> room) {
-	roomManager->AddRoom(room);
-	AddObject(room);
+	if (roomManager->AddRoom(room)) {
+		AddObject(room);
+	}
 }
 
 void Scene::RemoveRoom(const RoomCoord& coord) {
@@ -100,14 +102,29 @@ void Scene::FixedUpdateObjects(float dt) {
 			}
 
 			float err = minDist - dist;
-			float wa = 1.f / a->mass; // please don't be 0
-			float wb = 1.f / b->mass;
-			float wSum = wa + wb; // and sum shouldn't be 0
-
 			Vector2 normal = delta.Normalized();
 			Vector2 position = a->globalPosition * 0.5f + b->globalPosition * 0.5f;
-			a->globalPosition = a->globalPosition - normal * err * (wa / wSum);
-			b->globalPosition = b->globalPosition + normal * err * (wb / wSum);
+			
+			float wa;
+			float wb;
+			if (a->isStatic) {
+				wa = 0.f;
+			}
+			else {
+				wa = 1.f / a->mass;
+			}
+			if (b->isStatic) {
+				wb = 0.f;
+			}
+			else {
+				wb = 1.f / b->mass;
+			}
+			float wSum = wa + wb;
+
+			if (wSum > 1e-4f) {
+				a->globalPosition = a->globalPosition - normal * err * (wa / wSum);
+				b->globalPosition = b->globalPosition + normal * err * (wb / wSum);
+			}
 
 			a->OnCollision(b, normal * -1, position);
 			b->OnCollision(a, normal, position);
@@ -122,6 +139,9 @@ void Scene::FixedUpdateObjects(float dt) {
 				continue;
 			}
 			auto ptr = dynamic_cast<BasePhysicalObject*>(objects[j].get());
+			if (ptr->isStatic) {
+				continue;
+			}
 
 			if (roomManager->rooms[i]->ResolveCollision(ptr, normal, position)) {
 				ptr->OnCollision(roomManager->rooms[i].get(), normal, position);
@@ -194,6 +214,21 @@ void Scene::RecycleObjects() {
 		if (!objects[i]->isPendingDestroy) {
 			continue;
 		}
+		// clear other places
+		auto ptr = objects[i].get();
+		if (camera.followTarget == ptr) {
+			camera.followTarget = nullptr;
+		}
+		auto playerPtr = dynamic_cast<BasePlayer*>(ptr);
+		if (playerPtr) {
+			for (int j = 0; j < players.GetSize(); ++j) {
+				if (players[j].get() == playerPtr) {
+					players.Erase(j);
+					break;
+				}
+			}
+		}
+
 		objects[i]->OnDestroy();
 		objects.Erase(i);
 	}
@@ -208,7 +243,7 @@ Vector2 Scene::GetCameraTargetPos() {
 		return camera.followTarget->globalPosition;
 	}
 	else {
-		return Vector2();
+		return camera.globalPosition;
 	}
 }
 
@@ -221,8 +256,10 @@ AABB Scene::GetCameraAABB() {
 }
 
 BasePlayer* Scene::GetFirstPlayer() {
-	if (players.GetSize() >= 1) {
-		return players[0].get();
+	for (int i = 0; i < players.GetSize(); ++i) {
+		if (players[i] && players[i]->isActive && !players[i]->isPendingDestroy && !players[i]->isDead) {
+			return players[i].get();
+		}
 	}
 	return nullptr;
 }
@@ -231,11 +268,15 @@ BasePlayer* Scene::GetClosestPlayer(const Vector2& pos) {
 	if (players.GetSize() == 0) {
 		return nullptr;
 	}
-	BasePlayer* res = players[0].get();
-	float dist = (res->globalPosition - pos).Length();
-	for (int i = 1; i < players.GetSize(); ++i) {
-		if ((players[i]->globalPosition - pos).Length() < dist) {
-			res = players[i].get();
+	BasePlayer* res = nullptr;
+	float dist = 0.f;
+	for (int i = 0; i < players.GetSize(); ++i) {
+		if (players[i] && players[i]->isActive && !players[i]->isPendingDestroy && !players[i]->isDead) {
+			float d = (players[i]->globalPosition - pos).Length();
+			if (res == nullptr || d < dist) {
+				dist = d;
+				res = players[i].get();
+			}
 		}
 	}
 	return res;
@@ -244,6 +285,11 @@ BasePlayer* Scene::GetClosestPlayer(const Vector2& pos) {
 bool Scene::IsInRoom(Vector2& pos) {
 	RoomCoord coord = roomManager->Wolrd2RoomCoord(pos);
 	return roomManager->HasRoom(coord);
+}
+
+int Scene::GetObjectCount() const
+{
+	return objects.GetSize();
 }
 
 void Scene::RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems) {

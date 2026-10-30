@@ -64,6 +64,7 @@ int main() {
 			std::cout << "clear time: " << clearTime / frameTimeCounter << std::endl;
 			std::cout << "render time: " << renderTime / frameTimeCounter << std::endl;
 			std::cout << "present time: " << presentTime / frameTimeCounter << std::endl;
+			std::cout << "current objects: " << mainScene.GetObjectCount() << std::endl;
 			frameTimeCounter = 0;
 			frameCounter = 0;
 			fixedUpdateTime = 0;

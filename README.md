@@ -42,3 +42,11 @@ Hitting enemy's tail is the same as hitting the enemy.
 When killed, the enemies' head despawns, but the body nodes still exist for a while for players to eat.  
 Eating red nodes would restore player's health, and grey nodes just have no effect.  
 
+## Reminder
+Still working on BaseEnemy and enemy spawning.  
+I went into a problem that the player's tail is not that natural, because it looked too heavy. So I thought through for the difference between my dot-line model and the real animals. One big difference is that the mass distribution of a real animal is not even. Animals have thicker body and thiner tail. Therefore I changed the mass of the body node into a decreasing sequence. It turned out to be pretty well.  
+There are 3 types of enemy: Fast, Medium, Slow.  
+Fase contains no health node, with only 2 health point.  
+Medium contains some health, with a liitle more health point.  
+Slow contains lots of health, with a lot of health point.  
+The static eneity that spawns enemies should only be spawnting the Fast enemy, and have some health point.  

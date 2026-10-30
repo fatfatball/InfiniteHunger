@@ -19,6 +19,7 @@ public:
 	float maxForce;
 	bool isFixed; // if it can be moved by constraints (not including collision)
 	float collisionRadius;
+	bool isStatic; // if it can be moved by collisions
 
 	BasePhysicalObject(GamesEngineeringBase::Window& canvas) : BaseGameObject(canvas) {
 		dampValue = 0.1f;
@@ -27,6 +28,7 @@ public:
 		maxForce = 0;
 		isFixed = false;
 		collisionRadius = 0;
+		isStatic = false;
 	}
 
 	virtual void UpdatePhysicPosition(const float& dt) {

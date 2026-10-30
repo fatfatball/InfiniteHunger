@@ -59,15 +59,16 @@ unsigned char RoomManager::GetAlphaAt(const float& u, const float& v) const {
 	return 0;
 }
 
-void RoomManager::AddRoom(std::shared_ptr<Room> room) {
+bool RoomManager::AddRoom(std::shared_ptr<Room> room) {
 	if (!room) {
-		return;
+		return false;
 	}
 	// check that it is not added twice
 	if (HasRoom(room->GetCoord())) {
-		return;
+		return false;
 	}
 	rooms.PushBack(room);
+	return true;
 }
 
 void RoomManager::RemoveRoom(const RoomCoord coord) {

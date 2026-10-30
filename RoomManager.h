@@ -20,7 +20,7 @@ public:
 	ColorRGBA GetColorAt(const float& u, const float& v) const override;
 	unsigned char GetAlphaAt(const float& u, const float& v) const override;
 
-	void AddRoom(std::shared_ptr<Room> room);
+	bool AddRoom(std::shared_ptr<Room> room);
 	void RemoveRoom(const RoomCoord coord);
 	bool HasRoom(const RoomCoord& coord);
 	Room* GetRoomAt(const RoomCoord& coord);

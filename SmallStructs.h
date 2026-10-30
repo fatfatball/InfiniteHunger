@@ -91,3 +91,8 @@ enum class EnemyType {
 	Medium,
 	Slow,
 };
+
+enum class BodyNodeType {
+	Normal,
+	Heal,
+};

@@ -54,17 +54,19 @@ public:
 	void FixedUpdate(const float& dt) override {
 		// second player shouldn't be outside of the window
 		if (!scene->GetCameraAABB().Intersects(GetAABB(curState))) {
-			TeleportTo(scene->GetFirstPlayer()->globalPosition);
+			if (scene->GetFirstPlayer() != this) {
+				TeleportTo(scene->GetFirstPlayer()->globalPosition);
+			}
 		}
 		BaseCharacter::FixedUpdate(dt);
 	}
 
-	void TakeDamage(const float& damage) override {
+	bool TakeDamage(const float& damage) override {
 		if (isDead || isInvulnerable || isPendingDestroy) {
-			return;
+			return false;
 		}
 		if (listTails.GetSize() == 0) {
-			return;
+			return false;
 		}
 		// the player only takes int damage, as it refer to the body length
 		int damageVal = (int)std::round(damage);
@@ -83,6 +85,8 @@ public:
 		else {
 			OnDie();
 		}
+
+		return true;
 	}
 
 	void Heal(const float& val) override {
