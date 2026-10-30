@@ -55,18 +55,30 @@ public:
 	ColorRGBA GetColorAt(const float& u, const float& v) const override {
 		int x = std::clamp(u, 0.f, 1.f) * sprite.width;
 		int y = std::clamp(v, 0.f, 1.f) * sprite.height;
+		x = x == sprite.width ? x - 1 : x;
+		y = y == sprite.height ? y - 1 : y;
 		auto ptr = sprite.atUnchecked(x, y);
 		ColorRGBA color;
+		if (isOwnerDead) {
+			color.a = sprite.alphaAtUnchecked(x, y) * std::clamp(selfVanishCounter / selfVanishTime, 0.f, 1.f);
+		}
+		else {
+			color.a = sprite.alphaAtUnchecked(x, y);
+		}
 		color.r = ptr[0];
 		color.g = ptr[1];
 		color.b = ptr[2];
-		color.a = sprite.alphaAtUnchecked(x, y);
 		return color;
 	}
 
 	unsigned char GetAlphaAt(const float& u, const float& v) const override {
+		if (isOwnerDead) {
+			return 1;
+		}
 		int x = std::clamp(u, 0.f, 1.f) * sprite.width;
 		int y = std::clamp(v, 0.f, 1.f) * sprite.height;
+		x = x == sprite.width ? x - 1 : x;
+		y = y == sprite.height ? y - 1 : y;
 		auto ptr = sprite.atUnchecked(x, y);
 		return sprite.alphaAtUnchecked(x, y);
 	}
