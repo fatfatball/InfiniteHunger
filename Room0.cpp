@@ -7,3 +7,7 @@ Room0::Room0(GamesEngineeringBase::Window& canvas, const RoomCoord coord)
 	curState.globalPositionS = globalPosition;
 	prevState.globalPositionS = globalPosition;
 }
+
+void Room0::OnStart() {
+	Room::OnStart();
+}

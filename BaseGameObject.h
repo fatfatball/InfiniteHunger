@@ -29,7 +29,8 @@ public:
 	Vector2 globalPosition = {};
 	Vector2 scale = {}; // negative means flipped; directly represents the volume by global axis
 	float rotation = 0.f; // in rad, 0 is facing right, pi/2 is facing down
-	bool canCollide;
+	bool canCollide; // physics and trigger can collide
+	bool isTrigger; // test for collide but don't move
 
 	BaseGameObject(GamesEngineeringBase::Window& canvas) : env(canvas) {
 		isActive = true;
@@ -41,6 +42,7 @@ public:
 		rotation = 0.f;
 		renderVisible = false;
 		canCollide = false;
+		isTrigger = false;
 	}
 	virtual ~BaseGameObject() = default;
 
@@ -203,6 +205,13 @@ public:
 		renderVisible = renderState.scaleS.x > 1 && renderState.scaleS.y > 1;
 		if (renderVisible) renderInvScale = { 1 / renderState.scaleS.x , 1 / renderState.scaleS.y };
 		renderScreenAABB = camera.GetScreenAABB(renderAABB);
+	}
+
+	void TeleportTo(const Vector2& globalPos) {
+		globalPosition = globalPos;
+		curState.globalPositionS = globalPos;
+		prevState.globalPositionS = globalPos;
+		renderState = curState;
 	}
 
 protected:

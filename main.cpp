@@ -17,9 +17,8 @@ int main() {
 	bool running = true;
 	Camera camera;
 	Scene mainScene = Scene(canvas, camera);
-	mainScene.AddObject(std::make_shared<Player0>(canvas));
-	//auto room0 = std::make_shared<Room0>(canvas, RoomCoord{ 0 ,0 });
-	//mainScene.AddRoom(std::move(room0));
+	//mainScene.AddObject(std::make_shared<Player0>(canvas));
+	mainScene.AddPlayer(PlayerType::Swordsman);
 
 #pragma region Timers
 	GamesEngineeringBase::Timer loopTimer;
@@ -53,8 +52,6 @@ int main() {
 	//	mainScene.AddObject(std::move(obj));
 	//}
 #pragma endregion
-
-	bool prevBPressed = false;
 
 	while (running) {
 		frameTime = loopTimer.dt();

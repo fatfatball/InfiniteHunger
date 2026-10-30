@@ -142,6 +142,7 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="BaseBodyNode.h" />
     <ClInclude Include="BaseCharacter.h" />
+    <ClInclude Include="BaseEnemy.h" />
     <ClInclude Include="BaseGameObject.h" />
     <ClInclude Include="BasePhysicalObject.h" />
     <ClInclude Include="BasePlayer.h" />

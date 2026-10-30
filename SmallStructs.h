@@ -79,3 +79,15 @@ enum class CharacterType {
 	Enemy,
 	None,
 };
+
+enum class PlayerType {
+	Swordsman,
+	Archer,
+	Wizard,
+};
+
+enum class EnemyType {
+	Fast,
+	Medium,
+	Slow,
+};

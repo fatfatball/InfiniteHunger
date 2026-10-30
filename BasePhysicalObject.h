@@ -63,5 +63,5 @@ public:
 		return velocity;
 	}
 
-	virtual void OnCollision(const BaseGameObject* other, const Vector2& normal, const Vector2& position) {}
+	virtual void OnCollision(BaseGameObject* other, const Vector2& normal, const Vector2& position) {}
 };

@@ -9,6 +9,8 @@
 #include "Room.h"
 #include "RoomManager.h"
 
+class BasePlayer;
+
 // a scene contains lots of objects, and manage their life circles
 class Scene{
 private:
@@ -20,6 +22,7 @@ private:
 	List<List<RenderedItem>> renderedItemLists{ CO_RENDER_THREADS + 1 };
 	//List<std::shared_ptr<Tilemap>> tilemaps;
 	std::shared_ptr<RoomManager> roomManager;
+	List< std::shared_ptr<BasePlayer>> players;
 	 
 public:
 	Scene(GamesEngineeringBase::Window& window, Camera& camera);
@@ -33,6 +36,7 @@ public:
 	void AddObject(std::shared_ptr<BaseGameObject> obj);
 	void AddRoom(std::shared_ptr<Room> room);
 	void RemoveRoom(const RoomCoord& coord);
+	void AddPlayer(const PlayerType type);
 
 	void FixedUpdateObjects(float dt);
 	void VisualUpdateObjects(float dt);
@@ -42,6 +46,10 @@ public:
 	void SetCameraTarget(BaseGameObject* target);
 	Vector2 GetCameraTargetPos();
 	void SetCameraBoundary(const AABB& newBound);
+	AABB GetCameraAABB();
+	BasePlayer* GetFirstPlayer();
+	BasePlayer* GetClosestPlayer(const Vector2& pos); // find the closest player for enemy
+	bool IsInRoom(Vector2& pos); // is a pos is inside of an instantiated room
 
 private:
 	void RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems);

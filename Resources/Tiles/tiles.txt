@@ -1,3 +1,2 @@
 0	tiles.png	0
 1	crate.png	1
-2	door.png	1

@@ -26,5 +26,5 @@ public:
 	Room* GetRoomAt(const RoomCoord& coord);
 	std::shared_ptr<Room> GetRandomRoomAt(const RoomCoord& coord);
 	bool CheckIfLive(const RoomCoord& coord);
-	RoomCoord Wolrd2RoomCoord(const Vector2& pos);
+	static RoomCoord Wolrd2RoomCoord(const Vector2& pos);
 };

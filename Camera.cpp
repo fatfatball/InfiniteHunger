@@ -5,6 +5,10 @@
 #include "Math.h"
 
 void Camera::VisualUpdate(const float& dt) {
+	if (followTarget == nullptr) {
+		return;
+	}
+
 	Vector2 tmpPos = followTarget->renderState.globalPositionS;
 	tmpPos.x = std::clamp(tmpPos.x, boundary.min.x, boundary.max.x);
 	tmpPos.y = std::clamp(tmpPos.y, boundary.min.y, boundary.max.y);

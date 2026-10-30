@@ -4,6 +4,8 @@
 #include <functional>
 #include "BasePhysicalObject.h"
 #include "Vector2.h"
+#include "Player0.h"
+#include "BasePlayer.h"
 
 Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(window), camera(camera) {
 	// slice the canvas into tiles, for rendering
@@ -40,6 +42,26 @@ void Scene::AddRoom(std::shared_ptr<Room> room) {
 
 void Scene::RemoveRoom(const RoomCoord& coord) {
 	roomManager->RemoveRoom(coord);
+}
+
+void Scene::AddPlayer(const PlayerType type) {
+	if (players.GetSize() >= 2) {
+		return;
+	}
+	switch (type) {
+	case PlayerType::Swordsman: {
+		auto ptr = std::make_shared<Player0>(canvas);
+		ptr->TeleportTo(camera.globalPosition);
+		AddObject(ptr);
+		players.PushBack(ptr);
+		break;
+	}
+	default:
+		break;
+	}
+	if (players.GetSize() == 1) {
+		SetCameraTarget(players[0].get());
+	}
 }
 
 void Scene::FixedUpdateObjects(float dt) {
@@ -192,6 +214,36 @@ Vector2 Scene::GetCameraTargetPos() {
 
 void Scene::SetCameraBoundary(const AABB& newBound) {
 	camera.SetBoundary(newBound);
+}
+
+AABB Scene::GetCameraAABB() {
+	return camera.GetAABB();
+}
+
+BasePlayer* Scene::GetFirstPlayer() {
+	if (players.GetSize() >= 1) {
+		return players[0].get();
+	}
+	return nullptr;
+}
+
+BasePlayer* Scene::GetClosestPlayer(const Vector2& pos) {
+	if (players.GetSize() == 0) {
+		return nullptr;
+	}
+	BasePlayer* res = players[0].get();
+	float dist = (res->globalPosition - pos).Length();
+	for (int i = 1; i < players.GetSize(); ++i) {
+		if ((players[i]->globalPosition - pos).Length() < dist) {
+			res = players[i].get();
+		}
+	}
+	return res;
+}
+
+bool Scene::IsInRoom(Vector2& pos) {
+	RoomCoord coord = roomManager->Wolrd2RoomCoord(pos);
+	return roomManager->HasRoom(coord);
 }
 
 void Scene::RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems) {

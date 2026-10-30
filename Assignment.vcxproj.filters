@@ -117,6 +117,9 @@
     <ClInclude Include="BaseBodyNode.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="BaseEnemy.h">
+      <Filter>Header Files\GameObjects\Characters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

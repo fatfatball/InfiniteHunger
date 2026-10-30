@@ -12,7 +12,6 @@ Player0::Player0(GamesEngineeringBase::Window& canvas) : BasePlayer(canvas){
 
 void Player0::OnStart() {
 	BasePlayer::OnStart();
-	scene->SetCameraTarget(this);
 }
 
 void Player0::FixedUpdate(const float& dt) {

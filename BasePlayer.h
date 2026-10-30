@@ -51,6 +51,14 @@ public:
 		}
 	}
 
+	void FixedUpdate(const float& dt) override {
+		// second player shouldn't be outside of the window
+		if (!scene->GetCameraAABB().Intersects(GetAABB(curState))) {
+			TeleportTo(scene->GetFirstPlayer()->globalPosition);
+		}
+		BaseCharacter::FixedUpdate(dt);
+	}
+
 	void TakeDamage(const float& damage) override {
 		if (isDead || isInvulnerable || isPendingDestroy) {
 			return;
