@@ -80,7 +80,13 @@ void Scene::FixedUpdateObjects(float dt) {
 	// 1. solve entity colliding entity.
 	// 2. solve entity colliding tilemap.
 	for (int i = 0; i < size; ++i) {
+		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
+			continue;
+		}
 		for (int j = i + 1; j < size; ++j) {
+			if (!objects[j]->isActive || objects[j]->isPendingDestroy) {
+				continue;
+			}
 			auto o1 = objects[i].get();
 			auto o2 = objects[j].get();
 			if (!o1->canCollide || !o2->canCollide) {
@@ -135,7 +141,7 @@ void Scene::FixedUpdateObjects(float dt) {
 	Vector2 position;
 	for (int i = 0; i < roomManager->rooms.GetSize(); ++i) {
 		for (int j = 0; j < size; ++j) {
-			if (!objects[j]->canCollide) {
+			if (!objects[j]->canCollide || !objects[j]->isActive || objects[j]->isPendingDestroy) {
 				continue;
 			}
 			auto ptr = dynamic_cast<BasePhysicalObject*>(objects[j].get());

@@ -71,12 +71,12 @@ bool Player0::TakeDamage(const float& damage) {
 	return true;
 }
 
-void Player0::Heal(const float& val) {
+bool Player0::Heal(const float& val) {
 	if (isDead || isPendingDestroy) {
-		return;
+		return false;
 	}
 	if (listTails.GetSize() == maxHealth) {
-		return;
+		return false;
 	}
 	// also the heal val should be int
 	int healVal = (int)std::round(val);
@@ -88,6 +88,7 @@ void Player0::Heal(const float& val) {
 	}
 	curHealth = listTails.GetSize();
 	OnHeal();
+	return true;
 }
 
 void Player0::OnDie() {

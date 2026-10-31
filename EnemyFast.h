@@ -14,10 +14,6 @@ public:
 
 	void VisualUpdate(const float& dt) override;
 
-	void OnDestroy() override;
-
-	void OnCollision(BaseGameObject* other, const Vector2& normal, const Vector2& position) override;
-
 private:
 	std::string GetSpritePath() override;
 };

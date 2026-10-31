@@ -150,6 +150,8 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="EnemyFast.h" />
     <ClInclude Include="EnemyBodyNode.h" />
+    <ClInclude Include="EnemyMedium.h" />
+    <ClInclude Include="EnemySlow.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Math.h" />
@@ -172,6 +174,8 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="EnemyBodyNode.cpp" />
     <ClCompile Include="EnemyFast.cpp" />
+    <ClCompile Include="EnemyMedium.cpp" />
+    <ClCompile Include="EnemySlow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player0.cpp" />
     <ClCompile Include="Player0TailNode.cpp" />

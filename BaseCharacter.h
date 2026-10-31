@@ -70,7 +70,7 @@ public:
 
 	virtual bool TakeDamage(const float& damage);
 
-	virtual void Heal(const float& val);
+	virtual bool Heal(const float& val);
 	
 	virtual void OnHurt() {};
 

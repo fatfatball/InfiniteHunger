@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 
+// the swordsman
 // player only has 1 body line
 // the health refers to the length of body line
 // the body node can only be changed at the end of line, like a stack
@@ -16,7 +17,7 @@ public:
 	void FixedUpdate(const float& dt) override;
 
 	bool TakeDamage(const float& damage) override;
-	void Heal(const float& val) override;
+	bool Heal(const float& val) override;
 	void OnDie() override;
 
 private:

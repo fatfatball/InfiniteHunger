@@ -262,13 +262,14 @@ bool BaseCharacter::TakeDamage(const float& damage) {
 	return true;
 }
 
-void BaseCharacter::Heal(const float& val) {
+bool BaseCharacter::Heal(const float& val) {
 	if (isPendingDestroy || curHealth <= 0.f || isDead) {
-		return;
+		return false;
 	}
 	curHealth += val;
 	if (curHealth > maxHealth) {
 		curHealth = maxHealth;
 	}
 	OnHeal();
+	return true;
 }

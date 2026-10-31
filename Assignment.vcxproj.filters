@@ -126,6 +126,12 @@
     <ClInclude Include="Player0TailNode.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyMedium.h">
+      <Filter>Header Files\GameObjects\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySlow.h">
+      <Filter>Header Files\GameObjects\Characters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -172,6 +178,12 @@
     </ClCompile>
     <ClCompile Include="EnemyBodyNode.cpp">
       <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyMedium.cpp">
+      <Filter>Source Files\GameObjects\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySlow.cpp">
+      <Filter>Source Files\GameObjects\Characters</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

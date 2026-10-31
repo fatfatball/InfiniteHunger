@@ -93,5 +93,38 @@ public:
 		}
 		BaseCharacter::FixedUpdate(dt);
 	}
+
+	void OnDestroy() override {
+		for (int i = 0; i < listTails.GetSize(); ++i) {
+			listTails[i]->TriggerWhenOwnerDie();
+		}
+		for (int i = 0; i < polyLine2Ds.GetSize(); ++i) {
+			polyLine2Ds[i]->isPendingDestroy = true;
+		}
+	}
+
+	void OnCollision(BaseGameObject* other, const Vector2& normal, const Vector2& position) override {
+		if (contactDamage < 1e-4f) {
+			return;
+		}
+
+		auto ptr1 = dynamic_cast<BasePlayer*>(other);
+		if (ptr1) {
+			if (ptr1->TakeDamage(contactDamage)) {
+				ptr1->globalPosition = ptr1->globalPosition + normal * -hitMovement;
+				globalPosition = globalPosition + normal * hitMovement;
+			}
+			return;
+		}
+
+		auto ptr2 = dynamic_cast<BaseBodyNode*>(other);
+		if (ptr2 && ptr2->ownerType == CharacterType::Player) {
+			if (ptr2->owner->TakeDamage(contactDamage)) {
+				ptr2->owner->globalPosition = ptr2->owner->globalPosition + normal * -hitMovement;
+				globalPosition = globalPosition + normal * hitMovement;
+			}
+			return;
+		}
+	}
 };
 

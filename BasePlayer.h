@@ -19,8 +19,8 @@ public:
 		globalPosition = { 0, 0 };
 		rotation = 0.01f;
 		maxVelocity = 400; // global position per second
-		maxForce = 1000 * mass; // global position per second^2
-		rotationSpeed = PI * 3.f / 2.f; // radians per second
+		maxForce = 2000 * mass; // global position per second^2
+		rotationSpeed = PI * 2.f; // radians per second
 		renderOrder = RenderOrder::Third;
 		prevState = { globalPosition, scale, rotation };
 		curState = { globalPosition, scale, rotation };
@@ -89,12 +89,12 @@ public:
 		return true;
 	}
 
-	void Heal(const float& val) override {
+	bool Heal(const float& val) override {
 		if (isDead || isPendingDestroy) {
-			return;
+			return false;
 		}
 		if (listTails.GetSize() == maxHealth) {
-			return;
+			return false;
 		}
 		// also the heal val should be int
 		int healVal = (int)std::round(val);
@@ -106,6 +106,7 @@ public:
 		}
 		curHealth = listTails.GetSize();
 		OnHeal();
+		return true;
 	}
 	// OnHurt, OnHeal, OnDie
 

@@ -1,6 +1,8 @@
 #include "Room0.h"
 #include <string>
 #include "EnemyFast.h"
+#include "EnemyMedium.h"
+#include "EnemySlow.h"
 #include "Vector2.h"
 #include "Scene.h"
 #include <memory>
@@ -17,5 +19,5 @@ void Room0::OnStart() {
 	// load enemies here
 	Vector2 pos;
 	pos = { 80, 80 };
-	scene->AddObject(std::make_shared<EnemyFast>(env, pos + globalPosition));
+	scene->AddObject(std::make_shared<EnemySlow>(env, pos + globalPosition));
 }

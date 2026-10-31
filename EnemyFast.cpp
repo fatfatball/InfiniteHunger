@@ -20,7 +20,7 @@ EnemyFast::EnemyFast(GamesEngineeringBase::Window& canvas, const Vector2& pos)
 	maxHealth = 1.5f; // 2 hits to death
 	curHealth = 1.5f;
 	invulnerableTime = 0.2f;
-	collisionRadius = 5.f;
+	collisionRadius = 10.f;
 	isFixed = true;
 }
 
@@ -44,6 +44,13 @@ void EnemyFast::OnStart() {
 		scene->AddObject(nodePtrs[i]);
 		listTails.PushBack(nodePtrs[i]);
 	}
+
+	nodePtrs[0]->mass = 4;
+	nodePtrs[1]->mass = 2;
+	nodePtrs[2]->mass = 1;
+	nodePtrs[3]->mass = 2;
+	nodePtrs[4]->mass = 1;
+
 	angleConstraints.PushBack(
 		{ ConstraintType::DirectionAngle, this, nodePtrs[0].get(), nullptr, PI, neckMaxBend , stiffness });
 	angleConstraints.PushBack(
@@ -112,35 +119,6 @@ void EnemyFast::FixedUpdate(const float& dt) {
 
 void EnemyFast::VisualUpdate(const float& dt) {
 	BaseEnemy::VisualUpdate(dt);
-}
-
-void EnemyFast::OnDestroy() {
-	for (int i = 0; i < listTails.GetSize(); ++i) {
-		listTails[i]->TriggerWhenOwnerDie();
-	}
-	for (int i = 0; i < polyLine2Ds.GetSize(); ++i) {
-		polyLine2Ds[i]->isPendingDestroy = true;
-	}
-}
-
-void EnemyFast::OnCollision(BaseGameObject* other, const Vector2& normal, const Vector2& position) {
-	auto ptr1 = dynamic_cast<BasePlayer*>(other);
-	if (ptr1) {
-		if (ptr1->TakeDamage(contactDamage)) {
-			ptr1->globalPosition = ptr1->globalPosition + normal * -hitMovement;
-			globalPosition = globalPosition + normal * hitMovement;
-		}
-		return;
-	}
-
-	auto ptr2 = dynamic_cast<BaseBodyNode*>(other);
-	if (ptr2 && ptr2->ownerType == CharacterType::Player) {
-		if (ptr2->owner->TakeDamage(contactDamage)) {
-			ptr2->owner->globalPosition = ptr2->owner->globalPosition + normal * -hitMovement;
-			globalPosition = globalPosition + normal * hitMovement;
-		}
-		return;
-	}
 }
 
 std::string EnemyFast::GetSpritePath() {

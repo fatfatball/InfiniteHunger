@@ -13,5 +13,7 @@ public:
 		BaseBodyNode(canvas, pos, owner, type, nodeType) {}
 	void VisualUpdate(const float& dt) override {}
 	void OnDestroy() override {}
+
+	void OnCollision(BaseGameObject* other, const Vector2& normal, const Vector2& position) override;
 };
 
