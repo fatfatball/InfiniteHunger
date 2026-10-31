@@ -137,7 +137,7 @@ BaseCharacter::BaseCharacter(GamesEngineeringBase::Window& canvas) : BasePhysica
 	isFixed = true;
 	canCollide = true;
 	collisionRadius = 20;
-	invulnerableTime = 0.3;
+	invulnerableTime = 0.4f;
 	invulnerableCounter = invulnerableTime;
 	isInvulnerable = false;
 	isDead = false;
@@ -238,7 +238,6 @@ unsigned char BaseCharacter::GetAlphaAt(const float& u, const float& v) const {
 	int y = std::clamp(v, 0.f, 1.f) * sprite.height;
 	x = x == sprite.width ? x - 1 : x;
 	y = y == sprite.height ? y - 1 : y;
-	auto ptr = sprite.atUnchecked(x, y);
 	return sprite.alphaAtUnchecked(x, y);
 }
 

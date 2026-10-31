@@ -13,7 +13,7 @@ EnemySlow::EnemySlow(GamesEngineeringBase::Window& canvas, const Vector2& pos)
 	hitMovement = 8.f;
 	maxHealth = 3.5f; // 4 hits to death
 	curHealth = 3.5f;
-	invulnerableTime = 0.2f;
+	invulnerableTime = 0.4f;
 	collisionRadius = 11.f;
 	isFixed = true;
 }
@@ -42,7 +42,6 @@ void EnemySlow::OnStart() {
 				this, CharacterType::Enemy, BodyNodeType::Normal);
 		}
 		nodePtrs[i]->mass = 15.f - (i % 3 + 1) * 2;
-		scene->AddObject(nodePtrs[i]);
 		listTails.PushBack(nodePtrs[i]);
 	}
 	nodePtrs[0]->mass = 20.f;
@@ -162,6 +161,10 @@ void EnemySlow::OnStart() {
 	tmp2.PushBack(nodePtrs[8].get());
 	tmp2.PushBack(nodePtrs[9].get());
 	linedNodes.PushBack(std::move(tmp2));
+
+	for (int i = 0; i < nodesCount; ++i) {
+		scene->AddObject(nodePtrs[i]);
+	}
 }
 
 void EnemySlow::FixedUpdate(const float& dt) {

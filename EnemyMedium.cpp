@@ -12,7 +12,7 @@ EnemyMedium::EnemyMedium(GamesEngineeringBase::Window& canvas, const Vector2& po
 	hitMovement = 6.f; 
 	maxHealth = 2.5f; // 3 hits to death
 	curHealth = 2.5f;
-	invulnerableTime = 0.2f;
+	invulnerableTime = 0.4f;
 	collisionRadius = 10.f;
 	isFixed = true;
 }
@@ -41,7 +41,6 @@ void EnemyMedium::OnStart() {
 				this, CharacterType::Enemy, BodyNodeType::Normal);
 		}
 		nodePtrs[i]->mass = 10.f - i;
-		scene->AddObject(nodePtrs[i]);
 		listTails.PushBack(nodePtrs[i]);
 	}
 	angleConstraints.PushBack(
@@ -97,6 +96,10 @@ void EnemyMedium::OnStart() {
 	tmp.PushBack(nodePtrs[3].get());
 	tmp.PushBack(nodePtrs[4].get());
 	linedNodes.PushBack(std::move(tmp));
+
+	for (int i = 0; i < nodesCount; ++i) {
+		scene->AddObject(nodePtrs[i]);
+	}
 }
 
 void EnemyMedium::FixedUpdate(const float& dt) {

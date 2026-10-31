@@ -8,6 +8,9 @@
 class BasePlayer : public BaseCharacter {
 protected:
 	float physicalStiffness;
+	float attackCooldown;
+	float attackCooldownCounter;
+	bool isFirstPlayer; // indicate that if this is the 1p, or 2p
 
 public:
 	BasePlayer(GamesEngineeringBase::Window& canvas) : BaseCharacter(canvas) {
@@ -30,6 +33,8 @@ public:
 		invulnerableTime = 0.5f;
 		invulnerableCounter = invulnerableTime;
 		isInvulnerable = false;
+		attackCooldown = 0.75f;
+		attackCooldownCounter = 0.f;
 	}
 
 	void OnStart() override {
@@ -52,13 +57,89 @@ public:
 	}
 
 	void FixedUpdate(const float& dt) override {
+		if (!isDead) {
+			Vector2 inputDir = Vector2();
+			if (isFirstPlayer) {
+				if (env.keyPressed(0x57)) { // W
+					inputDir.y += -1;
+				}
+				if (env.keyPressed(0x41)) { // A
+					inputDir.x += -1;
+				}
+				if (env.keyPressed(0x53)) { // S
+					inputDir.y += 1;
+				}
+				if (env.keyPressed(0x44)) { // D
+					inputDir.x += 1;
+				}
+
+				if (env.keyPressed(0x43)) {// C
+					Attack();
+				}
+			}
+			else {
+				if (env.keyPressed(VK_UP)) {
+					inputDir.y += -1;
+				}
+				if (env.keyPressed(VK_LEFT)) {
+					inputDir.x += -1;
+				}
+				if (env.keyPressed(VK_DOWN)) {
+					inputDir.y += 1;
+				}
+				if (env.keyPressed(VK_RIGHT)) {
+					inputDir.x += 1;
+				}
+
+				if (env.keyPressed(VK_OEM_COMMA)) { // VK_OEM_PERIOD
+					Attack();
+				}
+			}
+
+			// the force calculation algorithm is still naive
+			force = Vector2(std::cos(rotation), std::sin(rotation)) * maxForce * -inputDir.y;
+			rotation = Math::WrapAngle(rotation + inputDir.x * rotationSpeed * dt);
+		}
+
 		// second player shouldn't be outside of the window
 		if (!scene->GetCameraAABB().Intersects(GetAABB(curState))) {
-			if (scene->GetFirstPlayer() != this) {
+			if (!isFirstPlayer) {
 				TeleportTo(scene->GetFirstPlayer()->globalPosition);
 			}
 		}
+		TickAttackCooldown(dt);
 		BaseCharacter::FixedUpdate(dt);
+	}
+
+	ColorRGBA GetColorAt(const float& u, const float& v) const override {
+		int x = std::clamp(u, 0.f, 1.f) * sprite.width;
+		int y = std::clamp(v, 0.f, 1.f) * sprite.height;
+		x = x == sprite.width ? x - 1 : x;
+		y = y == sprite.height ? y - 1 : y;
+		auto ptr = sprite.atUnchecked(x, y);
+		ColorRGBA color;
+		color.r = ptr[0];
+		color.g = ptr[1];
+		color.b = ptr[2];
+		if (isInvulnerable) {
+			float tmp = invulnerableCounter / invulnerableTime * 3.f; // flash when invulnerable
+			color.a = sprite.alphaAtUnchecked(x, y) * (tmp - floor(tmp));
+		}
+		else {
+			color.a = sprite.alphaAtUnchecked(x, y);
+		}
+		return color;
+	}
+
+	unsigned char GetAlphaAt(const float& u, const float& v) const override {
+		if (isInvulnerable) {
+			return 127;
+		}
+		int x = std::clamp(u, 0.f, 1.f) * sprite.width;
+		int y = std::clamp(v, 0.f, 1.f) * sprite.height;
+		x = x == sprite.width ? x - 1 : x;
+		y = y == sprite.height ? y - 1 : y;
+		return sprite.alphaAtUnchecked(x, y);
 	}
 
 	bool TakeDamage(const float& damage) override {
@@ -108,7 +189,26 @@ public:
 		OnHeal();
 		return true;
 	}
-	// OnHurt, OnHeal, OnDie
+
+	void OnDie() override {
+		force = {};
+		isDead = true;
+	}
+
+	virtual bool Attack() {
+		if (attackCooldownCounter > 0) {
+			return false;
+		}
+		// do attack here
+		attackCooldownCounter = attackCooldown;
+		return true;
+	}
+
+	void TickAttackCooldown(const float& dt) {
+		if (attackCooldownCounter > 0) {
+			attackCooldownCounter -= dt;
+		}
+	}
 
 protected:
 	void Add1BodyNode() {
@@ -124,7 +224,7 @@ protected:
 
 			angleConstraints.PushBack(
 				{ ConstraintType::DirectionAngle, this, ptr.get(), nullptr,
-				PI, PI / 12.f , physicalStiffness });
+				PI, PI / 24.f , physicalStiffness });
 			distConstraints.PushBack(
 				{ ConstraintType::Distance, this, ptr.get(), nullptr,
 				27.f, 0.f, physicalStiffness });

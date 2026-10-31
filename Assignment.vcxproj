@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
+    <ClInclude Include="BaseAttack.h" />
     <ClInclude Include="BaseBodyNode.h" />
     <ClInclude Include="BaseCharacter.h" />
     <ClInclude Include="BaseEnemy.h" />
@@ -156,7 +157,12 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Player0.h" />
-    <ClInclude Include="Player0TailNode.h" />
+    <ClInclude Include="Player2.h" />
+    <ClInclude Include="PlayerAttack1.h" />
+    <ClInclude Include="PlayerAttack2.h" />
+    <ClInclude Include="PlayerTailNode.h" />
+    <ClInclude Include="Player1.h" />
+    <ClInclude Include="PlayerAttack0.h" />
     <ClInclude Include="PolyLine2D.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="Room0.h" />
@@ -170,6 +176,7 @@
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseAttack.cpp" />
     <ClCompile Include="BaseCharacter.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="EnemyBodyNode.cpp" />
@@ -178,7 +185,12 @@
     <ClCompile Include="EnemySlow.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player0.cpp" />
-    <ClCompile Include="Player0TailNode.cpp" />
+    <ClCompile Include="Player2.cpp" />
+    <ClCompile Include="PlayerAttack1.cpp" />
+    <ClCompile Include="PlayerAttack2.cpp" />
+    <ClCompile Include="PlayerTailNode.cpp" />
+    <ClCompile Include="Player1.cpp" />
+    <ClCompile Include="PlayerAttack0.cpp" />
     <ClCompile Include="PolyLine2D.cpp" />
     <ClCompile Include="Room0.cpp" />
     <ClCompile Include="RoomManager.cpp" />

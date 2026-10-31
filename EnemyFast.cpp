@@ -19,7 +19,7 @@ EnemyFast::EnemyFast(GamesEngineeringBase::Window& canvas, const Vector2& pos)
 	hitMovement = 4.f;
 	maxHealth = 1.5f; // 2 hits to death
 	curHealth = 1.5f;
-	invulnerableTime = 0.2f;
+	invulnerableTime = 0.4f;
 	collisionRadius = 10.f;
 	isFixed = true;
 }
@@ -41,7 +41,6 @@ void EnemyFast::OnStart() {
 	for (int i = 0; i < nodesCount; ++i) {
 		nodePtrs[i] = std::make_shared<EnemyBodyNode>(env, globalPosition + Vector2{ -10, 0 } * i,
 			this, CharacterType::Enemy, BodyNodeType::Normal);
-		scene->AddObject(nodePtrs[i]);
 		listTails.PushBack(nodePtrs[i]);
 	}
 
@@ -110,6 +109,10 @@ void EnemyFast::OnStart() {
 	List<BasePhysicalObject*> tmp1;
 	tmp1.PushBack(nodePtrs[0].get()), tmp1.PushBack(nodePtrs[3].get()), tmp1.PushBack(nodePtrs[4].get());
 	linedNodes.PushBack(std::move(tmp1));
+
+	for (int i = 0; i < nodesCount; ++i) {
+		scene->AddObject(nodePtrs[i]);
+	}
 }
 
 void EnemyFast::FixedUpdate(const float& dt) {

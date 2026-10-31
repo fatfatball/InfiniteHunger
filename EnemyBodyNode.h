@@ -9,8 +9,7 @@ private:
 public:
 	EnemyBodyNode(GamesEngineeringBase::Window& canvas) : BaseBodyNode(canvas) {}
 	EnemyBodyNode(GamesEngineeringBase::Window& canvas, const Vector2& pos,
-		BaseCharacter* owner, const CharacterType& type, const BodyNodeType& nodeType) :
-		BaseBodyNode(canvas, pos, owner, type, nodeType) {}
+		BaseCharacter* owner, const CharacterType& type, const BodyNodeType& nodeType);
 	void VisualUpdate(const float& dt) override {}
 	void OnDestroy() override {}
 

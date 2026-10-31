@@ -168,6 +168,7 @@ bool Tilemap::ResolveCollision(BasePhysicalObject* obj, Vector2& normal, Vector2
 
 	bool collided = false;
 
+	// calculate obj's aabb by tile
 	int tx0 = (int)std::floor((localPos.x - obj->collisionRadius + halfW) / TILE_LENGTH);
 	int tx1 = (int)std::floor((localPos.x + obj->collisionRadius + halfW) / TILE_LENGTH);
 	int ty0 = (int)std::floor((localPos.y - obj->collisionRadius + halfH) / TILE_LENGTH);
@@ -223,7 +224,9 @@ bool Tilemap::ResolveCollision(BasePhysicalObject* obj, Vector2& normal, Vector2
 		}
 	}
 
-	obj->globalPosition = globalPosition + localPos;
+	if (!obj->isTrigger && !obj->isStatic) {
+		obj->globalPosition = globalPosition + localPos;
+	}
 	return collided;
 }
 

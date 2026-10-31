@@ -16,9 +16,7 @@ public:
 
 	void FixedUpdate(const float& dt) override;
 
-	bool TakeDamage(const float& damage) override;
-	bool Heal(const float& val) override;
-	void OnDie() override;
+	bool Attack() override;
 
 private:
 	std::string GetSpritePath() override;

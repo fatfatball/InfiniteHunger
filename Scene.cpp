@@ -6,7 +6,8 @@
 #include "Vector2.h"
 #include "Player0.h"
 #include "BasePlayer.h"
-#include <iostream>
+#include "Player1.h"
+#include "Player2.h"
 
 Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(window), camera(camera) {
 	// slice the canvas into tiles, for rendering
@@ -53,6 +54,20 @@ void Scene::AddPlayer(const PlayerType type) {
 	switch (type) {
 	case PlayerType::Swordsman: {
 		auto ptr = std::make_shared<Player0>(canvas);
+		ptr->TeleportTo(camera.globalPosition);
+		AddObject(ptr);
+		players.PushBack(ptr);
+		break;
+	}
+	case PlayerType::Archer: {
+		auto ptr = std::make_shared<Player1>(canvas);
+		ptr->TeleportTo(camera.globalPosition);
+		AddObject(ptr);
+		players.PushBack(ptr);
+		break;
+	}
+	case PlayerType::Wizard: {
+		auto ptr = std::make_shared<Player2>(canvas);
 		ptr->TeleportTo(camera.globalPosition);
 		AddObject(ptr);
 		players.PushBack(ptr);
@@ -111,25 +126,28 @@ void Scene::FixedUpdateObjects(float dt) {
 			Vector2 normal = delta.Normalized();
 			Vector2 position = a->globalPosition * 0.5f + b->globalPosition * 0.5f;
 			
-			float wa;
-			float wb;
-			if (a->isStatic) {
-				wa = 0.f;
-			}
-			else {
-				wa = 1.f / a->mass;
-			}
-			if (b->isStatic) {
-				wb = 0.f;
-			}
-			else {
-				wb = 1.f / b->mass;
-			}
-			float wSum = wa + wb;
+			// apply collision constraint: move the position
+			if (!a->isTrigger && !b->isTrigger) {
+				float wa;
+				float wb;
+				if (a->isStatic) {
+					wa = 0.f;
+				}
+				else {
+					wa = 1.f / a->mass;
+				}
+				if (b->isStatic) {
+					wb = 0.f;
+				}
+				else {
+					wb = 1.f / b->mass;
+				}
+				float wSum = wa + wb;
 
-			if (wSum > 1e-4f) {
-				a->globalPosition = a->globalPosition - normal * err * (wa / wSum);
-				b->globalPosition = b->globalPosition + normal * err * (wb / wSum);
+				if (wSum > 1e-4f) {
+					a->globalPosition = a->globalPosition - normal * err * (wa / wSum);
+					b->globalPosition = b->globalPosition + normal * err * (wb / wSum);
+				}
 			}
 
 			a->OnCollision(b, normal * -1, position);
@@ -145,9 +163,6 @@ void Scene::FixedUpdateObjects(float dt) {
 				continue;
 			}
 			auto ptr = dynamic_cast<BasePhysicalObject*>(objects[j].get());
-			if (ptr->isStatic) {
-				continue;
-			}
 
 			if (roomManager->rooms[i]->ResolveCollision(ptr, normal, position)) {
 				ptr->OnCollision(roomManager->rooms[i].get(), normal, position);

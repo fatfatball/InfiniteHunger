@@ -18,7 +18,7 @@ int main() {
 	Camera camera;
 	Scene mainScene = Scene(canvas, camera);
 	//mainScene.AddObject(std::make_shared<Player0>(canvas));
-	mainScene.AddPlayer(PlayerType::Swordsman);
+	mainScene.AddPlayer(PlayerType::Wizard);
 
 #pragma region Timers
 	GamesEngineeringBase::Timer loopTimer;

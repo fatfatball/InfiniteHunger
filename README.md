@@ -46,11 +46,10 @@ Eating red nodes would restore player's health, and grey nodes just have no effe
 Another static enemy keeps spawning slow enemy.  
 
 ## Player Attacks & Skills [in progress]
-- All attacks & skills have a cool down time. Attacks have a cool down of 0.75s.
+- All attacks have a cool down time of 0.75s, and a damage of 1.
 - Swordsman's attack: instantiate a physical object "sword", then keep the "sword" stays in front of the Swordsman, with an angle of (front - swingAngle / 2.f + swingAngle * (curAttackTime / maxAttackTime)), like distance constraint and  angle constraint in BaseCharacter. The "sword" should detect the collision and hurt enemies on contact. If (curAttackTime >= maxAttackTime), destroy "sword".  
 - Archer's attack: instantiate a physical object "arrow", initialize the direction by player's front, then it should fly at a constant speed until hit something or reach its max lifetime. The "arrow" should detect the collision and hurt enemies on contact.
-- Wizard's attack: instantiate a physical static & isTrigger object "boom area", initialize the position by player's pos + player's front + constDist, then it should disappear within 0.5s. The "boom area" should detect the collision and hurt enemies on contact. 
-- All skills have a cool down of 15s.
+- Wizard's attack: instantiate a physical static & isTrigger object "boom area", initialize the position by player's pos + player's front + constDist, then it should disappear within 0.2s. The "boom area" should detect the collision and hurt enemies on contact. 
 - Swordsman's skill: for the following 10s, become invulerable. // TODO: add some visual effects when invulnerable
 - Archer's skill: immediately shoot 16 "arrow" in all directions. For the following 10s, speeds up 25%.  
 - Wizard's skill: immediately cast a large "boom area" at the player's pos, with a damage of 10 (eliminating all enemies).

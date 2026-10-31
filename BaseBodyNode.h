@@ -17,7 +17,7 @@ public:
 		rotation = 0.f;
 		maxVelocity = 500; // slightly larger than player/enemy
 		maxForce = 0; // no usage here
-		renderOrder = RenderOrder::Third;
+		renderOrder = RenderOrder::Second;
 		prevState = { globalPosition, scale, rotation };
 		curState = { globalPosition, scale, rotation };
 		isFixed = false;
@@ -28,7 +28,7 @@ public:
 		renderState = curState;
 		nodeType = BodyNodeType::Normal;
 		isOwnerDead = false;
-		selfVanishTime = 5.f;
+		selfVanishTime = 15.f;
 	}
 
 	BaseBodyNode(GamesEngineeringBase::Window& canvas, const Vector2& pos,
@@ -72,15 +72,15 @@ public:
 	}
 
 	unsigned char GetAlphaAt(const float& u, const float& v) const override {
-		if (isOwnerDead) {
-			return 1;
-		}
 		int x = std::clamp(u, 0.f, 1.f) * sprite.width;
 		int y = std::clamp(v, 0.f, 1.f) * sprite.height;
 		x = x == sprite.width ? x - 1 : x;
 		y = y == sprite.height ? y - 1 : y;
-		auto ptr = sprite.atUnchecked(x, y);
-		return sprite.alphaAtUnchecked(x, y);
+		auto res = sprite.alphaAtUnchecked(x, y);
+		if (res != 0 && isOwnerDead) {
+			return 127;
+		}
+		return res;
 	}
 
 	bool TakeDamage(const float& damage) {

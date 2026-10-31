@@ -11,6 +11,14 @@ std::string EnemyBodyNode::GetSpritePath() const {
 	}
 }
 
+EnemyBodyNode::EnemyBodyNode(GamesEngineeringBase::Window& canvas, const Vector2& pos,
+	BaseCharacter* owner, const CharacterType& type, const BodyNodeType& nodeType) :
+	BaseBodyNode(canvas, pos, owner, type, nodeType) {
+	if (nodeType == BodyNodeType::Heal) {
+		collisionRadius = 6.f;
+	}
+}
+
 void EnemyBodyNode::OnCollision(BaseGameObject* other, const Vector2& normal, const Vector2& position) {
 	if (nodeType != BodyNodeType::Heal || !isOwnerDead) {
 		return;
