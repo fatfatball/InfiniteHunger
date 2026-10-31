@@ -73,3 +73,7 @@ void BaseAttack::OnCollision(BaseGameObject* other, const Vector2& normal, const
         return;
     }
 }
+
+void BaseAttack::SetDamage(const float& val) {
+    damage = val;
+}

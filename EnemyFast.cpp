@@ -19,7 +19,7 @@ EnemyFast::EnemyFast(GamesEngineeringBase::Window& canvas, const Vector2& pos)
 	hitMovement = 4.f;
 	maxHealth = 1.5f; // 2 hits to death
 	curHealth = 1.5f;
-	invulnerableTime = 0.4f;
+	invulnerableTime = 0.35f;
 	collisionRadius = 10.f;
 	isFixed = true;
 }

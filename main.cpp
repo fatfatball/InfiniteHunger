@@ -17,7 +17,6 @@ int main() {
 	bool running = true;
 	Camera camera;
 	Scene mainScene = Scene(canvas, camera);
-	//mainScene.AddObject(std::make_shared<Player0>(canvas));
 	mainScene.AddPlayer(PlayerType::Wizard);
 
 #pragma region Timers
@@ -28,7 +27,7 @@ int main() {
 	float frameTimeCounter = 0;
 
 	GamesEngineeringBase::Timer performanceTestTimer;
-	float fixedUpdateTime = 0;
+	float updateTime = 0;
 	float clearTime = 0;
 	float renderTime = 0;
 	float presentTime = 0;
@@ -60,14 +59,14 @@ int main() {
 		frameTimeCounter += frameTime;
 		if (frameTimeCounter > 1.0f) {
 			std::cout << "FPS: " << frameCounter / frameTimeCounter << std::endl;
-			std::cout << "fixed update time: " << fixedUpdateTime / frameTimeCounter << std::endl;
+			std::cout << "update time: " << updateTime / frameTimeCounter << std::endl;
 			std::cout << "clear time: " << clearTime / frameTimeCounter << std::endl;
 			std::cout << "render time: " << renderTime / frameTimeCounter << std::endl;
 			std::cout << "present time: " << presentTime / frameTimeCounter << std::endl;
 			std::cout << "current objects: " << mainScene.GetObjectCount() << std::endl;
 			frameTimeCounter = 0;
 			frameCounter = 0;
-			fixedUpdateTime = 0;
+			updateTime = 0;
 			clearTime = 0;
 			renderTime = 0;
 			presentTime = 0;
@@ -91,17 +90,16 @@ int main() {
 			mainScene.RecycleObjects(); 
 			frameTimeAccumulator -= FIXED_DELTATIME;
 		}
-		fixedUpdateTime += performanceTestTimer.dt();
 #pragma endregion
 
 #pragma region VisualUpdate
 		// traverse the objects, update them by frameTime
 		mainScene.VisualUpdateObjects(frameTime);
 		camera.VisualUpdate(frameTime);
+		updateTime += performanceTestTimer.dt();
 #pragma endregion
 
 #pragma region Render
-		performanceTestTimer.reset();
 		canvas.clear();
 		clearTime += performanceTestTimer.dt();
 		// traverse the render-able objects, sort them by order, 

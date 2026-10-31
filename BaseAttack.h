@@ -27,4 +27,6 @@ public:
     ColorRGBA GetColorAt(const float& u, const float& v) const override;
     unsigned char GetAlphaAt(const float& u, const float& v) const override;
     void OnCollision(BaseGameObject* other, const Vector2& normal, const Vector2& position) override;
+
+    void SetDamage(const float& val);
 };

@@ -6,7 +6,7 @@ PlayerAttack2::PlayerAttack2(GamesEngineeringBase::Window& canvas,
 	scale = { 70, 70 };
 	collisionRadius = 35.f;
 	hitMovement = 10.f;
-	castRange = 150.f;
+	castRange = 200.f;
 	globalPosition = pos + Vector2{ std::cos(owner->rotation), std::sin(owner->rotation) } * castRange;
 	rotation = owner->rotation;
 	curState = { globalPosition, scale, rotation };

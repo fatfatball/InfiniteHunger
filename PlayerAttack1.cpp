@@ -4,15 +4,21 @@
 #include "BaseEnemy.h"
 
 PlayerAttack1::PlayerAttack1(GamesEngineeringBase::Window& canvas,
-	BaseCharacter* owner, const Vector2& pos) : BaseAttack(canvas, 1.f, 3.f, owner) {
+	BaseCharacter* owner, const Vector2& pos) 
+    : PlayerAttack1(canvas, owner, pos, Vector2{ std::cos(owner->rotation), std::sin(owner->rotation) }) {
+
+}
+
+PlayerAttack1::PlayerAttack1(GamesEngineeringBase::Window& canvas, BaseCharacter* owner,
+    const Vector2& pos, const Vector2& dir) : BaseAttack(canvas, 1.f, 3.f, owner) {
     scale = { 50, 50 };
-	flyingSpeed = 800.f;
-	collisionRadius = 20.f;
-	hitMovement = 2.f; 
-    globalPosition = pos + Vector2{ std::cos(owner->rotation), std::sin(owner->rotation)} * 40;
-	rotation = owner->rotation;
-	curState = { globalPosition, scale, rotation };
-	prevState = curState;
+    flyingSpeed = 800.f;
+    collisionRadius = 20.f;
+    hitMovement = 2.f;
+    globalPosition = pos + dir * 40;
+    rotation = std::atan2(dir.y, dir.x);
+    curState = { globalPosition, scale, rotation };
+    prevState = curState;
 }
 
 void PlayerAttack1::FixedUpdate(const float& dt) {
@@ -21,8 +27,10 @@ void PlayerAttack1::FixedUpdate(const float& dt) {
 }
 
 void PlayerAttack1::OnCollision(BaseGameObject* other, const Vector2& normal, const Vector2& position) {
-    isPendingDestroy = true;
-    isActive = false;
+    if (!other->isTrigger) {
+        isPendingDestroy = true;
+        isActive = false;
+    }
     auto ptr1 = dynamic_cast<BaseEnemy*>(other);
     if (ptr1) {
         if (ptr1->TakeDamage(damage)) {

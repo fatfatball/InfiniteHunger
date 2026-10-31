@@ -147,6 +147,7 @@
     <ClInclude Include="BaseGameObject.h" />
     <ClInclude Include="BasePhysicalObject.h" />
     <ClInclude Include="BasePlayer.h" />
+    <ClInclude Include="BaseSkill.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="EnemyFast.h" />
@@ -160,6 +161,9 @@
     <ClInclude Include="Player2.h" />
     <ClInclude Include="PlayerAttack1.h" />
     <ClInclude Include="PlayerAttack2.h" />
+    <ClInclude Include="PlayerSkill0.h" />
+    <ClInclude Include="PlayerSkill1.h" />
+    <ClInclude Include="PlayerSkill2.h" />
     <ClInclude Include="PlayerTailNode.h" />
     <ClInclude Include="Player1.h" />
     <ClInclude Include="PlayerAttack0.h" />
@@ -188,6 +192,9 @@
     <ClCompile Include="Player2.cpp" />
     <ClCompile Include="PlayerAttack1.cpp" />
     <ClCompile Include="PlayerAttack2.cpp" />
+    <ClCompile Include="PlayerSkill0.cpp" />
+    <ClCompile Include="PlayerSkill1.cpp" />
+    <ClCompile Include="PlayerSkill2.cpp" />
     <ClCompile Include="PlayerTailNode.cpp" />
     <ClCompile Include="Player1.cpp" />
     <ClCompile Include="PlayerAttack0.cpp" />

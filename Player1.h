@@ -7,7 +7,7 @@
 // archer player
 class Player1 : public BasePlayer {
 public:
-	Player1(GamesEngineeringBase::Window& canvas);
+	Player1(GamesEngineeringBase::Window& canvas, const bool& isFirst);
 
 	void OnStart() override;
 

@@ -51,23 +51,24 @@ void Scene::AddPlayer(const PlayerType type) {
 	if (players.GetSize() >= 2) {
 		return;
 	}
+	bool isFirstPlayer = !(players.GetSize() > 0);
 	switch (type) {
 	case PlayerType::Swordsman: {
-		auto ptr = std::make_shared<Player0>(canvas);
+		auto ptr = std::make_shared<Player0>(canvas, isFirstPlayer);
 		ptr->TeleportTo(camera.globalPosition);
 		AddObject(ptr);
 		players.PushBack(ptr);
 		break;
 	}
 	case PlayerType::Archer: {
-		auto ptr = std::make_shared<Player1>(canvas);
+		auto ptr = std::make_shared<Player1>(canvas, isFirstPlayer);
 		ptr->TeleportTo(camera.globalPosition);
 		AddObject(ptr);
 		players.PushBack(ptr);
 		break;
 	}
 	case PlayerType::Wizard: {
-		auto ptr = std::make_shared<Player2>(canvas);
+		auto ptr = std::make_shared<Player2>(canvas, isFirstPlayer);
 		ptr->TeleportTo(camera.globalPosition);
 		AddObject(ptr);
 		players.PushBack(ptr);

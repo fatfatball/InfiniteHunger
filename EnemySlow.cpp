@@ -13,7 +13,7 @@ EnemySlow::EnemySlow(GamesEngineeringBase::Window& canvas, const Vector2& pos)
 	hitMovement = 8.f;
 	maxHealth = 3.5f; // 4 hits to death
 	curHealth = 3.5f;
-	invulnerableTime = 0.4f;
+	invulnerableTime = 0.35f;
 	collisionRadius = 11.f;
 	isFixed = true;
 }

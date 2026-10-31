@@ -50,7 +50,7 @@ Another static enemy keeps spawning slow enemy.
 - Swordsman's attack: instantiate a physical object "sword", then keep the "sword" stays in front of the Swordsman, with an angle of (front - swingAngle / 2.f + swingAngle * (curAttackTime / maxAttackTime)), like distance constraint and  angle constraint in BaseCharacter. The "sword" should detect the collision and hurt enemies on contact. If (curAttackTime >= maxAttackTime), destroy "sword".  
 - Archer's attack: instantiate a physical object "arrow", initialize the direction by player's front, then it should fly at a constant speed until hit something or reach its max lifetime. The "arrow" should detect the collision and hurt enemies on contact.
 - Wizard's attack: instantiate a physical static & isTrigger object "boom area", initialize the position by player's pos + player's front + constDist, then it should disappear within 0.2s. The "boom area" should detect the collision and hurt enemies on contact. 
-- Swordsman's skill: for the following 10s, become invulerable. // TODO: add some visual effects when invulnerable
+- Swordsman's skill: for the following 7.5s, become invulerable.  
 - Archer's skill: immediately shoot 16 "arrow" in all directions. For the following 10s, speeds up 25%.  
 - Wizard's skill: immediately cast a large "boom area" at the player's pos, with a damage of 10 (eliminating all enemies).
 
@@ -59,16 +59,16 @@ I went into a problem that the player's tail is not that natural, because it loo
 I tried to render polyline. At first, I just used Bresenham's method to draw a pixel line. To give it some thickness, I began to try stamping - draw something on each pixel by Bresenham's method. A filled circle would be correct, but it takes a lot of time, and draw really a lot of redundant pixels. A cross is quite cheap to do so, but the thickness tend to differ by different directions, and cause false on the two ends of the line. An unfilled circle fixes the difference in different directions, but a lot of pixels inside the line are not fully covered. Finally, I decided to use the cross + unfilled circle, which will only leave some error on the two ends, but have much better performance than the filled circle. Also, the error on two ends can be covered by other objects, or simply by drawing a filled circle on each end.  
 
 ## Works still need to do:
-1. 3 player attacks
-1. enemy death spawn health
-2. 3 player skills
-3. 3 players
-4. 3 enemies (done)
-5. enemy spawner
-5. string display
-6. menu scene
-7. tally screen
-7. sound effects
-8. save
-9. more rooms
-10. key and locked door 
+1. 3 player attacks (done)
+2. enemy death spawn health (done)
+3. 3 player skills
+4. 3 players (done)
+5. 3 enemies (done)
+6. enemy spawner
+7. string display
+8. menu scene
+9. tally screen
+10. sound effects
+11. save
+12. more rooms
+13. key and locked door 

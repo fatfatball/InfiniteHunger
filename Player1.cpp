@@ -3,9 +3,12 @@
 #include "PlayerAttack1.h"
 #include <cmath>
 #include "Vector2.h"
+#include <memory>
+#include "PlayerSkill1.h"
 
-Player1::Player1(GamesEngineeringBase::Window& canvas) : BasePlayer(canvas) {
-
+Player1::Player1(GamesEngineeringBase::Window& canvas, const bool& isFirst) : BasePlayer(canvas, isFirst) {
+	attackCooldown = 0.4f;
+	skill = std::make_unique<PlayerSkill1>(this);
 }
 
 void Player1::OnStart() {

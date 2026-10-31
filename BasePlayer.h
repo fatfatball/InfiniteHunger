@@ -4,6 +4,7 @@
 #include "BaseBodyNode.h"
 #include <memory>
 #include "GamesEngineeringBase.h"
+#include "BaseSkill.h"
 
 class BasePlayer : public BaseCharacter {
 protected:
@@ -11,9 +12,12 @@ protected:
 	float attackCooldown;
 	float attackCooldownCounter;
 	bool isFirstPlayer; // indicate that if this is the 1p, or 2p
+	bool skillPressed;
+	std::unique_ptr<BaseSkill> skill;
+	friend class BaseSkill;
 
 public:
-	BasePlayer(GamesEngineeringBase::Window& canvas) : BaseCharacter(canvas) {
+	BasePlayer(GamesEngineeringBase::Window& canvas, const bool& isFirst) : BaseCharacter(canvas) {
 		physicalStiffness = 0.75f;
 		mass = 15;
 		maxHealth = 13;
@@ -35,6 +39,8 @@ public:
 		isInvulnerable = false;
 		attackCooldown = 0.75f;
 		attackCooldownCounter = 0.f;
+		isFirstPlayer = isFirst;
+		skillPressed = false;
 	}
 
 	void OnStart() override {
@@ -73,9 +79,13 @@ public:
 					inputDir.x += 1;
 				}
 
-				if (env.keyPressed(0x43)) {// C
+				if (env.keyPressed(0x43)) { // C
 					Attack();
 				}
+				if (env.keyPressed(0x56) && skillPressed == false) { // V
+					CastSkill();
+				}
+				skillPressed = env.keyPressed(0x56);
 			}
 			else {
 				if (env.keyPressed(VK_UP)) {
@@ -91,9 +101,13 @@ public:
 					inputDir.x += 1;
 				}
 
-				if (env.keyPressed(VK_OEM_COMMA)) { // VK_OEM_PERIOD
+				if (env.keyPressed(VK_OEM_COMMA)) {
 					Attack();
 				}
+				if (env.keyPressed(VK_OEM_PERIOD) && skillPressed == false) {
+					CastSkill();
+				}
+				skillPressed = env.keyPressed(VK_OEM_PERIOD);
 			}
 
 			// the force calculation algorithm is still naive
@@ -107,6 +121,8 @@ public:
 				TeleportTo(scene->GetFirstPlayer()->globalPosition);
 			}
 		}
+
+		skill->Tick(dt);
 		TickAttackCooldown(dt);
 		BaseCharacter::FixedUpdate(dt);
 	}
@@ -210,6 +226,11 @@ public:
 		}
 	}
 
+	void SetInvulnerable(const float& time) {
+		isInvulnerable = true;
+		invulnerableCounter = time;
+	}
+
 protected:
 	void Add1BodyNode() {
 		// no check for max health
@@ -291,4 +312,35 @@ protected:
 	}
 
 	virtual std::shared_ptr<BaseBodyNode> GetBodyNode(GamesEngineeringBase::Window& env, const Vector2& pos) = 0;
+
+	void CastSkill() {
+		TakeDamageNoInvulnerable(1.f);
+		skill->CastSkill();
+	}
+
+	bool TakeDamageNoInvulnerable(const float& damage) {
+		if (isDead || isPendingDestroy) {
+			return false;
+		}
+		if (listTails.GetSize() == 0) {
+			return false;
+		}
+		// the player only takes int damage, as it refer to the body length
+		int damageVal = (int)std::round(damage);
+		for (int i = 0; i < damageVal; ++i) {
+			if (listTails.GetSize() > 0) {
+				Remove1BodyNode();
+			}
+		}
+		curHealth = listTails.GetSize();
+
+		if (listTails.GetSize() > 0) {
+			OnHurt();
+		}
+		else {
+			OnDie();
+		}
+
+		return true;
+	}
 };

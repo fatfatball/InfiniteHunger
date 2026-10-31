@@ -10,7 +10,7 @@
 // the body node can only be changed at the end of line, like a stack
 class Player0 : public BasePlayer {
 public:
-	Player0(GamesEngineeringBase::Window& canvas);
+	Player0(GamesEngineeringBase::Window& canvas, const bool& isFirst);
 
 	void OnStart() override;
 

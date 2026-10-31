@@ -61,6 +61,13 @@ public:
 		curPhysicState = { velocity, force };
 	}
 
+	void ResetStates() {
+		curState = { globalPosition, scale, rotation };
+		prevState = curState;
+		curPhysicState = { velocity, force };
+		prevPhysicState = curPhysicState;
+	}
+
 	Vector2 GetVelocity() const {
 		return velocity;
 	}

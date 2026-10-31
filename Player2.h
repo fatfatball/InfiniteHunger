@@ -7,7 +7,7 @@
 // wizard player
 class Player2 : public BasePlayer {
 public:
-	Player2(GamesEngineeringBase::Window& canvas);
+	Player2(GamesEngineeringBase::Window& canvas, const bool& isFirst);
 
 	void OnStart() override;
 

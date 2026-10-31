@@ -9,9 +9,11 @@
 #include "PlayerTailNode.h"
 #include "PlayerAttack0.h"
 #include "GamesEngineeringBase.h"
+#include "PlayerSkill0.h"
+#include <memory>
 
-Player0::Player0(GamesEngineeringBase::Window& canvas) : BasePlayer(canvas){
-
+Player0::Player0(GamesEngineeringBase::Window& canvas, const bool& isFirst) : BasePlayer(canvas, isFirst){
+	skill = std::make_unique<PlayerSkill0>(this);
 }
 
 void Player0::OnStart() {

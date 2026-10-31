@@ -5,7 +5,7 @@
 #include "Math.h"
 
 PlayerAttack0::PlayerAttack0(GamesEngineeringBase::Window& canvas, BaseCharacter* owner, const Vector2& pos)
-    : BaseAttack(canvas, 1.f, 0.2f, owner) {
+    : BaseAttack(canvas, 1.f, 0.25f, owner) {
     collisionRadius = 30.f;
     hitMovement = 10.f;
     swingRadius = 50.f;

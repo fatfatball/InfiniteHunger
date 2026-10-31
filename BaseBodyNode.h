@@ -94,6 +94,7 @@ public:
 		owner = nullptr;
 		isOwnerDead = true;
 		selfVanishCounter = selfVanishTime;
+		dampValue = 0.75f;
 	}
 
 	void TickSelfVanish(const float& dt) {
