@@ -37,6 +37,7 @@ public:
 		globalPosition = pos;
 		curState.globalPositionS = globalPosition;
 		prevState.globalPositionS = globalPosition;
+		renderState = curState;
 	}
 
 	void FixedUpdate(const float& dt) override {

@@ -156,6 +156,7 @@
     <ClInclude Include="EnemyMedium.h" />
     <ClInclude Include="EnemySlow.h" />
     <ClInclude Include="EnemyStatic.h" />
+    <ClInclude Include="Fonts.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
     <ClInclude Include="ItemKey.h" />
     <ClInclude Include="ItemLockedDoor.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="TestGameObject.h" />
     <ClInclude Include="TestPhysicalObject.h" />
     <ClInclude Include="TestPhysicalTail.h" />
+    <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="Tilemap.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
@@ -213,6 +215,7 @@
     <ClCompile Include="TestGameObject.cpp" />
     <ClCompile Include="TestPhysicalObject.cpp" />
     <ClCompile Include="TestPhysicalTail.cpp" />
+    <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="Tilemap.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

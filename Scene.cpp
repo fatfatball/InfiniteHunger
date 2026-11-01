@@ -24,6 +24,7 @@ Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(wind
 	roomManager = std::make_shared<RoomManager>(canvas);
 	roomManager->scene = this;
 	AddObject(roomManager);
+	
 }
 
 void Scene::AddObject(std::shared_ptr<BaseGameObject> obj) {

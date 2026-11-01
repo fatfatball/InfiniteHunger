@@ -2,7 +2,6 @@
 #include "Constants.h"
 #include "TestGameObject.h"
 #include "Camera.h"
-#include <iostream>
 #include "List.h"
 #include "Scene.h"
 #include <memory>
@@ -10,14 +9,15 @@
 #include "PolyLine2D.h"
 #include "Room0.h"
 #include "SmallStructs.h"
+#include "TextRenderer.h"
 
 int main() {
 	GamesEngineeringBase::Window canvas;
-	canvas.create(WINDOW_WIDTH, WINDOW_HEIGHT, "test_window_name");
+	canvas.create(WINDOW_WIDTH, WINDOW_HEIGHT, "Infinite Hunger");
 	bool running = true;
 	Camera camera;
 	Scene mainScene = Scene(canvas, camera);
-	mainScene.AddPlayer(PlayerType::Archer);
+	mainScene.AddPlayer(PlayerType::Swordsman);
 
 #pragma region Timers
 	GamesEngineeringBase::Timer loopTimer;
@@ -27,10 +27,11 @@ int main() {
 	float frameTimeCounter = 0;
 
 	GamesEngineeringBase::Timer performanceTestTimer;
-	float updateTime = 0;
-	float clearTime = 0;
-	float renderTime = 0;
-	float presentTime = 0;
+	//float updateTime = 0;
+	//float clearTime = 0;
+	//float renderTime = 0;
+	//float presentTime = 0;
+	int fpsCount = 0;
 #pragma endregion
 
 #pragma region TestingObjects
@@ -58,18 +59,19 @@ int main() {
 #pragma region PerformanceDetect
 		frameTimeCounter += frameTime;
 		if (frameTimeCounter > 1.0f) {
-			std::cout << "FPS: " << frameCounter / frameTimeCounter << std::endl;
-			std::cout << "update time: " << updateTime / frameTimeCounter << std::endl;
-			std::cout << "clear time: " << clearTime / frameTimeCounter << std::endl;
-			std::cout << "render time: " << renderTime / frameTimeCounter << std::endl;
-			std::cout << "present time: " << presentTime / frameTimeCounter << std::endl;
-			std::cout << "current objects: " << mainScene.GetObjectCount() << std::endl;
+			fpsCount = frameCounter / frameTimeCounter;
+			//std::cout << "FPS: " << frameCounter / frameTimeCounter << std::endl;
+			//std::cout << "update time: " << updateTime / frameTimeCounter << std::endl;
+			//std::cout << "clear time: " << clearTime / frameTimeCounter << std::endl;
+			//std::cout << "render time: " << renderTime / frameTimeCounter << std::endl;
+			//std::cout << "present time: " << presentTime / frameTimeCounter << std::endl;
+			//std::cout << "current objects: " << mainScene.GetObjectCount() << std::endl;
 			frameTimeCounter = 0;
 			frameCounter = 0;
-			updateTime = 0;
-			clearTime = 0;
-			renderTime = 0;
-			presentTime = 0;
+			//updateTime = 0;
+			//clearTime = 0;
+			//renderTime = 0;
+			//presentTime = 0;
 		}
 		frameCounter += 1;
 #pragma endregion
@@ -96,18 +98,19 @@ int main() {
 		// traverse the objects, update them by frameTime
 		mainScene.VisualUpdateObjects(frameTime);
 		camera.VisualUpdate(frameTime);
-		updateTime += performanceTestTimer.dt();
+		//updateTime += performanceTestTimer.dt();
 #pragma endregion
 
 #pragma region Render
 		canvas.clear();
-		clearTime += performanceTestTimer.dt();
+		//clearTime += performanceTestTimer.dt();
 		// traverse the render-able objects, sort them by order, 
 		// then call render method respectively.
 		mainScene.RenderObjects(frameTimeAccumulator / FIXED_DELTATIME);
-		renderTime += performanceTestTimer.dt();
+		TextRenderer::DrawText(canvas, "FPS: " + std::to_string(fpsCount), 5, 5, 2, { 127, 127, 127, 255 });
+		//renderTime += performanceTestTimer.dt();
 		canvas.present();
-		presentTime += performanceTestTimer.dt();
+		//presentTime += performanceTestTimer.dt();
 #pragma endregion
 
 #pragma region OnlyForTest

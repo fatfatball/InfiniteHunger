@@ -101,7 +101,7 @@ void EnemyStatic::SpawnEnemy() {
 		return;
 	}
 
-	Vector2 spawnPos = globalPosition + Vector2{ 0.f, -20.f };
+	Vector2 spawnPos = globalPosition + Vector2{ 0.f, -30.f };
 	std::shared_ptr<EnemyFast> spawnedEnemy = std::make_shared<EnemyFast>(env, spawnPos);
 	scene->AddObject(spawnedEnemy);
 	spawnedEnemies.PushBack(spawnedEnemy);

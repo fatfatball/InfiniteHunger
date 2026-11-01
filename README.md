@@ -66,9 +66,12 @@ I tried to render polyline. At first, I just used Bresenham's method to draw a p
 5. 3 enemies (done)
 6. enemy spawner (done)
 7. key and locked door (done)
-8. string display
-9. menu scene
-10. tally screen
-11. sound effects
-12. save
-13. more rooms
+8. string display (done)
+9. scene manager / base scene
+10. menu scene
+11. tally screen
+12. sound effects
+13. save
+14. more rooms
+
+## Special thanks to Kenney for the assets

@@ -49,6 +49,9 @@
     <Filter Include="Source Files\GameObjects\Attacks&amp;Skills">
       <UniqueIdentifier>{e3c4a012-1336-4ff8-9794-5d1394e75dc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Tools">
+      <UniqueIdentifier>{3600f1b5-8c27-43d0-900b-37218025a0ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -180,6 +183,12 @@
     <ClInclude Include="ItemLockedDoor.h">
       <Filter>Header Files\GameObjects\Tilemap</Filter>
     </ClInclude>
+    <ClInclude Include="TextRenderer.h">
+      <Filter>Header Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Fonts.h">
+      <Filter>Header Files\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -271,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="ItemLockedDoor.cpp">
       <Filter>Source Files\GameObjects\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderer.cpp">
+      <Filter>Source Files\Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

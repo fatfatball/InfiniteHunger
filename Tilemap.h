@@ -33,7 +33,7 @@ public:
 	ColorRGBA GetColorAt(const float& u, const float& v) const override; // just don't use them
 	unsigned char GetAlphaAt(const float& u, const float& v) const override;
 
-	bool LocalPos2TilePos(const Vector2& localPos, int& tileX, int& tileY) const;
+	virtual bool LocalPos2TilePos(const Vector2& localPos, int& tileX, int& tileY) const;
 	bool IsSolid(const int& tileX, const int& tileY) const;
 	AABB GetAABB() const;
 	AABB GetTileLocalAABB(const int& tileX, const int& tileY) const;

@@ -8,6 +8,7 @@
 #include <atomic>
 #include "Room.h"
 #include "RoomManager.h"
+#include "TextRenderer.h"
 
 class BasePlayer;
 
@@ -31,6 +32,7 @@ public:
 		for (int i = 0; i < objects.GetSize(); ++i) {
 			objects[i]->OnDestroy();
 		}
+		camera.ResetCamera();
 	}
 
 	void AddObject(std::shared_ptr<BaseGameObject> obj);
