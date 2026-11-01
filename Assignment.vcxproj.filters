@@ -168,6 +168,18 @@
     <ClInclude Include="PlayerSkill2.h">
       <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyStatic.h">
+      <Filter>Header Files\GameObjects\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseItem.h">
+      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemKey.h">
+      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemLockedDoor.h">
+      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -247,6 +259,18 @@
     </ClCompile>
     <ClCompile Include="PlayerSkill2.cpp">
       <Filter>Source Files\GameObjects\Attacks&amp;Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyStatic.cpp">
+      <Filter>Source Files\GameObjects\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseItem.cpp">
+      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemKey.cpp">
+      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemLockedDoor.cpp">
+      <Filter>Source Files\GameObjects\Tilemap</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

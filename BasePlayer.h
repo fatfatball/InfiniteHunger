@@ -15,6 +15,7 @@ protected:
 	bool skillPressed;
 	std::unique_ptr<BaseSkill> skill;
 	friend class BaseSkill;
+	int keyCount; // the number of keys the player has
 
 public:
 	BasePlayer(GamesEngineeringBase::Window& canvas, const bool& isFirst) : BaseCharacter(canvas) {
@@ -41,6 +42,7 @@ public:
 		attackCooldownCounter = 0.f;
 		isFirstPlayer = isFirst;
 		skillPressed = false;
+		keyCount = 0;
 	}
 
 	void OnStart() override {
@@ -229,6 +231,18 @@ public:
 	void SetInvulnerable(const float& time) {
 		isInvulnerable = true;
 		invulnerableCounter = time;
+	}
+
+	void AddKey() {
+		++keyCount;
+	}
+
+	bool UseKey() {
+		if (keyCount > 0) {
+			--keyCount;
+			return true;
+		}
+		return false;
 	}
 
 protected:

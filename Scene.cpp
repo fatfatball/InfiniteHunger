@@ -320,7 +320,7 @@ void Scene::RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<Re
 		bool isRendered;
 		short depth = 0;
 		// depth test
-		for (int order = 2; order >= 0; --order) {
+		for (int order = 3; order >= 0; --order) {
 			for (int i = objects.GetSize() - 1; i >= 0; --i) {
 				if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 					continue;

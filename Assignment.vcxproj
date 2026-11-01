@@ -145,6 +145,7 @@
     <ClInclude Include="BaseCharacter.h" />
     <ClInclude Include="BaseEnemy.h" />
     <ClInclude Include="BaseGameObject.h" />
+    <ClInclude Include="BaseItem.h" />
     <ClInclude Include="BasePhysicalObject.h" />
     <ClInclude Include="BasePlayer.h" />
     <ClInclude Include="BaseSkill.h" />
@@ -154,7 +155,10 @@
     <ClInclude Include="EnemyBodyNode.h" />
     <ClInclude Include="EnemyMedium.h" />
     <ClInclude Include="EnemySlow.h" />
+    <ClInclude Include="EnemyStatic.h" />
     <ClInclude Include="GamesEngineeringBase.h" />
+    <ClInclude Include="ItemKey.h" />
+    <ClInclude Include="ItemLockedDoor.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Player0.h" />
@@ -182,11 +186,15 @@
   <ItemGroup>
     <ClCompile Include="BaseAttack.cpp" />
     <ClCompile Include="BaseCharacter.cpp" />
+    <ClCompile Include="BaseItem.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="EnemyBodyNode.cpp" />
     <ClCompile Include="EnemyFast.cpp" />
     <ClCompile Include="EnemyMedium.cpp" />
     <ClCompile Include="EnemySlow.cpp" />
+    <ClCompile Include="EnemyStatic.cpp" />
+    <ClCompile Include="ItemKey.cpp" />
+    <ClCompile Include="ItemLockedDoor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player0.cpp" />
     <ClCompile Include="Player2.cpp" />

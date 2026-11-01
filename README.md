@@ -61,14 +61,14 @@ I tried to render polyline. At first, I just used Bresenham's method to draw a p
 ## Works still need to do:
 1. 3 player attacks (done)
 2. enemy death spawn health (done)
-3. 3 player skills
+3. 3 player skills (done)
 4. 3 players (done)
 5. 3 enemies (done)
-6. enemy spawner
-7. string display
-8. menu scene
-9. tally screen
-10. sound effects
-11. save
-12. more rooms
-13. key and locked door 
+6. enemy spawner (done)
+7. key and locked door (done)
+8. string display
+9. menu scene
+10. tally screen
+11. sound effects
+12. save
+13. more rooms

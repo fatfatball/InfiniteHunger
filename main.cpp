@@ -17,7 +17,7 @@ int main() {
 	bool running = true;
 	Camera camera;
 	Scene mainScene = Scene(canvas, camera);
-	mainScene.AddPlayer(PlayerType::Wizard);
+	mainScene.AddPlayer(PlayerType::Archer);
 
 #pragma region Timers
 	GamesEngineeringBase::Timer loopTimer;

@@ -7,6 +7,7 @@ enum RenderOrder {
 	First,
 	Second,
 	Third,
+	HUD,
 };
 
 struct ColorRGBA {

@@ -33,7 +33,7 @@ void PlayerAttack1::OnCollision(BaseGameObject* other, const Vector2& normal, co
     }
     auto ptr1 = dynamic_cast<BaseEnemy*>(other);
     if (ptr1) {
-        if (ptr1->TakeDamage(damage)) {
+        if (ptr1->TakeDamage(damage) && !ptr1->isStatic && !ptr1->isTrigger) {
             ptr1->globalPosition = ptr1->globalPosition +
                 (ptr1->globalPosition - owner->globalPosition).Normalized() * hitMovement;
         }
@@ -44,7 +44,7 @@ void PlayerAttack1::OnCollision(BaseGameObject* other, const Vector2& normal, co
 
     auto ptr2 = dynamic_cast<BaseBodyNode*>(other);
     if (ptr2 && ptr2->owner && ptr2->ownerType == CharacterType::Enemy) {
-        if (ptr2->owner->TakeDamage(damage)) {
+        if (ptr2->owner->TakeDamage(damage) && !ptr2->owner->isStatic && !ptr2->owner->isTrigger) {
             ptr2->owner->globalPosition = ptr2->owner->globalPosition +
                 (ptr2->owner->globalPosition - owner->globalPosition).Normalized() * hitMovement;
         }
