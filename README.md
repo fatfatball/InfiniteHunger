@@ -68,7 +68,7 @@ I tried to render polyline. At first, I just used Bresenham's method to draw a p
 7. key and locked door (done)
 8. string display (done)
 9. scene manager / base scene (done)
-10. menu scene
+10. menu scene (done)
 11. tally screen
 12. sound effects
 13. save

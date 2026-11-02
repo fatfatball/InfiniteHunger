@@ -1,5 +1,6 @@
 #include "TextRenderer.h"
 #include "Fonts.h"
+#include "SmallStructs.h"
 
 void TextRenderer::DrawChar(
 	GamesEngineeringBase::Window& env,
@@ -53,4 +54,18 @@ void TextRenderer::DrawText(
 		DrawChar(env, text[i], cursorX, cursorY, scale, color);
 		cursorX += 6 * scale;
 	}
+}
+
+ScreenAABB TextRenderer::GetTextScreenAABB(const std::string& text, const int& x, const int& y, const int& scale) {
+	int cursorX = x;
+	int cursorY = y;
+	for (int i = 0; i < text.length(); i++) {
+		if (text[i] == '\n') {
+			cursorX = x;
+			cursorY += 8 * scale;
+			continue;
+		}
+		cursorX += 6 * scale;
+	}
+	return { (short)x, (short)y, (short)(cursorX - scale), (short)(cursorY + 7 * scale) };
 }

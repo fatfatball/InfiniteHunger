@@ -125,6 +125,5 @@ public:
 		boundary.min.y = -1000;
 		boundary.max.x = 1000;
 		boundary.max.y = 1000;
-		ClearDepthGraph();
 	}
 };

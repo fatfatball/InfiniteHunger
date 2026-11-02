@@ -1,7 +1,8 @@
 #pragma once
 #include "GamesEngineeringBase.h"
-#include "SmallStructs.h"
+#include "AABB.h"
 #include <string>
+#include "SmallStructs.h"
 
 class TextRenderer {
 private:
@@ -10,5 +11,6 @@ private:
 
 public:
 	static void DrawText(GamesEngineeringBase::Window& env, const std::string& text, const int& x, const int& y, const int& scale, const ColorRGBA& color);
+	static ScreenAABB GetTextScreenAABB(const std::string& text, const int& x, const int& y, const int& scale);
 };
 

@@ -9,6 +9,7 @@
 #include "Room.h"
 #include "RoomManager.h"
 #include "TextRenderer.h"
+#include "ClickableText.h"
 
 class SceneManager;
 class BasePlayer;
@@ -17,6 +18,7 @@ class BasePlayer;
 class Scene{
 protected:
 	List<std::shared_ptr<BaseGameObject>> objects;
+	List<std::shared_ptr<ClickableText>> uiObjects;
 	GamesEngineeringBase::Window& canvas;
 	Camera& camera;
 	//List<RenderedItem> renderedItems;
@@ -29,24 +31,24 @@ protected:
 public:
 	SceneManager* sceneManager;
 
-	Scene(GamesEngineeringBase::Window& window, Camera& camera);
+	Scene(GamesEngineeringBase::Window& window, Camera& camera, SceneManager* manager);
 
 	virtual ~Scene() {
 		for (int i = 0; i < objects.GetSize(); ++i) {
 			objects[i]->OnDestroy();
 		}
-		camera.ResetCamera();
 	}
 
 	void AddObject(std::shared_ptr<BaseGameObject> obj);
+	void AddUIObject(std::shared_ptr<ClickableText> uiObject);
 	void AddRoom(std::shared_ptr<Room> room);
 	void RemoveRoom(const RoomCoord& coord);
 	void AddPlayer(const PlayerType type);
 
-	void FixedUpdateObjects(float dt);
-	void VisualUpdateObjects(float dt);
-	void RenderObjects(const float& alpha);
-	void RecycleObjects();
+	virtual void FixedUpdateObjects(const float& dt);
+	virtual void VisualUpdateObjects(const float& dt);
+	virtual void RenderObjects(const float& alpha);
+	virtual void RecycleObjects();
 
 	void SetCameraTarget(BaseGameObject* target);
 	Vector2 GetCameraTargetPos();

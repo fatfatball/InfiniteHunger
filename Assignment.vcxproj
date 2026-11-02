@@ -150,6 +150,7 @@
     <ClInclude Include="BasePlayer.h" />
     <ClInclude Include="BaseSkill.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ClickableText.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="EnemyFast.h" />
     <ClInclude Include="EnemyBodyNode.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneGameplay.h" />
+    <ClInclude Include="SceneMenu.h" />
     <ClInclude Include="SmallStructs.h" />
     <ClInclude Include="TestGameObject.h" />
     <ClInclude Include="TestPhysicalObject.h" />
@@ -192,6 +194,7 @@
     <ClCompile Include="BaseCharacter.cpp" />
     <ClCompile Include="BaseItem.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ClickableText.cpp" />
     <ClCompile Include="EnemyBodyNode.cpp" />
     <ClCompile Include="EnemyFast.cpp" />
     <ClCompile Include="EnemyMedium.cpp" />
@@ -216,6 +219,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneGameplay.cpp" />
+    <ClCompile Include="SceneMenu.cpp" />
     <ClCompile Include="TestGameObject.cpp" />
     <ClCompile Include="TestPhysicalObject.cpp" />
     <ClCompile Include="TestPhysicalTail.cpp" />

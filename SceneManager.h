@@ -37,5 +37,9 @@ public:
 	void FixedUpdate(const float& dt);
 	void VisualUpdate(const float& dt);
 	void Render(const float& alpha, const int& fpsCount);
+
+	void QuitGame() {
+		running = false;
+	}
 };
 

@@ -2,6 +2,7 @@
 #include "SceneGameplay.h"
 #include <memory>
 #include "TextRenderer.h"
+#include "SceneMenu.h"
 
 void SceneManager::SolveSceneChange() {
 	if (nextScene) {
@@ -16,30 +17,28 @@ SceneManager::SceneManager(bool& running) : running(running) {
 	// initialize the current scene into menu scene
 	// test for single scene
 	camera.ResetCamera();
-	ChangeScene({ SceneManagerState::MultiScene, PlayerType::Swordsman, PlayerType::Archer,{} });
+	ChangeScene({ SceneManagerState::MenuScene, PlayerType::Swordsman, PlayerType::Archer,{} });
 	SolveSceneChange();
 }
 
 void SceneManager::ChangeScene(const SceneChangeContext& ctx) {
+	camera.ResetCamera();
 	switch (ctx.nextScene) {
 	case SceneManagerState::None:
 		break;
-	case SceneManagerState::SingleScene: {
-		nextScene = std::make_unique<SceneGameplay>(canvas, camera);
+	case SceneManagerState::SingleScene:
+		nextScene = std::make_unique<SceneGameplay>(canvas, camera, this);
 		nextScene->AddPlayer(ctx.player1);
-		nextScene->sceneManager = this;
 		break;
-	}
-	case SceneManagerState::MultiScene: {
-		nextScene = std::make_unique<SceneGameplay>(canvas, camera);
+	case SceneManagerState::MultiScene:
+		nextScene = std::make_unique<SceneGameplay>(canvas, camera, this);
 		nextScene->AddPlayer(ctx.player1);
 		nextScene->AddPlayer(ctx.player2);
-		nextScene->sceneManager = this;
 		break;
-	}
 	case SceneManagerState::LoadScene:
 		break;
 	case SceneManagerState::MenuScene:
+		nextScene = std::make_unique<SceneMenu>(canvas, camera, this);
 		break;
 	case SceneManagerState::TallyScene:
 		break;

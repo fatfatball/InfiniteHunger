@@ -9,7 +9,8 @@
 #include "Player1.h"
 #include "Player2.h"
 
-Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera) : canvas(window), camera(camera) {
+Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera, SceneManager* manager) 
+	: canvas(window), camera(camera), sceneManager(manager) {
 	// slice the canvas into tiles, for rendering
 	ScreenAABB renderTile = { 0, 0, 0, 0 };
 	for (short yPos = 0; yPos < WINDOW_HEIGHT; yPos += RENDER_TILE_HEIGHT) {
@@ -31,6 +32,15 @@ void Scene::AddObject(std::shared_ptr<BaseGameObject> obj) {
 	BaseGameObject* raw = obj.get();
 	raw->scene = this;
 	objects.PushBack(obj);
+	raw->OnStart();
+}
+
+void Scene::AddUIObject(std::shared_ptr<ClickableText> uiObject) {
+	if (!uiObject) {
+		return;
+	}
+	ClickableText* raw = uiObject.get();
+	uiObjects.PushBack(uiObject);
 	raw->OnStart();
 }
 
@@ -79,7 +89,7 @@ void Scene::AddPlayer(const PlayerType type) {
 	}
 }
 
-void Scene::FixedUpdateObjects(float dt) {
+void Scene::FixedUpdateObjects(const float& dt) {
 	int size = objects.GetSize();
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
@@ -153,21 +163,23 @@ void Scene::FixedUpdateObjects(float dt) {
 		}
 	}
 
-	Vector2 normal;
-	Vector2 position;
-	for (int i = 0; i < roomManager->rooms.GetSize(); ++i) {
-		for (int j = 0; j < size; ++j) {
-			if (!objects[j]->canCollide || !objects[j]->isActive || objects[j]->isPendingDestroy) {
-				continue;
-			}
-			auto ptr = dynamic_cast<BasePhysicalObject*>(objects[j].get());
+ 	if (roomManager && roomManager->rooms.GetSize() != 0) {
+		Vector2 normal;
+		Vector2 position;
+		for (int i = 0; i < roomManager->rooms.GetSize(); ++i) {
+			for (int j = 0; j < size; ++j) {
+				if (!objects[j]->canCollide || !objects[j]->isActive || objects[j]->isPendingDestroy) {
+					continue;
+				}
+				auto ptr = dynamic_cast<BasePhysicalObject*>(objects[j].get());
 
-			if (roomManager->rooms[i]->ResolveCollision(ptr, normal, position)) {
-				ptr->OnCollision(roomManager->rooms[i].get(), normal, position);
+				if (roomManager->rooms[i]->ResolveCollision(ptr, normal, position)) {
+					ptr->OnCollision(roomManager->rooms[i].get(), normal, position);
+				}
 			}
 		}
 	}
-
+	
 	// solve other constraints here
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
@@ -192,13 +204,21 @@ void Scene::FixedUpdateObjects(float dt) {
 	}
 }
 
-void Scene::VisualUpdateObjects(float dt) {
+void Scene::VisualUpdateObjects(const float& dt) {
 	int size = objects.GetSize();
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 			continue;
 		}
 		objects[i]->VisualUpdate(dt);
+	}
+
+	size = uiObjects.GetSize();
+	for (int i = 0; i < size; ++i) {
+		if (!uiObjects[i] || uiObjects[i]->isPendingDestroy) {
+			continue;
+		}
+		uiObjects[i]->VisualUpdate(dt);
 	}
 }
 
@@ -225,6 +245,15 @@ void Scene::RenderObjects(const float& alpha) {
 	for (int i = 0; i < CO_RENDER_THREADS; ++i) {
 		workers[i].join();
 	}
+
+	// render UI objects at last
+	size = uiObjects.GetSize();
+	for (int i = 0; i < size; ++i) {
+		if (!uiObjects[i] || uiObjects[i]->isPendingDestroy) {
+			continue;
+		}
+		uiObjects[i]->RenderSelf();
+	}
 }
 
 void Scene::RecycleObjects() {
@@ -250,6 +279,16 @@ void Scene::RecycleObjects() {
 
 		objects[i]->OnDestroy();
 		objects.Erase(i);
+	}
+
+	// recycle UI objects
+	size = uiObjects.GetSize();
+	for (int i = size - 1; i >= 0; --i) {
+		if (!uiObjects[i] || !uiObjects[i]->isPendingDestroy) {
+			continue;
+		}
+		uiObjects[i]->OnDestroy();
+		uiObjects.Erase(i);
 	}
 }
 

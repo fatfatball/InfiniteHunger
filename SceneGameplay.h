@@ -4,6 +4,6 @@
 
 class SceneGameplay : public Scene {
 public:
-	SceneGameplay(GamesEngineeringBase::Window& window, Camera& camera);
+	SceneGameplay(GamesEngineeringBase::Window& window, Camera& camera, SceneManager* manager);
 };
 

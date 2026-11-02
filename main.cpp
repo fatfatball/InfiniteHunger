@@ -1,15 +1,5 @@
 #include "GamesEngineeringBase.h"
 #include "Constants.h"
-#include "TestGameObject.h"
-#include "Camera.h"
-#include "List.h"
-#include "Scene.h"
-#include <memory>
-#include "Player0.h"
-#include "PolyLine2D.h"
-#include "Room0.h"
-#include "SmallStructs.h"
-#include "TextRenderer.h"
 #include "SceneManager.h"
 
 int main() {
