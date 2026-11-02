@@ -10,11 +10,12 @@
 #include "RoomManager.h"
 #include "TextRenderer.h"
 
+class SceneManager;
 class BasePlayer;
 
 // a scene contains lots of objects, and manage their life circles
 class Scene{
-private:
+protected:
 	List<std::shared_ptr<BaseGameObject>> objects;
 	GamesEngineeringBase::Window& canvas;
 	Camera& camera;
@@ -26,9 +27,11 @@ private:
 	List< std::shared_ptr<BasePlayer>> players;
 	 
 public:
+	SceneManager* sceneManager;
+
 	Scene(GamesEngineeringBase::Window& window, Camera& camera);
 
-	~Scene() {
+	virtual ~Scene() {
 		for (int i = 0; i < objects.GetSize(); ++i) {
 			objects[i]->OnDestroy();
 		}

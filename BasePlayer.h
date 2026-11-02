@@ -118,7 +118,7 @@ public:
 		}
 
 		// second player shouldn't be outside of the window
-		if (!scene->GetCameraAABB().Intersects(GetAABB(curState))) {
+		if (!isDead && !scene->GetCameraAABB().Intersects(GetAABB(curState))) {
 			if (!isFirstPlayer) {
 				TeleportTo(scene->GetFirstPlayer()->globalPosition);
 			}

@@ -177,6 +177,8 @@
     <ClInclude Include="Room0.h" />
     <ClInclude Include="RoomManager.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SceneGameplay.h" />
     <ClInclude Include="SmallStructs.h" />
     <ClInclude Include="TestGameObject.h" />
     <ClInclude Include="TestPhysicalObject.h" />
@@ -212,6 +214,8 @@
     <ClCompile Include="Room0.cpp" />
     <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SceneGameplay.cpp" />
     <ClCompile Include="TestGameObject.cpp" />
     <ClCompile Include="TestPhysicalObject.cpp" />
     <ClCompile Include="TestPhysicalTail.cpp" />

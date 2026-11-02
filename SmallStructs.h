@@ -97,3 +97,8 @@ enum class BodyNodeType {
 	Normal,
 	Heal,
 };
+
+struct RunStat {
+	int totalEnemyKilled = 0;
+	float totalTime = 0.f;
+};

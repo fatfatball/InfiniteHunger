@@ -10,14 +10,16 @@
 #include "Room0.h"
 #include "SmallStructs.h"
 #include "TextRenderer.h"
+#include "SceneManager.h"
 
 int main() {
-	GamesEngineeringBase::Window canvas;
-	canvas.create(WINDOW_WIDTH, WINDOW_HEIGHT, "Infinite Hunger");
 	bool running = true;
-	Camera camera;
-	Scene mainScene = Scene(canvas, camera);
-	mainScene.AddPlayer(PlayerType::Swordsman);
+	//GamesEngineeringBase::Window canvas;
+	//canvas.create(WINDOW_WIDTH, WINDOW_HEIGHT, "Infinite Hunger");
+	//Camera camera;
+	//Scene mainScene = Scene(canvas, camera);
+	//mainScene.AddPlayer(PlayerType::Swordsman);
+	SceneManager sceneManager(running);
 
 #pragma region Timers
 	GamesEngineeringBase::Timer loopTimer;
@@ -87,36 +89,24 @@ int main() {
 			// traverse the fixed_updated objects
 			// store the previous state
 			// update the current state using FIXED_DELTATIME
-			mainScene.FixedUpdateObjects(FIXED_DELTATIME);
-			// traverse the recycle-marked objects, delete them all
-			mainScene.RecycleObjects(); 
+			sceneManager.FixedUpdate(FIXED_DELTATIME);
 			frameTimeAccumulator -= FIXED_DELTATIME;
 		}
 #pragma endregion
 
 #pragma region VisualUpdate
 		// traverse the objects, update them by frameTime
-		mainScene.VisualUpdateObjects(frameTime);
-		camera.VisualUpdate(frameTime);
+		sceneManager.VisualUpdate(frameTime);
 		//updateTime += performanceTestTimer.dt();
 #pragma endregion
 
 #pragma region Render
-		canvas.clear();
 		//clearTime += performanceTestTimer.dt();
 		// traverse the render-able objects, sort them by order, 
 		// then call render method respectively.
-		mainScene.RenderObjects(frameTimeAccumulator / FIXED_DELTATIME);
-		TextRenderer::DrawText(canvas, "FPS: " + std::to_string(fpsCount), 5, 5, 2, { 127, 127, 127, 255 });
+		sceneManager.Render(frameTimeAccumulator / FIXED_DELTATIME, fpsCount);
 		//renderTime += performanceTestTimer.dt();
-		canvas.present();
 		//presentTime += performanceTestTimer.dt();
-#pragma endregion
-
-#pragma region OnlyForTest
-		if (canvas.keyPressed(0x1b)) { // esc to close
-			running = false;
-		}
 #pragma endregion
 	}
 	return 0;

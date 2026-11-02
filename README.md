@@ -67,7 +67,7 @@ I tried to render polyline. At first, I just used Bresenham's method to draw a p
 6. enemy spawner (done)
 7. key and locked door (done)
 8. string display (done)
-9. scene manager / base scene
+9. scene manager / base scene (done)
 10. menu scene
 11. tally screen
 12. sound effects
