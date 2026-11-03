@@ -3,6 +3,7 @@
 #include "GamesEngineeringBase.h"
 #include <string>
 #include "Vector2.h"
+#include "Projectile.h"
 
 class EnemySlow : public BaseEnemy {
 public:
@@ -15,6 +16,11 @@ public:
 	void VisualUpdate(const float& dt) override;
 
 private:
+	float attackCooldown;
+	float attackCooldownCounter;
+
+	void TickAttackCooldown(const float& dt);
+	bool Attack();
 	std::string GetSpritePath() override;
 };
 

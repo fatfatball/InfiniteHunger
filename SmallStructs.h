@@ -99,6 +99,7 @@ enum class BodyNodeType {
 };
 
 struct RunStat {
+	int playerCount = 0;
 	int totalEnemyKilled = 0;
-	float totalTime = 0.f;
+	double totalTime = 0.0;
 };

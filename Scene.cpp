@@ -101,7 +101,6 @@ void Scene::FixedUpdateObjects(const float& dt) {
 #pragma region CollisionSolving
 	// solve collision here
 	// 1. solve entity colliding entity.
-	// 2. solve entity colliding tilemap.
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 			continue;
@@ -163,6 +162,7 @@ void Scene::FixedUpdateObjects(const float& dt) {
 		}
 	}
 
+	// 2. solve entity colliding tilemap.
  	if (roomManager && roomManager->rooms.GetSize() != 0) {
 		Vector2 normal;
 		Vector2 position;
@@ -267,6 +267,7 @@ void Scene::RecycleObjects() {
 		if (camera.followTarget == ptr) {
 			camera.followTarget = nullptr;
 		}
+		// clear objects
 		auto playerPtr = dynamic_cast<BasePlayer*>(ptr);
 		if (playerPtr) {
 			for (int j = 0; j < players.GetSize(); ++j) {

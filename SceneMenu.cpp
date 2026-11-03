@@ -50,7 +50,7 @@ void SceneMenu::StartPlayerSelection(const int& count) {
 		[this, count]() {
 			sceneManager->ChangeScene(
 				{ count == 1 ? SceneManagerState::SingleScene : SceneManagerState::MultiScene,
-				player1, player2 });
+				player1, player2, {count, 0, 0.0} });
 		}));
 	AddUIObject(std::make_shared<ClickableText>(canvas, "BACK", Vector2(50, 625), 5, 
 		[this]() {

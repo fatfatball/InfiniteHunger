@@ -27,4 +27,8 @@ public:
 	std::shared_ptr<Room> GetRandomRoomAt(const RoomCoord& coord);
 	bool CheckIfLive(const RoomCoord& coord);
 	static RoomCoord Wolrd2RoomCoord(const Vector2& pos);
+	int GetRandSeed() const { return randSeed; }
+
+private:
+	int randSeed;
 };

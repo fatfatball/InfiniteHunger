@@ -1,5 +1,9 @@
 #include "EnemySlow.h"
 #include "EnemyBodyNode.h"
+#include "Projectile.h"
+#include "SmallStructs.h"
+#include <cmath>
+#include "Vector2.h"
 
 EnemySlow::EnemySlow(GamesEngineeringBase::Window& canvas, const Vector2& pos) 
 : BaseEnemy(canvas, pos) {
@@ -8,7 +12,7 @@ EnemySlow::EnemySlow(GamesEngineeringBase::Window& canvas, const Vector2& pos)
 	mass = 30.f;
 	maxVelocity = 225.f;
 	maxForce = 500.f * mass;
-	rotationSpeed = PI * 3.f / 2.f;
+	rotationSpeed = PI * 3.f / 4.f;
 	contactDamage = 1.f;
 	hitMovement = 8.f;
 	maxHealth = 3.5f; // 4 hits to death
@@ -16,6 +20,8 @@ EnemySlow::EnemySlow(GamesEngineeringBase::Window& canvas, const Vector2& pos)
 	invulnerableTime = 0.35f;
 	collisionRadius = 11.f;
 	isFixed = true;
+	attackCooldown = 3.f;
+	attackCooldownCounter = attackCooldown;
 }
 
 void EnemySlow::OnStart() {
@@ -169,10 +175,33 @@ void EnemySlow::OnStart() {
 
 void EnemySlow::FixedUpdate(const float& dt) {
 	BaseEnemy::FixedUpdate(dt);
+	TickAttackCooldown(dt);
+	if (chaseTarget) {
+		Attack();
+	}
 }
 
 void EnemySlow::VisualUpdate(const float& dt) {
 	BaseEnemy::VisualUpdate(dt);
+}
+
+void EnemySlow::TickAttackCooldown(const float& dt) {
+	if (attackCooldownCounter > 0) {
+		attackCooldownCounter -= dt;
+	}
+}
+
+bool EnemySlow::Attack() {
+	if (attackCooldownCounter > 0) {
+		return false;
+	}
+
+	auto ptr = std::make_shared<Projectile>(env, globalPosition, 
+		Vector2{std::cos(rotation), std::sin(rotation)}, CharacterType::Enemy);
+	scene->AddObject(ptr);
+
+	attackCooldownCounter = attackCooldown;
+	return true;
 }
 
 std::string EnemySlow::GetSpritePath()

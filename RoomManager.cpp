@@ -3,10 +3,14 @@
 #include "Scene.h"
 #include <cmath>
 #include "SmallStructs.h"
+#include <random>
+#include "Room1.h"
+#include "Room2.h"
 
 RoomManager::RoomManager(GamesEngineeringBase::Window& canvas) : BaseGameObject(canvas) {
 	scale = { 0, 0 };
 	prevRoom = { 100, 100 };
+	randSeed = time(0);
 }
 
 void RoomManager::OnStart() {
@@ -75,6 +79,7 @@ void RoomManager::RemoveRoom(const RoomCoord coord) {
 	// traverse the rooms, find the corresponding room, set to pending destroy
 	for (int i = 0; i < rooms.GetSize(); ++i) {
 		if (rooms[i]->GetCoord() == coord) {
+			rooms[i]->DestroyRoomObjects();
 			rooms[i]->isPendingDestroy = true;
 			rooms[i]->isActive = false;
 			rooms.Erase(i);
@@ -110,7 +115,24 @@ Room* RoomManager::GetRoomAt(const RoomCoord& coord)
 }
 
 std::shared_ptr<Room> RoomManager::GetRandomRoomAt(const RoomCoord& coord) {
-	return std::make_shared<Room0>(env, coord);
+	long long x = coord.x + 0xFFFF;
+	long long y = coord.y + 0xFFFF;
+	long long sum = x + y;
+	long long pair = sum * (sum + 1) / 2 + y;
+	long long offset = pair * 325;
+	std::mt19937 rng(randSeed + offset);
+	int room = rng() % 3;
+	
+	switch (room) {
+	case 0:
+		return std::make_shared<Room0>(env, coord);
+	case 1:
+		return std::make_shared<Room1>(env, coord);
+	case 2:
+		return std::make_shared<Room2>(env, coord);
+	default:
+		return std::make_shared<Room0>(env, coord);
+	}
 }
 
 bool RoomManager::CheckIfLive(const RoomCoord& coord) {

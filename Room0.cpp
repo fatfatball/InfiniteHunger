@@ -1,14 +1,11 @@
 #include "Room0.h"
-#include <string>
-#include "EnemyFast.h"
-#include "EnemyMedium.h"
 #include "EnemySlow.h"
-#include "EnemyStatic.h"
 #include "Vector2.h"
 #include "Scene.h"
 #include <memory>
+#include "ItemTrap.h"
+#include "ItemTrapTrigger.h"
 #include "ItemKey.h"
-#include "ItemLockedDoor.h"
 
 Room0::Room0(GamesEngineeringBase::Window& canvas, const RoomCoord coord)
 	: Room(canvas, coord, "./Resources/Maps/Room0") {
@@ -19,12 +16,34 @@ Room0::Room0(GamesEngineeringBase::Window& canvas, const RoomCoord coord)
 
 void Room0::OnStart() {
 	Room::OnStart();
-	// load enemies here
+	// load here
 	Vector2 pos;
-	pos = { 128, 128 };
-	scene->AddObject(std::make_shared<EnemyStatic>(env, pos + globalPosition));
-	scene->AddObject(std::make_shared<ItemKey>(env, pos + globalPosition));
-	pos = { 512, 128 };
-	scene->AddObject(std::make_shared<ItemLockedDoor>(env, pos + globalPosition));
 
+	pos = { 64 * 8, -64 * 8 };
+	auto ptr_trap3 = std::make_shared<ItemTrap>(env, pos + globalPosition);
+	scene->AddObject(ptr_trap3);
+	roomObjects.PushBack(ptr_trap3);
+
+	pos = { -64 * 8, 64 * 8 };
+	auto ptr_trap4 = std::make_shared<ItemTrap>(env, pos + globalPosition);
+	scene->AddObject(ptr_trap4);
+	roomObjects.PushBack(ptr_trap4);
+
+	pos = { -64*8, -64 * 8 };
+	auto ptr_trap0 = std::make_shared<ItemTrapTrigger>(env, pos + globalPosition, ptr_trap3);
+	ptr_trap3->SetProjectileDirection((ptr_trap0->globalPosition - ptr_trap3->globalPosition).Normalized());
+	scene->AddObject(ptr_trap0);
+	roomObjects.PushBack(ptr_trap0);
+	auto ptr0 = std::make_shared<ItemKey>(env, pos + globalPosition);
+	scene->AddObject(ptr0);
+	roomObjects.PushBack(ptr0);
+
+	pos = { 64 * 8, 64 * 8 };
+	auto ptr_trap1 = std::make_shared<ItemTrapTrigger>(env, pos + globalPosition, ptr_trap4);
+	ptr_trap4->SetProjectileDirection((ptr_trap1->globalPosition - ptr_trap4->globalPosition).Normalized());
+	scene->AddObject(ptr_trap1);
+	roomObjects.PushBack(ptr_trap1);
+	auto ptr1 = std::make_shared<ItemKey>(env, pos + globalPosition);
+	scene->AddObject(ptr1);
+	roomObjects.PushBack(ptr1);
 }

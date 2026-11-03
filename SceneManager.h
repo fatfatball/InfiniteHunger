@@ -27,6 +27,7 @@ private:
 	Camera camera;
 	GamesEngineeringBase::Window canvas;
 	bool& running;
+	RunStat runStat;
 
 	void SolveSceneChange();
 
@@ -41,5 +42,7 @@ public:
 	void QuitGame() {
 		running = false;
 	}
+
+	RunStat GetRunStat() const { return runStat; }
 };
 

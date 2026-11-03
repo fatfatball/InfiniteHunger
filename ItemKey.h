@@ -9,6 +9,7 @@ private:
 
 public:
 	ItemKey(GamesEngineeringBase::Window& env, const Vector2& pos);
+
 	void OnCollision(BaseGameObject* other, const Vector2& normal, const Vector2& position) override;
 };
 

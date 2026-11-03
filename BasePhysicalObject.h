@@ -33,7 +33,7 @@ public:
 
 	virtual void UpdatePhysicPosition(const float& dt) {
 		// update position using Verlet algorithm
-		// calculate velocity approximately
+		// calculate velocity approximately. the curVelocity is calculated by pos[t] and pos[t-1]
 		velocity = curPhysicState.velocityS + force / mass * dt;
 		// clamp velocity to maxVelocity
 		if (velocity.Length() > maxVelocity) {

@@ -3,6 +3,7 @@
 #include <memory>
 #include "TextRenderer.h"
 #include "SceneMenu.h"
+#include "SceneTally.h"
 
 void SceneManager::SolveSceneChange() {
 	if (nextScene) {
@@ -22,6 +23,7 @@ SceneManager::SceneManager(bool& running) : running(running) {
 }
 
 void SceneManager::ChangeScene(const SceneChangeContext& ctx) {
+	runStat = ctx.stat;
 	camera.ResetCamera();
 	switch (ctx.nextScene) {
 	case SceneManagerState::None:
@@ -41,6 +43,7 @@ void SceneManager::ChangeScene(const SceneChangeContext& ctx) {
 		nextScene = std::make_unique<SceneMenu>(canvas, camera, this);
 		break;
 	case SceneManagerState::TallyScene:
+		nextScene = std::make_unique<SceneTally>(canvas, camera, this, runStat);
 		break;
 	default:
 		break;

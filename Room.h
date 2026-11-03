@@ -4,12 +4,15 @@
 #include "SmallStructs.h"
 #include "Vector2.h"
 #include "Constants.h"
-#include "Constants.h"
+#include <memory>
+#include "List.h"
+#include "BaseGameObject.h"
 
 class Room : public Tilemap {
 protected:
 	std::string mapFolder;
 	RoomCoord coord;
+	List<std::weak_ptr<BaseGameObject>> roomObjects; // to store and destroy the static objects in this room
 
 	std::string GetTileFolderPath() override {
 		return "./Resources/Tiles";
@@ -17,6 +20,7 @@ protected:
 	std::string GetMapFolderPath() override {
 		return mapFolder;
 	}
+
 public:
 	//short focusChanged; // 0: no change; 1: false to true; -1: true to false
 
@@ -42,6 +46,16 @@ public:
 		}
 	}
 
+	~Room() {
+		for (int i = 0; i < roomObjects.GetSize(); ++i) {
+			auto obj = roomObjects[i].lock();
+			if (obj) {		
+				obj->isActive = false;
+				obj->isPendingDestroy = true;
+			}
+		}
+	}
+
 	RoomCoord GetCoord() const {
 		return coord;
 	}
@@ -56,6 +70,17 @@ public:
 		isFocused = GetAABB().Intersects(camera.GetAABB());
 		renderAABB = GetAABB().GetIntersectionAABB(camera.GetAABB());
 		renderScreenAABB = camera.GetScreenAABB(renderAABB);
+	}
+
+	void DestroyRoomObjects() {
+		for (int i = 0; i < roomObjects.GetSize(); ++i) {
+			auto obj = roomObjects[i].lock();
+			if (obj) {
+				obj->isActive = false;
+				obj->isPendingDestroy = true;
+			}
+		}
+		roomObjects.Clear();
 	}
 };
 

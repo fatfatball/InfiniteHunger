@@ -13,10 +13,6 @@ ItemLockedDoor::ItemLockedDoor(GamesEngineeringBase::Window& env, const Vector2&
 }
 
 void ItemLockedDoor::OnCollision(BaseGameObject * other, const Vector2 & normal, const Vector2 & position) {
-	if (!isActive || isPendingDestroy) {
-		return;
-	}
-
 	auto player = dynamic_cast<BasePlayer*>(other);
 	if (player != nullptr && !player->isDead && player->UseKey()) {
 		isActive = false;

@@ -207,6 +207,27 @@
     <ClInclude Include="SceneMenu.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="SceneTally.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTimer.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemTrap.h">
+      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemTrapTrigger.h">
+      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="Room1.h">
+      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    </ClInclude>
+    <ClInclude Include="Room2.h">
+      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -313,6 +334,27 @@
     </ClCompile>
     <ClCompile Include="SceneMenu.cpp">
       <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTally.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="BasePlayer.cpp">
+      <Filter>Source Files\GameObjects\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files\GameObjects\Attacks&amp;Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemTrap.cpp">
+      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemTrapTrigger.cpp">
+      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="Room1.cpp">
+      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="Room2.cpp">
+      <Filter>Source Files\GameObjects\Tilemap</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -69,9 +69,11 @@ I tried to render polyline. At first, I just used Bresenham's method to draw a p
 8. string display (done)
 9. scene manager / base scene (done)
 10. menu scene (done)
-11. tally screen
-12. sound effects
-13. save
-14. more rooms
+11. tally screen (done)
+12. enemy's projectiles (done)
+13. traps (done)
+14. save
+15. more rooms
+16. tutorial
 
 ## Special thanks to Kenney for the assets
