@@ -99,9 +99,6 @@ public:
 			for (int i = 0; i < polyLine2Ds.GetSize(); ++i) {
 				polyLine2Ds[i]->isPendingDestroy = true;
 			}
-			if (onUnsave) {
-				onUnsave();
-			}
 		}
 		BaseCharacter::FixedUpdate(dt);
 	}
@@ -112,6 +109,11 @@ public:
 		}
 		for (int i = 0; i < polyLine2Ds.GetSize(); ++i) {
 			polyLine2Ds[i]->isPendingDestroy = true;
+		}
+		if (!isDead) {
+			if (onUnsave) {
+				onUnsave();
+			}
 		}
 	}
 
