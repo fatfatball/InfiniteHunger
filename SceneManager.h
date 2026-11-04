@@ -3,6 +3,7 @@
 #include "GamesEngineeringBase.h"
 #include <memory>
 #include "SmallStructs.h"
+#include "SaveManager.h"
 
 enum class SceneManagerState {
 	None,
@@ -32,6 +33,8 @@ private:
 	void SolveSceneChange();
 
 public:
+	SaveManager saveManager;
+
 	SceneManager(bool& running);
 	
 	void ChangeScene(const SceneChangeContext& ctx);

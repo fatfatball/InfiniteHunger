@@ -29,11 +29,13 @@ void SceneManager::ChangeScene(const SceneChangeContext& ctx) {
 	case SceneManagerState::None:
 		break;
 	case SceneManagerState::SingleScene:
-		nextScene = std::make_unique<SceneGameplay>(canvas, camera, this);
+		saveManager.Clear();
+		nextScene = std::make_unique<SceneGameplay>(canvas, camera, this, &saveManager);
 		nextScene->AddPlayer(ctx.player1);
 		break;
 	case SceneManagerState::MultiScene:
-		nextScene = std::make_unique<SceneGameplay>(canvas, camera, this);
+		saveManager.Clear();
+		nextScene = std::make_unique<SceneGameplay>(canvas, camera, this, &saveManager);
 		nextScene->AddPlayer(ctx.player1);
 		nextScene->AddPlayer(ctx.player2);
 		break;

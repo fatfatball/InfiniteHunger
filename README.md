@@ -73,7 +73,7 @@ I tried to render polyline. At first, I just used Bresenham's method to draw a p
 12. enemy's projectiles (done)
 13. traps (done)
 14. save
-15. more rooms
+15. more rooms (done)
 16. tutorial
 
 ## Special thanks to Kenney for the assets

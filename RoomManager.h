@@ -5,13 +5,15 @@
 #include <memory>
 #include "SmallStructs.h"
 #include "Vector2.h"
+#include "SaveManager.h"
 
 class RoomManager : public BaseGameObject {
 public:
 	List<std::shared_ptr<Room>> rooms;
 	RoomCoord prevRoom;
+	SaveManager* saveManager;
 
-	RoomManager(GamesEngineeringBase::Window& canvas);
+	RoomManager(GamesEngineeringBase::Window& canvas, SaveManager* saveManager);
 
 	void OnStart() override;
 	void FixedUpdate(const float& dt) override;

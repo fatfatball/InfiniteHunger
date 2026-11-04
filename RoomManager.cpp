@@ -7,10 +7,11 @@
 #include "Room1.h"
 #include "Room2.h"
 
-RoomManager::RoomManager(GamesEngineeringBase::Window& canvas) : BaseGameObject(canvas) {
+RoomManager::RoomManager(GamesEngineeringBase::Window& canvas, SaveManager* saveManager) : BaseGameObject(canvas) {
 	scale = { 0, 0 };
-	prevRoom = { 100, 100 };
+	prevRoom = { 10000000, 10000000 };
 	randSeed = time(0);
+	this->saveManager = saveManager;
 }
 
 void RoomManager::OnStart() {
@@ -121,18 +122,25 @@ std::shared_ptr<Room> RoomManager::GetRandomRoomAt(const RoomCoord& coord) {
 	long long pair = sum * (sum + 1) / 2 + y;
 	long long offset = pair * 325;
 	std::mt19937 rng(randSeed + offset);
-	int room = rng() % 3;
+	int roomNum = rng() % 3;
+	std::shared_ptr<Room> room;
 	
-	switch (room) {
+	switch (roomNum) {
 	case 0:
-		return std::make_shared<Room0>(env, coord);
+		room = std::make_shared<Room0>(env, coord);
+		break;
 	case 1:
-		return std::make_shared<Room1>(env, coord);
+		room = std::make_shared<Room1>(env, coord);
+		break;
 	case 2:
-		return std::make_shared<Room2>(env, coord);
+		room = std::make_shared<Room2>(env, coord);
+		break;
 	default:
-		return std::make_shared<Room0>(env, coord);
+		room = std::make_shared<Room0>(env, coord);
+		break;
 	}
+	room->saveManager = saveManager;
+	return room;
 }
 
 bool RoomManager::CheckIfLive(const RoomCoord& coord) {

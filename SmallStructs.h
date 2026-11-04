@@ -103,3 +103,8 @@ struct RunStat {
 	int totalEnemyKilled = 0;
 	double totalTime = 0.0;
 };
+
+struct RoomSave {
+	RoomCoord coord;
+	bool completed[4] = { false, false, false, false };
+};

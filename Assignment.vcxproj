@@ -183,6 +183,7 @@
     <ClInclude Include="Room1.h" />
     <ClInclude Include="Room2.h" />
     <ClInclude Include="RoomManager.h" />
+    <ClInclude Include="SaveManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneGameplay.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="Room1.cpp" />
     <ClCompile Include="Room2.cpp" />
     <ClCompile Include="RoomManager.cpp" />
+    <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneGameplay.cpp" />

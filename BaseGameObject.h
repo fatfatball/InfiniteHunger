@@ -5,6 +5,7 @@
 #include "Math.h"
 #include "SmallStructs.h"
 #include "Camera.h"
+#include <functional>
 
 class Scene;
 
@@ -31,6 +32,8 @@ public:
 	float rotation = 0.f; // in rad, 0 is facing right, pi/2 is facing down
 	bool canCollide; // physics and trigger can collide
 	bool isTrigger; // test for collide but don't move
+
+	std::function<void()> onSaving; // save to SaveManager
 
 	BaseGameObject(GamesEngineeringBase::Window& canvas) : env(canvas) {
 		isActive = true;
@@ -212,6 +215,12 @@ public:
 		curState.globalPositionS = globalPos;
 		prevState.globalPositionS = globalPos;
 		renderState = curState;
+	}
+
+	void TriggerSaving() {
+		if (onSaving) {
+			onSaving();
+		}
 	}
 
 protected:

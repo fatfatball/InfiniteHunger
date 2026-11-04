@@ -17,5 +17,6 @@ void ItemLockedDoor::OnCollision(BaseGameObject * other, const Vector2 & normal,
 	if (player != nullptr && !player->isDead && player->UseKey()) {
 		isActive = false;
 		isPendingDestroy = true;
+		TriggerSaving();
 	}
 }

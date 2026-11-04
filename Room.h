@@ -7,6 +7,7 @@
 #include <memory>
 #include "List.h"
 #include "BaseGameObject.h"
+#include "SaveManager.h"
 
 class Room : public Tilemap {
 protected:
@@ -22,6 +23,7 @@ protected:
 	}
 
 public:
+	SaveManager* saveManager;
 	//short focusChanged; // 0: no change; 1: false to true; -1: true to false
 
 	Room(GamesEngineeringBase::Window& canvas, const RoomCoord coord, const std::string mapFolder)
@@ -44,6 +46,8 @@ public:
 				GetTileCollisions(j, i) = false;
 			}
 		}
+
+		saveManager = nullptr;
 	}
 
 	~Room() {

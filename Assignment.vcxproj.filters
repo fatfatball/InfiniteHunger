@@ -228,6 +228,9 @@
     <ClInclude Include="Room2.h">
       <Filter>Header Files\GameObjects\Tilemap</Filter>
     </ClInclude>
+    <ClInclude Include="SaveManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -355,6 +358,9 @@
     </ClCompile>
     <ClCompile Include="Room2.cpp">
       <Filter>Source Files\GameObjects\Tilemap</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -22,5 +22,6 @@ void ItemKey::OnCollision(BaseGameObject* other, const Vector2& normal, const Ve
 		isActive = false;
 		isPendingDestroy = true;
 		player->AddKey();
+		TriggerSaving();
 	}
 }

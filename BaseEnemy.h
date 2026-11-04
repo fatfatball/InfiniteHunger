@@ -127,5 +127,10 @@ public:
 			return;
 		}
 	}
+
+	void OnDie() override {
+		BaseCharacter::OnDie();
+		TriggerSaving();
+	}
 };
 

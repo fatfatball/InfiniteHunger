@@ -4,14 +4,17 @@
 #include "ObjectTimer.h"
 #include "SceneManager.h"
 #include "SmallStructs.h"
+#include "SaveManager.h"
 
-SceneGameplay::SceneGameplay(GamesEngineeringBase::Window& window, Camera& camera, SceneManager* manager) 
+SceneGameplay::SceneGameplay(GamesEngineeringBase::Window& window, Camera& camera,
+	SceneManager* manager, SaveManager* saveManager)
 	: Scene(window, camera, manager) {
 	// initialize the room manager
-	roomManager = std::make_shared<RoomManager>(canvas);
+	roomManager = std::make_shared<RoomManager>(canvas, saveManager);
 	roomManager->scene = this;
 	AddObject(roomManager);
-	runStat = { manager->GetRunStat().playerCount, 0, 0.0};
+	runStat = { manager->GetRunStat().playerCount, 0, 0.0 };
+	this->saveManager = saveManager;
 }
 
 void SceneGameplay::FixedUpdateObjects(const float& dt) {
