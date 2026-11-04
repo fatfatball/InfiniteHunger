@@ -5,10 +5,8 @@
 #include "SaveManager.h"
 
 class SceneGameplay : public Scene {
-private:
-	RunStat runStat;
-
 public:
+	RunStat runStat;
 	SaveManager* saveManager;
 
 	SceneGameplay(GamesEngineeringBase::Window& window, Camera& camera,

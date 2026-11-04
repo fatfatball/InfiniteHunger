@@ -15,7 +15,8 @@ public:
 	void UndoCompleted(const RoomCoord& coord, const int& slot);
 	void Clear();
 	// TODO
-	bool LoadFile(const std::string path);
-	void SaveFile(const std::string path);
+	// return the saveContext by saveCtx
+	bool LoadFile(const std::string path, SaveContext& saveCtx);
+	void SaveFile(const std::string path, const SaveContext& saveCtx);
 };
 

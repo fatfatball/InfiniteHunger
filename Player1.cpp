@@ -9,6 +9,7 @@
 Player1::Player1(GamesEngineeringBase::Window& canvas, const bool& isFirst) : BasePlayer(canvas, isFirst) {
 	attackCooldown = 0.4f;
 	skill = std::make_unique<PlayerSkill1>(this);
+	playerType = PlayerType::Archer;
 }
 
 void Player1::OnStart() {

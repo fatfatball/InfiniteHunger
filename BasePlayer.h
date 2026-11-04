@@ -5,6 +5,7 @@
 #include <memory>
 #include "GamesEngineeringBase.h"
 #include "BaseSkill.h"
+#include "SmallStructs.h"
 
 class BasePlayer : public BaseCharacter {
 protected:
@@ -20,6 +21,7 @@ protected:
 public:
 	float selfDamageTime; // as time goes by, the players get damaged. the interval shortens.
 	float selfDamageTimeCounter;
+	PlayerType playerType;
 
 	BasePlayer(GamesEngineeringBase::Window& canvas, const bool& isFirst);
 
@@ -46,6 +48,9 @@ public:
 	void AddKey();
 
 	bool UseKey();
+
+	float GetCurHealth() { return curHealth; }
+	int GetKeyCount() { return keyCount; }
 
 protected:
 	void Add1BodyNode();

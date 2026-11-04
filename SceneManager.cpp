@@ -4,6 +4,7 @@
 #include "TextRenderer.h"
 #include "SceneMenu.h"
 #include "SceneTally.h"
+#include "SmallStructs.h"
 
 void SceneManager::SolveSceneChange() {
 	if (nextScene) {
@@ -20,11 +21,13 @@ SceneManager::SceneManager(bool& running) : running(running) {
 	camera.ResetCamera();
 	ChangeScene({ SceneManagerState::MenuScene, PlayerType::Swordsman, PlayerType::Archer,{} });
 	SolveSceneChange();
+	curState = SceneManagerState::None;
 }
 
 void SceneManager::ChangeScene(const SceneChangeContext& ctx) {
 	runStat = ctx.stat;
 	camera.ResetCamera();
+	curState = ctx.nextScene;
 	switch (ctx.nextScene) {
 	case SceneManagerState::None:
 		break;
@@ -58,6 +61,10 @@ void SceneManager::FixedUpdate(const float& dt) {
 	}
 	currentScene->FixedUpdateObjects(dt);
 	currentScene->RecycleObjects();
+
+	if (canvas.keyPressed(0x1b)) { // esc to close
+		QuitGame();
+	}
 }
 
 void SceneManager::VisualUpdate(const float& dt) {
@@ -69,10 +76,6 @@ void SceneManager::VisualUpdate(const float& dt) {
 }
 
 void SceneManager::Render(const float& alpha, const int& fpsCount) {
-	if (canvas.keyPressed(0x1b)) { // esc to close
-		running = false;
-	}
-
 	if (!currentScene) {
 		return;
 	}
@@ -81,4 +84,22 @@ void SceneManager::Render(const float& alpha, const int& fpsCount) {
 	TextRenderer::DrawText(canvas, "FPS: " + std::to_string(fpsCount), 5, 5, 2, { 127, 127, 127, 255 });
 	canvas.present();
 	SolveSceneChange();
+}
+
+void SceneManager::QuitGame() {
+	running = false;
+	currentScene->RecycleAllObjects(); // this will leave players exist
+	// if it is single player / multi player, then save to file.
+	if (curState == SceneManagerState::SingleScene || curState == SceneManagerState::MultiScene) {
+		auto curScene = dynamic_cast<SceneGameplay*>(currentScene.get());
+		SaveContext saveCtx;
+		saveCtx.roomSeed = curScene->GetRoomManager()->GetRandSeed();
+		saveCtx.startRoom = curScene->GetRoomManager()->prevRoom;
+		saveCtx.runStat = curScene->runStat;
+		saveCtx.playerCount = curScene->GetPlayerCount();
+		for (int i = 0; i < saveCtx.playerCount; ++i) {
+			saveCtx.playerSave[i] = curScene->GetPlayerSaveDataAt(i);
+		}
+		saveManager.SaveFile(SAVE_FILE, saveCtx);
+	}
 }

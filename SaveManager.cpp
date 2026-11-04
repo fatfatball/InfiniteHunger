@@ -1,4 +1,7 @@
 #include "SaveManager.h"
+#include <fstream>
+#include "SmallStructs.h"
+#include <string>
 
 int SaveManager::FindIndex(const RoomCoord& coord) {
 	for (int i = 0; i < roomSaves.GetSize(); ++i) {
@@ -43,10 +46,21 @@ void SaveManager::Clear() {
 	roomSaves.Clear();
 }
 
-bool SaveManager::LoadFile(const std::string path)
-{
+bool SaveManager::LoadFile(const std::string path, SaveContext& saveCtx) {
+	roomSaves.Clear();
+	std::ifstream saveFile(path);
+
+	// TODO
+
 	return false;
 }
 
-void SaveManager::SaveFile(const std::string path)
-{}
+void SaveManager::SaveFile(const std::string path, const SaveContext& saveCtx) {
+	std::ofstream saveFile(path);
+	std::string sav = saveCtx.ToString();
+	for (int i = 0; i < roomSaves.GetSize(); ++i) {
+		sav += roomSaves[i].ToString();
+	}
+
+	saveFile << sav;
+}

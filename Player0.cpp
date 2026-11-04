@@ -14,6 +14,7 @@
 
 Player0::Player0(GamesEngineeringBase::Window& canvas, const bool& isFirst) : BasePlayer(canvas, isFirst){
 	skill = std::make_unique<PlayerSkill0>(this);
+	playerType = PlayerType::Swordsman;
 }
 
 void Player0::OnStart() {

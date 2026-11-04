@@ -293,6 +293,22 @@ void Scene::RecycleObjects() {
 	}
 }
 
+void Scene::RecycleAllObjects() {
+	// recycle the objects to trigger their OnDestroy function
+
+	int size = objects.GetSize();
+	for (int i = size - 1; i >= 0; --i) {
+		objects[i]->OnDestroy();
+		objects.Erase(i);
+	}
+
+	size = uiObjects.GetSize();
+	for (int i = size - 1; i >= 0; --i) {
+		uiObjects[i]->OnDestroy();
+		uiObjects.Erase(i);
+	}
+}
+
 void Scene::SetCameraTarget(BaseGameObject* target) {
 	camera.SetFollowTarget(target);
 }
@@ -349,6 +365,22 @@ bool Scene::IsInRoom(Vector2& pos) {
 int Scene::GetObjectCount() const
 {
 	return objects.GetSize();
+}
+
+PlayerSaveData Scene::GetPlayerSaveDataAt(const int& i) {
+	PlayerSaveData data;
+	if (i > players.GetSize() - 1) {
+		return data;
+	}
+
+	data.isAlive = !players[i]->isDead;
+	data.type = players[i]->playerType;
+	data.pos = players[i]->globalPosition;
+	data.curHealth = players[i]->GetCurHealth();
+	data.selfDamageTime = players[i]->selfDamageTime;
+	data.selfDamageCounter = players[i]->selfDamageTimeCounter;
+	data.keyCount = players[i]->GetKeyCount();
+	return data;
 }
 
 void Scene::RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems) {

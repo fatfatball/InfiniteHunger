@@ -1,4 +1,6 @@
 #pragma once
+#include "Vector2.h"
+#include <string>
 
 class BaseGameObject;
 class BasePhysicalObject;
@@ -107,4 +109,72 @@ struct RunStat {
 struct RoomSave {
 	RoomCoord coord;
 	bool completed[4] = { false, false, false, false };
+
+	std::string ToString() {
+		std::string res;
+		res = std::to_string(coord.x) + " " + std::to_string(coord.y) + "\n";
+		res += std::to_string(completed[0]) + " "
+			+ std::to_string(completed[1]) + " "
+			+ std::to_string(completed[2]) + " "
+			+ std::to_string(completed[3]) + "\n";
+		return res;
+	}
+};
+
+struct PlayerSaveData {
+	bool isAlive = false;
+	PlayerType type = PlayerType::Swordsman;
+	Vector2 pos = {};
+	int curHealth = 0;
+	float selfDamageTime = 0.f;
+	float selfDamageCounter = 0.f;
+	int keyCount = 0;
+
+	std::string ToString() const {
+		std::string res;
+
+		res = std::to_string(isAlive) + "\n";
+		switch (type) {
+		case PlayerType::Swordsman:
+			res += "Swordsman\n";
+			break;
+		case PlayerType::Archer:
+			res += "Archer\n";
+			break;
+		case PlayerType::Wizard:
+			res += "Wizard\n";
+			break;
+		default:
+			res += "Swordsman\n";
+			break;
+		}
+		res += std::to_string(pos.x) + " " + std::to_string(pos.y) + "\n";
+		res += std::to_string(curHealth) + "\n";
+		res += std::to_string(selfDamageTime) + "\n";
+		res += std::to_string(selfDamageCounter) + "\n";
+		res += std::to_string(keyCount) + "\n";
+
+		return res;
+	}
+};
+
+struct SaveContext {
+	int roomSeed = 0;
+	RoomCoord startRoom = {};
+	RunStat runStat;
+
+	int playerCount =  1;
+	PlayerSaveData playerSave[2];
+
+	std::string ToString() const {
+		std::string res;
+		res = std::to_string(roomSeed) + "\n";
+		res += std::to_string(startRoom.x) + " " + std::to_string(startRoom.y) + "\n";
+		res += std::to_string(runStat.playerCount) + " " + std::to_string(runStat.totalEnemyKilled)
+			+ " " + std::to_string(runStat.totalTime) + "\n";
+		res += std::to_string(playerCount) + "\n";
+		res += playerSave[0].ToString();
+		res += playerSave[1].ToString();
+		return res;
+	}
 };

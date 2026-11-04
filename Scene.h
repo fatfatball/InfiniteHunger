@@ -26,7 +26,7 @@ protected:
 	List<List<RenderedItem>> renderedItemLists{ CO_RENDER_THREADS + 1 };
 	//List<std::shared_ptr<Tilemap>> tilemaps;
 	std::shared_ptr<RoomManager> roomManager;
-	List< std::shared_ptr<BasePlayer>> players;
+	List<std::shared_ptr<BasePlayer>> players;
 	 
 public:
 	SceneManager* sceneManager;
@@ -49,6 +49,7 @@ public:
 	virtual void VisualUpdateObjects(const float& dt);
 	virtual void RenderObjects(const float& alpha);
 	virtual void RecycleObjects();
+	void RecycleAllObjects();
 
 	void SetCameraTarget(BaseGameObject* target);
 	Vector2 GetCameraTargetPos();
@@ -58,6 +59,9 @@ public:
 	BasePlayer* GetClosestPlayer(const Vector2& pos); // find the closest player for enemy
 	bool IsInRoom(Vector2& pos); // is a pos is inside of an instantiated room
 	int GetObjectCount() const;
+	RoomManager* GetRoomManager() { return roomManager.get(); }
+	int GetPlayerCount() { return players.GetSize(); }
+	PlayerSaveData GetPlayerSaveDataAt(const int& i);
 
 private:
 	void RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems);

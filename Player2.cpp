@@ -8,6 +8,7 @@
 
 Player2::Player2(GamesEngineeringBase::Window& canvas, const bool& isFirst) : BasePlayer(canvas, isFirst) {
 	skill = std::make_unique<PlayerSkill2>(this);
+	playerType = PlayerType::Wizard;
 }
 
 void Player2::OnStart() {

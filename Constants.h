@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 const float FIXED_DELTATIME = 1.0f / 50.0f;
 const short WINDOW_WIDTH = 1024; // 455
@@ -21,3 +22,5 @@ const int CO_RENDER_THREADS = 3;
 const short ROOM_WIDTH = 19;
 const short ROOM_HEIGHT = 19;
 const short TILE_LENGTH = 64; // each tile's length of side in world axis
+
+const std::string SAVE_FILE = "./save.sav";

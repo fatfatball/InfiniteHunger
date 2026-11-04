@@ -29,6 +29,7 @@ private:
 	GamesEngineeringBase::Window canvas;
 	bool& running;
 	RunStat runStat;
+	SceneManagerState curState;
 
 	void SolveSceneChange();
 
@@ -42,9 +43,7 @@ public:
 	void VisualUpdate(const float& dt);
 	void Render(const float& alpha, const int& fpsCount);
 
-	void QuitGame() {
-		running = false;
-	}
+	void QuitGame();
 
 	RunStat GetRunStat() const { return runStat; }
 };
