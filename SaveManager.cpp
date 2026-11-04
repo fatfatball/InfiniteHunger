@@ -33,6 +33,12 @@ void SaveManager::MarkCompleted(const RoomCoord& coord, const int& slot) {
 	}
 }
 
+void SaveManager::UndoCompleted(const RoomCoord& coord, const int& slot) {
+	int ind = FindIndex(coord);
+	if (ind < 0) { return; }
+	roomSaves[ind].completed[slot] = false;
+}
+
 void SaveManager::Clear() {
 	roomSaves.Clear();
 }

@@ -12,6 +12,7 @@ private:
 public:
 	bool IsCompleted(const RoomCoord& coord, const int& slot);
 	void MarkCompleted(const RoomCoord& coord, const int& slot);
+	void UndoCompleted(const RoomCoord& coord, const int& slot);
 	void Clear();
 	// TODO
 	bool LoadFile(const std::string path);

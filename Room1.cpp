@@ -45,6 +45,9 @@ void Room1::OnStart() {
 		ptr2->onSaving = [manager, roomCoord]() {
 			manager->MarkCompleted(roomCoord, 2);
 			};
+		ptr2->onUnsave = [manager, roomCoord]() {
+			manager->UndoCompleted(roomCoord, 2);
+			};
 		scene->AddObject(ptr2);
 	}
 
@@ -53,6 +56,9 @@ void Room1::OnStart() {
 		auto ptr3 = std::make_shared<EnemySlow>(env, pos + globalPosition);
 		ptr3->onSaving = [manager, roomCoord]() {
 			manager->MarkCompleted(roomCoord, 3);
+			};
+		ptr3->onUnsave = [manager, roomCoord]() {
+			manager->UndoCompleted(roomCoord, 3);
 			};
 		scene->AddObject(ptr3);
 	}

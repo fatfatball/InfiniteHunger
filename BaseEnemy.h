@@ -6,6 +6,7 @@
 #include "Math.h"
 #include "Scene.h"
 #include "BasePlayer.h"
+#include <functional>
 
 // base class for enemies.
 // enemies spawn when the room is generated
@@ -20,6 +21,8 @@ protected:
 	float hitMovement; // how far player will be hit back, world axis
 
 public:
+	std::function<void()> onUnsave; // save spawned, and unsave when despawned by itself
+
 	BaseEnemy(GamesEngineeringBase::Window& canvas) : BaseCharacter(canvas) {
 		chaseTarget = nullptr;
 		contactDamage = 1.f;
@@ -38,6 +41,11 @@ public:
 		curState.globalPositionS = globalPosition;
 		prevState.globalPositionS = globalPosition;
 		renderState = curState;
+	}
+
+	void OnStart() override {
+		BaseCharacter::OnStart();
+		TriggerSaving();
 	}
 
 	void FixedUpdate(const float& dt) override {
@@ -91,6 +99,9 @@ public:
 			for (int i = 0; i < polyLine2Ds.GetSize(); ++i) {
 				polyLine2Ds[i]->isPendingDestroy = true;
 			}
+			if (onUnsave) {
+				onUnsave();
+			}
 		}
 		BaseCharacter::FixedUpdate(dt);
 	}
@@ -130,7 +141,6 @@ public:
 
 	void OnDie() override {
 		BaseCharacter::OnDie();
-		TriggerSaving();
 	}
 };
 
