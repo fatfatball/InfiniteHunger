@@ -14,6 +14,7 @@ private:
 	int scale;
 	std::function<void()> OnClick;
 	ColorRGBA color;
+	ColorRGBA originColor;
 	ScreenAABB screenAABB;
 	bool prevMousePressed = false;
 
@@ -21,10 +22,10 @@ public:
 	bool isPendingDestroy;
 
 	ClickableText(GamesEngineeringBase::Window& canvas, const std::string& text,
-		const Vector2& position, const int& scale);
+		const Vector2& position, const int& scale, const ColorRGBA& color = { 200, 200, 200, 255 });
 
 	ClickableText(GamesEngineeringBase::Window& canvas, const std::string& text,
-		const Vector2& position, const int& scale, std::function<void()> OnClick);
+		const Vector2& position, const int& scale, std::function<void()> OnClick, const ColorRGBA& color = { 200, 200, 200, 255 });
 	
 	void OnStart();
 	void VisualUpdate(const float& dt);

@@ -12,6 +12,7 @@ enum class SceneManagerState {
 	LoadScene,
 	MenuScene,
 	TallyScene,
+	TutorialScene,
 };
 
 struct SceneChangeContext {

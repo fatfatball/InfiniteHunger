@@ -4,16 +4,17 @@
 #include "SmallStructs.h"
 
 ClickableText::ClickableText(GamesEngineeringBase::Window& canvas,
-	const std::string& text, const Vector2& position, const int& scale) 
+	const std::string& text, const Vector2& position, const int& scale, const ColorRGBA& color)
 	: text(text), env(canvas), position(position), scale(scale) {
-	color = { 200, 200, 200, 255 };
+	this->originColor = color;
+	this->color = color;
 	isPendingDestroy = false;
 	prevMousePressed = env.mouseButtonPressed(GamesEngineeringBase::MouseButton::MouseLeft);
 }
 
 ClickableText::ClickableText(GamesEngineeringBase::Window& canvas,
-	const std::string& text, const Vector2& position, const int& scale, std::function<void()> OnClick) 
-	: ClickableText(canvas, text, position, scale){
+	const std::string& text, const Vector2& position, const int& scale, std::function<void()> OnClick, const ColorRGBA& color)
+	: ClickableText(canvas, text, position, scale, color){
 	this->OnClick = OnClick;
 	screenAABB = TextRenderer::GetTextScreenAABB(text, position.x, position.y, scale);
 }
@@ -32,7 +33,7 @@ void ClickableText::VisualUpdate(const float& dt) {
 			}
 		}
 		else {
-			color = { 200, 200, 200, 255 };
+			color = originColor;
 		}
 	}
 	prevMousePressed = env.mouseButtonPressed(GamesEngineeringBase::MouseButton::MouseLeft);

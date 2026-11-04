@@ -13,7 +13,7 @@ public:
 	RoomCoord prevRoom;
 	RoomCoord startRoom;
 	SaveManager* saveManager;
-
+	bool isInfinite;
 
 	RoomManager(GamesEngineeringBase::Window& canvas, SaveManager* saveManager);
 	// for continue

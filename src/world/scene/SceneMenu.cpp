@@ -3,6 +3,7 @@
 #include <memory>
 #include "SmallStructs.h"
 #include "SceneManager.h"
+#include "SceneTutorial.h"
 
 SceneMenu::SceneMenu(GamesEngineeringBase::Window& window, Camera& camera, SceneManager* manager) 
 	:Scene(window, camera, manager) {	
@@ -19,7 +20,7 @@ void SceneMenu::StartMainMenu() {
 	AddUIObject(std::make_shared<ClickableText>(canvas, "INFINITE HUNGER", Vector2(200, 100), 7));
 	AddUIObject(std::make_shared<ClickableText>(canvas, "START TUTORIAL", Vector2(50, 325), 5,
 		[this]() {
-			// TODO: implement tutorial scene
+			sceneManager->ChangeScene({ SceneManagerState::TutorialScene, PlayerType::Swordsman });
 		}));
 	AddUIObject(std::make_shared<ClickableText>(canvas, "START SINGLE PLAYER", Vector2(50, 400), 5,
 		[this]() {

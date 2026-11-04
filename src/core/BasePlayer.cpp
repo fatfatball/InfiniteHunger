@@ -1,5 +1,6 @@
 #include "BasePlayer.h"
 #include "SceneGameplay.h"
+#include "SceneTutorial.h"
 
 BasePlayer::BasePlayer(GamesEngineeringBase::Window& canvas, const bool& isFirst) : BaseCharacter(canvas) {
 	physicalStiffness = 0.75f;
@@ -211,7 +212,13 @@ void BasePlayer::OnDie() {
 	isDead = true;
 	if (scene->GetFirstPlayer() == nullptr) {
 		auto gameplayScene = dynamic_cast<SceneGameplay*>(scene);
-		gameplayScene->PlayerAllDied();
+		if (gameplayScene) {
+			gameplayScene->PlayerAllDied();
+		}
+		else {
+			auto tutorialScene = dynamic_cast<SceneTutorial*>(scene);
+			tutorialScene->PlayerAllDied();
+		}
 	}
 	else {
 		scene->SetCameraTarget(scene->GetFirstPlayer());

@@ -13,6 +13,7 @@ RoomManager::RoomManager(GamesEngineeringBase::Window& canvas, SaveManager* save
 	prevRoom = { startRoom.x + 1, startRoom.y + 1 };
 	randSeed = time(0);
 	this->saveManager = saveManager;
+	isInfinite = true;
 }
 
 RoomManager::RoomManager(GamesEngineeringBase::Window& canvas, SaveManager* saveManager,
@@ -22,10 +23,13 @@ RoomManager::RoomManager(GamesEngineeringBase::Window& canvas, SaveManager* save
 	prevRoom = { startRoom.x + 1, startRoom.y + 1 };
 	randSeed = roomSeed;
 	this->saveManager = saveManager;
+	isInfinite = true;
 }
 
 void RoomManager::OnStart() {
-	scene->AddRoom(GetRandomRoomAt(startRoom));
+	if (isInfinite) {
+		scene->AddRoom(GetRandomRoomAt(startRoom));
+	}
 }
 
 void RoomManager::FixedUpdate(const float& dt) {
@@ -33,7 +37,7 @@ void RoomManager::FixedUpdate(const float& dt) {
 
 void RoomManager::VisualUpdate(const float& dt) {
 	// check if follow target exists
-	if (!scene->GetCameraTarget()) {
+	if (!scene->GetCameraTarget() || !isInfinite) {
 		return;
 	}
 

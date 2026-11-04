@@ -5,6 +5,7 @@
 #include "SceneMenu.h"
 #include "SceneTally.h"
 #include "SmallStructs.h"
+#include "SceneTutorial.h"
 
 void SceneManager::SolveSceneChange() {
 	if (nextScene) {
@@ -51,6 +52,10 @@ void SceneManager::ChangeScene(const SceneChangeContext& ctx) {
 		break;
 	case SceneManagerState::TallyScene:
 		nextScene = std::make_unique<SceneTally>(canvas, camera, this, runStat);
+		break;
+	case SceneManagerState::TutorialScene:
+		nextScene = std::make_unique<SceneTutorial>(canvas, camera, this, &saveManager);
+		nextScene->AddPlayer(ctx.player1);
 		break;
 	default:
 		break;
