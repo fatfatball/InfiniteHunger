@@ -89,6 +89,48 @@ void Scene::AddPlayer(const PlayerType type) {
 	}
 }
 
+void Scene::AddPlayer(const PlayerType& type, const Vector2& pos,
+	const float& curHealth, const float& selfDamageTime, const float& selfDamageCounter, const int& keyCount) {
+	if (players.GetSize() >= 2) {
+		return;
+	}
+	bool isFirstPlayer = !(players.GetSize() > 0);
+	std::shared_ptr<BasePlayer> ptr;
+
+	switch (type) {
+	case PlayerType::Swordsman: {
+		ptr = std::make_shared<Player0>(canvas, isFirstPlayer);
+		break;
+	}
+	case PlayerType::Archer: {
+		ptr = std::make_shared<Player1>(canvas, isFirstPlayer);
+		break;
+	}
+	case PlayerType::Wizard: {
+		ptr = std::make_shared<Player2>(canvas, isFirstPlayer);
+		break;
+	}
+	default:
+		ptr = std::make_shared<Player0>(canvas, isFirstPlayer);
+		break;
+	}
+
+	ptr->TeleportTo(pos);
+	ptr->SetCurHealth(curHealth);
+	ptr->SetKeyCount(keyCount);
+	ptr->selfDamageTime = selfDamageTime;
+	ptr->selfDamageTimeCounter = selfDamageCounter;
+	if (curHealth < 1e-4f) {
+		ptr->isDead = true;
+	}
+	AddObject(ptr);
+	players.PushBack(ptr);
+
+	if (!ptr->isDead) {
+		SetCameraTarget(players[players.GetSize() - 1].get());
+	}
+}
+
 void Scene::FixedUpdateObjects(const float& dt) {
 	int size = objects.GetSize();
 	for (int i = 0; i < size; ++i) {
@@ -311,6 +353,10 @@ void Scene::RecycleAllObjects() {
 
 void Scene::SetCameraTarget(BaseGameObject* target) {
 	camera.SetFollowTarget(target);
+}
+
+BaseGameObject* Scene::GetCameraTarget() {
+	return camera.followTarget;
 }
 
 Vector2 Scene::GetCameraTargetPos() {

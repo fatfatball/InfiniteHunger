@@ -14,7 +14,6 @@ public:
 	void MarkCompleted(const RoomCoord& coord, const int& slot);
 	void UndoCompleted(const RoomCoord& coord, const int& slot);
 	void Clear();
-	// TODO
 	// return the saveContext by saveCtx
 	bool LoadFile(const std::string path, SaveContext& saveCtx);
 	void SaveFile(const std::string path, const SaveContext& saveCtx);

@@ -17,6 +17,17 @@ SceneGameplay::SceneGameplay(GamesEngineeringBase::Window& window, Camera& camer
 	this->saveManager = saveManager;
 }
 
+SceneGameplay::SceneGameplay(GamesEngineeringBase::Window& window, Camera& camera,
+	SceneManager* manager, SaveManager* saveManager, const int& roomSeed,
+	const RoomCoord& startRoom) : Scene(window, camera, manager) {
+	roomManager = std::make_shared<RoomManager>(canvas, saveManager, roomSeed, startRoom);
+	roomManager->scene = this;
+
+	AddObject(roomManager);
+	runStat = { manager->GetRunStat().playerCount, 0, 0.0 };
+	this->saveManager = saveManager;
+}
+
 void SceneGameplay::FixedUpdateObjects(const float& dt) {
 	Scene::FixedUpdateObjects(dt);
 	runStat.totalTime += dt;
@@ -45,7 +56,9 @@ void SceneGameplay::RecycleObjects() {
 		}
 		else if (auto enemyPtr = dynamic_cast<BaseEnemy*>(ptr)) {
 			// Handle enemy-specific cleanup
-			++runStat.totalEnemyKilled;
+			if (enemyPtr->isDead) {
+				++runStat.totalEnemyKilled;
+			}
 		}
 
 		objects[i]->OnDestroy();

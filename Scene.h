@@ -44,6 +44,9 @@ public:
 	void AddRoom(std::shared_ptr<Room> room);
 	void RemoveRoom(const RoomCoord& coord);
 	void AddPlayer(const PlayerType type);
+	// for continue
+	void AddPlayer(const PlayerType& type, const Vector2& pos, const float& curHealth,
+		const float& selfDamageTime, const float& selfDamageCounter, const int& keyCount);
 
 	virtual void FixedUpdateObjects(const float& dt);
 	virtual void VisualUpdateObjects(const float& dt);
@@ -52,6 +55,7 @@ public:
 	void RecycleAllObjects();
 
 	void SetCameraTarget(BaseGameObject* target);
+	BaseGameObject* GetCameraTarget();
 	Vector2 GetCameraTargetPos();
 	void SetCameraBoundary(const AABB& newBound);
 	AABB GetCameraAABB();

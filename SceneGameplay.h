@@ -12,6 +12,11 @@ public:
 	SceneGameplay(GamesEngineeringBase::Window& window, Camera& camera,
 		SceneManager* manager, SaveManager* saveManager);
 
+	// for continue
+	SceneGameplay(GamesEngineeringBase::Window& window, Camera& camera,
+		SceneManager* manager, SaveManager* saveManager, const int& roomSeed,
+		const RoomCoord& startRoom);
+
 	void FixedUpdateObjects(const float& dt) override;
 	void RecycleObjects() override;
 	void PlayerAllDied();

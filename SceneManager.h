@@ -30,6 +30,7 @@ private:
 	bool& running;
 	RunStat runStat;
 	SceneManagerState curState;
+	bool isPendingQuit;
 
 	void SolveSceneChange();
 
@@ -46,5 +47,6 @@ public:
 	void QuitGame();
 
 	RunStat GetRunStat() const { return runStat; }
+	bool ContinueGame(std::string path);
 };
 

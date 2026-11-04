@@ -5,7 +5,7 @@ EnemyMedium::EnemyMedium(GamesEngineeringBase::Window& canvas, const Vector2& po
 	scale = { 50, 50 };
 	renderOrder = RenderOrder::Third;
 	mass = 20.f;
-	maxVelocity = 275.f;
+	maxVelocity = 225.f;
 	maxForce = 600.f * mass;
 	rotationSpeed = PI;
 	contactDamage = 1.f;

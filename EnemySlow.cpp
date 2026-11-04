@@ -10,7 +10,7 @@ EnemySlow::EnemySlow(GamesEngineeringBase::Window& canvas, const Vector2& pos)
 	scale = { 50, 50 };
 	renderOrder = RenderOrder::Third;
 	mass = 30.f;
-	maxVelocity = 225.f;
+	maxVelocity = 175.f;
 	maxForce = 500.f * mass;
 	rotationSpeed = PI * 3.f / 4.f;
 	contactDamage = 1.f;

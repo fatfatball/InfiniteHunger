@@ -19,7 +19,7 @@ EnemyStatic::EnemyStatic(GamesEngineeringBase::Window& canvas, const Vector2& po
 	collisionRadius = 28.f;
 	isFixed = true;
 	isStatic = true;
-	spawnInverval = 5.f;
+	spawnInverval = 6.f;
 	spawnInvervalCounter = spawnInverval;
 	maxSpawnedEnemies = 3;
 }

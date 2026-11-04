@@ -22,6 +22,7 @@ SceneManager::SceneManager(bool& running) : running(running) {
 	ChangeScene({ SceneManagerState::MenuScene, PlayerType::Swordsman, PlayerType::Archer,{} });
 	SolveSceneChange();
 	curState = SceneManagerState::None;
+	isPendingQuit = false;
 }
 
 void SceneManager::ChangeScene(const SceneChangeContext& ctx) {
@@ -43,6 +44,7 @@ void SceneManager::ChangeScene(const SceneChangeContext& ctx) {
 		nextScene->AddPlayer(ctx.player2);
 		break;
 	case SceneManagerState::LoadScene:
+		ContinueGame(SAVE_FILE);
 		break;
 	case SceneManagerState::MenuScene:
 		nextScene = std::make_unique<SceneMenu>(canvas, camera, this);
@@ -73,6 +75,28 @@ void SceneManager::VisualUpdate(const float& dt) {
 	}
 	currentScene->VisualUpdateObjects(dt);
 	camera.VisualUpdate(dt);
+
+	if (isPendingQuit) {
+		// recycle everything
+		currentScene->RecycleAllObjects(); // this will leave players exist
+		// if it is single player / multi player, then save to file.
+		if (curState == SceneManagerState::SingleScene || curState == SceneManagerState::MultiScene) {
+			auto curScene = dynamic_cast<SceneGameplay*>(currentScene.get());
+			SaveContext saveCtx;
+			saveCtx.roomSeed = curScene->GetRoomManager()->GetRandSeed();
+			saveCtx.startRoom = curScene->GetRoomManager()->prevRoom;
+			saveCtx.runStat = curScene->runStat;
+			saveCtx.playerCount = curScene->GetPlayerCount();
+			for (int i = 0; i < saveCtx.playerCount; ++i) {
+				saveCtx.playerSave[i] = curScene->GetPlayerSaveDataAt(i);
+			}
+
+			// only if there is alive player, can it be saved
+			if (saveCtx.playerSave[0].isAlive || saveCtx.playerSave[1].isAlive) {
+				saveManager.SaveFile(SAVE_FILE, saveCtx);
+			}
+		}
+	}
 }
 
 void SceneManager::Render(const float& alpha, const int& fpsCount) {
@@ -88,18 +112,35 @@ void SceneManager::Render(const float& alpha, const int& fpsCount) {
 
 void SceneManager::QuitGame() {
 	running = false;
-	currentScene->RecycleAllObjects(); // this will leave players exist
-	// if it is single player / multi player, then save to file.
-	if (curState == SceneManagerState::SingleScene || curState == SceneManagerState::MultiScene) {
-		auto curScene = dynamic_cast<SceneGameplay*>(currentScene.get());
-		SaveContext saveCtx;
-		saveCtx.roomSeed = curScene->GetRoomManager()->GetRandSeed();
-		saveCtx.startRoom = curScene->GetRoomManager()->prevRoom;
-		saveCtx.runStat = curScene->runStat;
-		saveCtx.playerCount = curScene->GetPlayerCount();
-		for (int i = 0; i < saveCtx.playerCount; ++i) {
-			saveCtx.playerSave[i] = curScene->GetPlayerSaveDataAt(i);
-		}
-		saveManager.SaveFile(SAVE_FILE, saveCtx);
+	isPendingQuit = true;
+}
+
+bool SceneManager::ContinueGame(std::string path) {
+	SaveContext ctx;
+
+	if (!saveManager.LoadFile(path, ctx)) {
+		return false;
 	}
+
+	camera.ResetCamera();
+	runStat = ctx.runStat;
+	auto gameplayScene = std::make_unique<SceneGameplay>(canvas, camera, this, &saveManager,
+		ctx.roomSeed, ctx.startRoom);
+	gameplayScene->runStat = ctx.runStat;
+	
+	for (int i = 0; i < ctx.playerCount; ++i) {
+		gameplayScene->AddPlayer(
+			ctx.playerSave[i].type,
+			ctx.playerSave[i].pos,
+			ctx.playerSave[i].curHealth,
+			ctx.playerSave[i].selfDamageTime,
+			ctx.playerSave[i].selfDamageCounter,
+			ctx.playerSave[i].keyCount
+			);
+	}
+
+	nextScene = std::move(gameplayScene);
+	curState = ctx.playerCount == 1 ? SceneManagerState::SingleScene : SceneManagerState::MultiScene;
+
+	return true;
 }

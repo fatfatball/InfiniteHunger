@@ -11,9 +11,14 @@ class RoomManager : public BaseGameObject {
 public:
 	List<std::shared_ptr<Room>> rooms;
 	RoomCoord prevRoom;
+	RoomCoord startRoom;
 	SaveManager* saveManager;
 
+
 	RoomManager(GamesEngineeringBase::Window& canvas, SaveManager* saveManager);
+	// for continue
+	RoomManager(GamesEngineeringBase::Window& canvas, SaveManager* saveManager,
+		const int& roomSeed, const RoomCoord& startRoom);
 
 	void OnStart() override;
 	void FixedUpdate(const float& dt) override;

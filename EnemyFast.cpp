@@ -12,7 +12,7 @@ EnemyFast::EnemyFast(GamesEngineeringBase::Window& canvas, const Vector2& pos)
 	scale = { 50, 50 };
 	renderOrder = RenderOrder::Third;
 	mass = 10;
-	maxVelocity = 450;
+	maxVelocity = 400;
 	maxForce = 1200 * mass;
 	rotationSpeed = PI / 2.f;
 	contactDamage = 1.f;

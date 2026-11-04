@@ -31,7 +31,7 @@ void SceneMenu::StartMainMenu() {
 		}));
 	AddUIObject(std::make_shared<ClickableText>(canvas, "CONTINUE", Vector2(50, 550), 5,
 		[this]() {
-			// TODO: implement load game
+			sceneManager->ChangeScene({ SceneManagerState::LoadScene });
 		}));
 	AddUIObject(std::make_shared<ClickableText>(canvas, "QUIT", Vector2(50, 625), 5,
 		[this]() {

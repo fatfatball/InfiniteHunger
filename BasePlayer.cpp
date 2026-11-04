@@ -26,7 +26,7 @@ BasePlayer::BasePlayer(GamesEngineeringBase::Window& canvas, const bool& isFirst
 	isFirstPlayer = isFirst;
 	skillPressed = false;
 	keyCount = 0;
-	selfDamageTime = 30.f; // second
+	selfDamageTime = 20.f; // second
 	selfDamageTimeCounter = selfDamageTime;
 }
 
@@ -212,6 +212,9 @@ void BasePlayer::OnDie() {
 	if (scene->GetFirstPlayer() == nullptr) {
 		auto gameplayScene = dynamic_cast<SceneGameplay*>(scene);
 		gameplayScene->PlayerAllDied();
+	}
+	else {
+		scene->SetCameraTarget(scene->GetFirstPlayer());
 	}
 }
 

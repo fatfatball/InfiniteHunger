@@ -9,19 +9,34 @@
 
 RoomManager::RoomManager(GamesEngineeringBase::Window& canvas, SaveManager* saveManager) : BaseGameObject(canvas) {
 	scale = { 0, 0 };
-	prevRoom = { 10000000, 10000000 };
+	startRoom = { 0, 0 };
+	prevRoom = { startRoom.x + 1, startRoom.y + 1 };
 	randSeed = time(0);
 	this->saveManager = saveManager;
 }
 
+RoomManager::RoomManager(GamesEngineeringBase::Window& canvas, SaveManager* saveManager,
+	const int& roomSeed, const RoomCoord& startRoom) : BaseGameObject(canvas) {
+	scale = { 0, 0 };
+	this->startRoom = startRoom;
+	prevRoom = { startRoom.x + 1, startRoom.y + 1 };
+	randSeed = roomSeed;
+	this->saveManager = saveManager;
+}
+
 void RoomManager::OnStart() {
-	scene->AddRoom(GetRandomRoomAt({ 0, 0 }));
+	scene->AddRoom(GetRandomRoomAt(startRoom));
 }
 
 void RoomManager::FixedUpdate(const float& dt) {
 }
 
 void RoomManager::VisualUpdate(const float& dt) {
+	// check if follow target exists
+	if (!scene->GetCameraTarget()) {
+		return;
+	}
+
 	// check if the current room changes
 	RoomCoord curRoom = Wolrd2RoomCoord(scene->GetCameraTargetPos());
 	if (prevRoom != curRoom) {

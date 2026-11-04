@@ -50,7 +50,9 @@ public:
 	bool UseKey();
 
 	float GetCurHealth() { return curHealth; }
+	void SetCurHealth(const float& val) { curHealth = val > maxHealth ? maxHealth : val; }
 	int GetKeyCount() { return keyCount; }
+	void SetKeyCount(const int& val) { keyCount = val; }
 
 protected:
 	void Add1BodyNode();
