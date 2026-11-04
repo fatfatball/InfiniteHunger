@@ -3,7 +3,7 @@
 #include "GamesEngineeringBase.h"
 #include "Vector2.h"
 #include <cmath>
-#include "Math.h"
+#include "MyMath.h"
 #include "Scene.h"
 #include "BasePlayer.h"
 #include <functional>

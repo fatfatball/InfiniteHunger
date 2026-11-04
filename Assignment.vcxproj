@@ -18,6 +18,110 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Constants.h" />
+    <ClInclude Include="src\core\BaseAttack.h" />
+    <ClInclude Include="src\core\BaseBodyNode.h" />
+    <ClInclude Include="src\core\BaseCharacter.h" />
+    <ClInclude Include="src\core\BaseEnemy.h" />
+    <ClInclude Include="src\core\BaseGameObject.h" />
+    <ClInclude Include="src\core\BaseItem.h" />
+    <ClInclude Include="src\core\BasePhysicalObject.h" />
+    <ClInclude Include="src\core\BasePlayer.h" />
+    <ClInclude Include="src\core\BaseSkill.h" />
+    <ClInclude Include="src\core\GamesEngineeringBase.h" />
+    <ClInclude Include="src\data_structs\AABB.h" />
+    <ClInclude Include="src\data_structs\List.h" />
+    <ClInclude Include="src\data_structs\SmallStructs.h" />
+    <ClInclude Include="src\data_structs\Vector2.h" />
+    <ClInclude Include="src\entity\EnemyBodyNode.h" />
+    <ClInclude Include="src\entity\EnemyFast.h" />
+    <ClInclude Include="src\entity\EnemyMedium.h" />
+    <ClInclude Include="src\entity\EnemySlow.h" />
+    <ClInclude Include="src\entity\EnemyStatic.h" />
+    <ClInclude Include="src\entity\ObjectTimer.h" />
+    <ClInclude Include="src\entity\Player0.h" />
+    <ClInclude Include="src\entity\Player1.h" />
+    <ClInclude Include="src\entity\Player2.h" />
+    <ClInclude Include="src\entity\PlayerAttack0.h" />
+    <ClInclude Include="src\entity\PlayerAttack1.h" />
+    <ClInclude Include="src\entity\PlayerAttack2.h" />
+    <ClInclude Include="src\entity\PlayerSkill0.h" />
+    <ClInclude Include="src\entity\PlayerSkill1.h" />
+    <ClInclude Include="src\entity\PlayerSkill2.h" />
+    <ClInclude Include="src\entity\PlayerTailNode.h" />
+    <ClInclude Include="src\entity\PolyLine2D.h" />
+    <ClInclude Include="src\entity\Projectile.h" />
+    <ClInclude Include="src\Math.h" />
+    <ClInclude Include="src\test\TestGameObject.h" />
+    <ClInclude Include="src\test\TestPhysicalObject.h" />
+    <ClInclude Include="src\test\TestPhysicalTail.h" />
+    <ClInclude Include="src\test\TextRenderer.h" />
+    <ClInclude Include="src\ui\ClickableText.h" />
+    <ClInclude Include="src\ui\Fonts.h" />
+    <ClInclude Include="src\world\Camera.h" />
+    <ClInclude Include="src\world\Room.h" />
+    <ClInclude Include="src\world\Room0.h" />
+    <ClInclude Include="src\world\Room1.h" />
+    <ClInclude Include="src\world\Room2.h" />
+    <ClInclude Include="src\world\RoomManager.h" />
+    <ClInclude Include="src\world\SaveManager.h" />
+    <ClInclude Include="src\world\scene\Scene.h" />
+    <ClInclude Include="src\world\scene\SceneGameplay.h" />
+    <ClInclude Include="src\world\scene\SceneManager.h" />
+    <ClInclude Include="src\world\scene\SceneMenu.h" />
+    <ClInclude Include="src\world\scene\SceneTally.h" />
+    <ClInclude Include="src\world\Tilemap.h" />
+    <ClInclude Include="src\world\tile_item\ItemKey.h" />
+    <ClInclude Include="src\world\tile_item\ItemLockedDoor.h" />
+    <ClInclude Include="src\world\tile_item\ItemTrap.h" />
+    <ClInclude Include="src\world\tile_item\ItemTrapTrigger.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core\BaseAttack.cpp" />
+    <ClCompile Include="src\core\BaseCharacter.cpp" />
+    <ClCompile Include="src\core\BaseItem.cpp" />
+    <ClCompile Include="src\core\BasePlayer.cpp" />
+    <ClCompile Include="src\entity\EnemyBodyNode.cpp" />
+    <ClCompile Include="src\entity\EnemyFast.cpp" />
+    <ClCompile Include="src\entity\EnemyMedium.cpp" />
+    <ClCompile Include="src\entity\EnemySlow.cpp" />
+    <ClCompile Include="src\entity\EnemyStatic.cpp" />
+    <ClCompile Include="src\entity\Player0.cpp" />
+    <ClCompile Include="src\entity\Player1.cpp" />
+    <ClCompile Include="src\entity\Player2.cpp" />
+    <ClCompile Include="src\entity\PlayerAttack0.cpp" />
+    <ClCompile Include="src\entity\PlayerAttack1.cpp" />
+    <ClCompile Include="src\entity\PlayerAttack2.cpp" />
+    <ClCompile Include="src\entity\PlayerSkill0.cpp" />
+    <ClCompile Include="src\entity\PlayerSkill1.cpp" />
+    <ClCompile Include="src\entity\PlayerSkill2.cpp" />
+    <ClCompile Include="src\entity\PlayerTailNode.cpp" />
+    <ClCompile Include="src\entity\PolyLine2D.cpp" />
+    <ClCompile Include="src\entity\Projectile.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\test\TestGameObject.cpp" />
+    <ClCompile Include="src\test\TestPhysicalObject.cpp" />
+    <ClCompile Include="src\test\TestPhysicalTail.cpp" />
+    <ClCompile Include="src\test\TextRenderer.cpp" />
+    <ClCompile Include="src\ui\ClickableText.cpp" />
+    <ClCompile Include="src\world\Camera.cpp" />
+    <ClCompile Include="src\world\Room0.cpp" />
+    <ClCompile Include="src\world\Room1.cpp" />
+    <ClCompile Include="src\world\Room2.cpp" />
+    <ClCompile Include="src\world\RoomManager.cpp" />
+    <ClCompile Include="src\world\SaveManager.cpp" />
+    <ClCompile Include="src\world\scene\Scene.cpp" />
+    <ClCompile Include="src\world\scene\SceneGameplay.cpp" />
+    <ClCompile Include="src\world\scene\SceneManager.cpp" />
+    <ClCompile Include="src\world\scene\SceneMenu.cpp" />
+    <ClCompile Include="src\world\scene\SceneTally.cpp" />
+    <ClCompile Include="src\world\Tilemap.cpp" />
+    <ClCompile Include="src\world\tile_item\ItemKey.cpp" />
+    <ClCompile Include="src\world\tile_item\ItemLockedDoor.cpp" />
+    <ClCompile Include="src\world\tile_item\ItemTrap.cpp" />
+    <ClCompile Include="src\world\tile_item\ItemTrapTrigger.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -70,6 +174,23 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <SourcePath>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item</SourcePath>
+    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item</SourcePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item</SourcePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -77,6 +198,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -95,6 +217,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -111,6 +234,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,6 +253,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(ProjectDir)src\core;$(ProjectDir)src\ui;$(ProjectDir)src\data_structs;$(ProjectDir)src\entity;$(ProjectDir)src\test;$(ProjectDir)src\world;$(ProjectDir)src\world\scene;$(ProjectDir)src\world\tile_item</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,110 +263,6 @@
       <EnableSegmentHeap>true</EnableSegmentHeap>
     </Manifest>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="AABB.h" />
-    <ClInclude Include="BaseAttack.h" />
-    <ClInclude Include="BaseBodyNode.h" />
-    <ClInclude Include="BaseCharacter.h" />
-    <ClInclude Include="BaseEnemy.h" />
-    <ClInclude Include="BaseGameObject.h" />
-    <ClInclude Include="BaseItem.h" />
-    <ClInclude Include="BasePhysicalObject.h" />
-    <ClInclude Include="BasePlayer.h" />
-    <ClInclude Include="BaseSkill.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="ClickableText.h" />
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="EnemyFast.h" />
-    <ClInclude Include="EnemyBodyNode.h" />
-    <ClInclude Include="EnemyMedium.h" />
-    <ClInclude Include="EnemySlow.h" />
-    <ClInclude Include="EnemyStatic.h" />
-    <ClInclude Include="Fonts.h" />
-    <ClInclude Include="GamesEngineeringBase.h" />
-    <ClInclude Include="ItemKey.h" />
-    <ClInclude Include="ItemLockedDoor.h" />
-    <ClInclude Include="ItemTrap.h" />
-    <ClInclude Include="ItemTrapTrigger.h" />
-    <ClInclude Include="List.h" />
-    <ClInclude Include="Math.h" />
-    <ClInclude Include="ObjectTimer.h" />
-    <ClInclude Include="Player0.h" />
-    <ClInclude Include="Player2.h" />
-    <ClInclude Include="PlayerAttack1.h" />
-    <ClInclude Include="PlayerAttack2.h" />
-    <ClInclude Include="PlayerSkill0.h" />
-    <ClInclude Include="PlayerSkill1.h" />
-    <ClInclude Include="PlayerSkill2.h" />
-    <ClInclude Include="PlayerTailNode.h" />
-    <ClInclude Include="Player1.h" />
-    <ClInclude Include="PlayerAttack0.h" />
-    <ClInclude Include="PolyLine2D.h" />
-    <ClInclude Include="Projectile.h" />
-    <ClInclude Include="Room.h" />
-    <ClInclude Include="Room0.h" />
-    <ClInclude Include="Room1.h" />
-    <ClInclude Include="Room2.h" />
-    <ClInclude Include="RoomManager.h" />
-    <ClInclude Include="SaveManager.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="SceneGameplay.h" />
-    <ClInclude Include="SceneMenu.h" />
-    <ClInclude Include="SceneTally.h" />
-    <ClInclude Include="SmallStructs.h" />
-    <ClInclude Include="TestGameObject.h" />
-    <ClInclude Include="TestPhysicalObject.h" />
-    <ClInclude Include="TestPhysicalTail.h" />
-    <ClInclude Include="TextRenderer.h" />
-    <ClInclude Include="Tilemap.h" />
-    <ClInclude Include="Vector2.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="BaseAttack.cpp" />
-    <ClCompile Include="BaseCharacter.cpp" />
-    <ClCompile Include="BaseItem.cpp" />
-    <ClCompile Include="BasePlayer.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ClickableText.cpp" />
-    <ClCompile Include="EnemyBodyNode.cpp" />
-    <ClCompile Include="EnemyFast.cpp" />
-    <ClCompile Include="EnemyMedium.cpp" />
-    <ClCompile Include="EnemySlow.cpp" />
-    <ClCompile Include="EnemyStatic.cpp" />
-    <ClCompile Include="ItemKey.cpp" />
-    <ClCompile Include="ItemLockedDoor.cpp" />
-    <ClCompile Include="ItemTrap.cpp" />
-    <ClCompile Include="ItemTrapTrigger.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player0.cpp" />
-    <ClCompile Include="Player2.cpp" />
-    <ClCompile Include="PlayerAttack1.cpp" />
-    <ClCompile Include="PlayerAttack2.cpp" />
-    <ClCompile Include="PlayerSkill0.cpp" />
-    <ClCompile Include="PlayerSkill1.cpp" />
-    <ClCompile Include="PlayerSkill2.cpp" />
-    <ClCompile Include="PlayerTailNode.cpp" />
-    <ClCompile Include="Player1.cpp" />
-    <ClCompile Include="PlayerAttack0.cpp" />
-    <ClCompile Include="PolyLine2D.cpp" />
-    <ClCompile Include="Projectile.cpp" />
-    <ClCompile Include="Room0.cpp" />
-    <ClCompile Include="Room1.cpp" />
-    <ClCompile Include="Room2.cpp" />
-    <ClCompile Include="RoomManager.cpp" />
-    <ClCompile Include="SaveManager.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="SceneGameplay.cpp" />
-    <ClCompile Include="SceneMenu.cpp" />
-    <ClCompile Include="SceneTally.cpp" />
-    <ClCompile Include="TestGameObject.cpp" />
-    <ClCompile Include="TestPhysicalObject.cpp" />
-    <ClCompile Include="TestPhysicalTail.cpp" />
-    <ClCompile Include="TextRenderer.cpp" />
-    <ClCompile Include="Tilemap.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

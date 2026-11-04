@@ -13,353 +13,308 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Data Structs">
-      <UniqueIdentifier>{2415b4b0-01ec-4a27-852e-93e7b8fa6ff1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Tools">
-      <UniqueIdentifier>{161ad541-848e-4a61-a393-dc9911453afb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameObjects">
-      <UniqueIdentifier>{bc54c5ba-d5eb-446e-8c2d-6d5592748076}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObjects">
-      <UniqueIdentifier>{a745969a-e6a8-4559-a328-c0df91c3df2e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameObjects\Tilemap">
-      <UniqueIdentifier>{a7d69996-e39a-425d-b210-eaa8f2caf09b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObjects\Tilemap">
-      <UniqueIdentifier>{70b154f7-d8f1-46bf-b7a7-1fa5b7ec5a76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameObjects\Tests">
-      <UniqueIdentifier>{69129113-fe12-4b8a-a0c7-fbf4346aba9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObjects\Tests">
-      <UniqueIdentifier>{59afa817-85e8-4ce2-89f6-97706c20b658}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObjects\Characters">
-      <UniqueIdentifier>{e1691b9c-bf43-4df9-a880-e05fb59e4383}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameObjects\Characters">
-      <UniqueIdentifier>{863c060b-7978-4d93-9194-bf5d94824d58}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameObjects\Attacks&amp;Skills">
-      <UniqueIdentifier>{cebe3977-2cb9-4230-ac89-076f511408d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameObjects\Attacks&amp;Skills">
-      <UniqueIdentifier>{e3c4a012-1336-4ff8-9794-5d1394e75dc7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Tools">
-      <UniqueIdentifier>{3600f1b5-8c27-43d0-900b-37218025a0ff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Scenes">
-      <UniqueIdentifier>{fc0f47b1-3fac-4afc-870e-e3dd5e95ce48}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Scenes">
-      <UniqueIdentifier>{f7daa361-4369-4bcb-af27-df3c791c45cc}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AABB.h">
-      <Filter>Header Files\Data Structs</Filter>
-    </ClInclude>
-    <ClInclude Include="List.h">
-      <Filter>Header Files\Data Structs</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>Header Files\Data Structs</Filter>
-    </ClInclude>
-    <ClInclude Include="SmallStructs.h">
-      <Filter>Header Files\Data Structs</Filter>
-    </ClInclude>
-    <ClInclude Include="Math.h">
-      <Filter>Header Files\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Constants.h">
+    <ClInclude Include="src\Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GamesEngineeringBase.h">
-      <Filter>Header Files\Tools</Filter>
+    <ClInclude Include="src\Math.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseGameObject.h">
-      <Filter>Header Files\GameObjects</Filter>
+    <ClInclude Include="src\world\Camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BasePhysicalObject.h">
-      <Filter>Header Files\GameObjects</Filter>
+    <ClInclude Include="src\world\Room.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PolyLine2D.h">
-      <Filter>Header Files\GameObjects</Filter>
+    <ClInclude Include="src\world\Room0.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Room0.h">
-      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    <ClInclude Include="src\world\Room1.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tilemap.h">
-      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    <ClInclude Include="src\world\Room2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestGameObject.h">
-      <Filter>Header Files\GameObjects\Tests</Filter>
+    <ClInclude Include="src\world\RoomManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestPhysicalObject.h">
-      <Filter>Header Files\GameObjects\Tests</Filter>
+    <ClInclude Include="src\world\SaveManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestPhysicalTail.h">
-      <Filter>Header Files\GameObjects\Tests</Filter>
+    <ClInclude Include="src\world\Tilemap.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Room.h">
-      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    <ClInclude Include="src\world\tile_item\ItemKey.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RoomManager.h">
-      <Filter>Header Files\GameObjects</Filter>
+    <ClInclude Include="src\world\tile_item\ItemLockedDoor.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Player0.h">
-      <Filter>Header Files\GameObjects\Characters</Filter>
+    <ClInclude Include="src\world\tile_item\ItemTrap.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseCharacter.h">
-      <Filter>Header Files\GameObjects\Characters</Filter>
+    <ClInclude Include="src\world\tile_item\ItemTrapTrigger.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BasePlayer.h">
-      <Filter>Header Files\GameObjects\Characters</Filter>
+    <ClInclude Include="src\core\BaseAttack.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseBodyNode.h">
-      <Filter>Header Files\GameObjects</Filter>
+    <ClInclude Include="src\core\BaseBodyNode.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseEnemy.h">
-      <Filter>Header Files\GameObjects\Characters</Filter>
+    <ClInclude Include="src\core\BaseCharacter.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyFast.h">
-      <Filter>Header Files\GameObjects\Characters</Filter>
+    <ClInclude Include="src\core\BaseEnemy.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyBodyNode.h">
-      <Filter>Header Files\GameObjects</Filter>
+    <ClInclude Include="src\core\BaseGameObject.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerTailNode.h">
-      <Filter>Header Files\GameObjects</Filter>
+    <ClInclude Include="src\core\BaseItem.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyMedium.h">
-      <Filter>Header Files\GameObjects\Characters</Filter>
+    <ClInclude Include="src\core\BasePhysicalObject.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemySlow.h">
-      <Filter>Header Files\GameObjects\Characters</Filter>
+    <ClInclude Include="src\core\BasePlayer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Player1.h">
-      <Filter>Header Files\GameObjects\Characters</Filter>
+    <ClInclude Include="src\core\BaseSkill.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Player2.h">
-      <Filter>Header Files\GameObjects\Characters</Filter>
+    <ClInclude Include="src\core\GamesEngineeringBase.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseAttack.h">
-      <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClInclude Include="src\data_structs\AABB.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerAttack0.h">
-      <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClInclude Include="src\data_structs\List.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerAttack1.h">
-      <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClInclude Include="src\data_structs\SmallStructs.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerAttack2.h">
-      <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClInclude Include="src\data_structs\Vector2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseSkill.h">
-      <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClInclude Include="src\entity\EnemyBodyNode.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerSkill0.h">
-      <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClInclude Include="src\entity\EnemyFast.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerSkill1.h">
-      <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClInclude Include="src\entity\EnemyMedium.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerSkill2.h">
-      <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClInclude Include="src\entity\EnemySlow.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyStatic.h">
-      <Filter>Header Files\GameObjects\Characters</Filter>
+    <ClInclude Include="src\entity\EnemyStatic.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BaseItem.h">
-      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    <ClInclude Include="src\entity\ObjectTimer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ItemKey.h">
-      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    <ClInclude Include="src\entity\Player0.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ItemLockedDoor.h">
-      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    <ClInclude Include="src\entity\Player1.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TextRenderer.h">
-      <Filter>Header Files\Tools</Filter>
+    <ClInclude Include="src\entity\Player2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Fonts.h">
-      <Filter>Header Files\Tools</Filter>
+    <ClInclude Include="src\entity\PlayerAttack0.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Header Files\Scenes</Filter>
+    <ClInclude Include="src\entity\PlayerAttack1.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Header Files\Scenes</Filter>
+    <ClInclude Include="src\entity\PlayerAttack2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneGameplay.h">
-      <Filter>Header Files\Scenes</Filter>
+    <ClInclude Include="src\entity\PlayerSkill0.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files\Scenes</Filter>
+    <ClInclude Include="src\entity\PlayerSkill1.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ClickableText.h">
-      <Filter>Header Files\GameObjects</Filter>
+    <ClInclude Include="src\entity\PlayerSkill2.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneMenu.h">
-      <Filter>Header Files\Scenes</Filter>
+    <ClInclude Include="src\entity\PlayerTailNode.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneTally.h">
-      <Filter>Header Files\Scenes</Filter>
+    <ClInclude Include="src\entity\PolyLine2D.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectTimer.h">
-      <Filter>Header Files\GameObjects</Filter>
+    <ClInclude Include="src\entity\Projectile.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Header Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClInclude Include="src\test\TestGameObject.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ItemTrap.h">
-      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    <ClInclude Include="src\test\TestPhysicalObject.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ItemTrapTrigger.h">
-      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    <ClInclude Include="src\test\TestPhysicalTail.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Room1.h">
-      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    <ClInclude Include="src\test\TextRenderer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Room2.h">
-      <Filter>Header Files\GameObjects\Tilemap</Filter>
+    <ClInclude Include="src\ui\ClickableText.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SaveManager.h">
+    <ClInclude Include="src\ui\Fonts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\scene\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\scene\SceneGameplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\scene\SceneManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\scene\SceneMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\scene\SceneTally.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PolyLine2D.cpp">
-      <Filter>Source Files\GameObjects</Filter>
+    <ClCompile Include="src\world\Camera.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tilemap.cpp">
-      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    <ClCompile Include="src\world\Room0.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Room0.cpp">
-      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    <ClCompile Include="src\world\Room1.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestGameObject.cpp">
-      <Filter>Source Files\GameObjects\Tests</Filter>
+    <ClCompile Include="src\world\Room2.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestPhysicalObject.cpp">
-      <Filter>Source Files\GameObjects\Tests</Filter>
+    <ClCompile Include="src\world\RoomManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestPhysicalTail.cpp">
-      <Filter>Source Files\GameObjects\Tests</Filter>
+    <ClCompile Include="src\world\SaveManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RoomManager.cpp">
-      <Filter>Source Files\GameObjects</Filter>
+    <ClCompile Include="src\world\Tilemap.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player0.cpp">
-      <Filter>Source Files\GameObjects\Characters</Filter>
+    <ClCompile Include="src\world\tile_item\ItemKey.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyFast.cpp">
-      <Filter>Source Files\GameObjects\Characters</Filter>
+    <ClCompile Include="src\world\tile_item\ItemLockedDoor.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BaseCharacter.cpp">
-      <Filter>Source Files\GameObjects\Characters</Filter>
+    <ClCompile Include="src\world\tile_item\ItemTrap.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerTailNode.cpp">
-      <Filter>Source Files\GameObjects</Filter>
+    <ClCompile Include="src\world\tile_item\ItemTrapTrigger.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyBodyNode.cpp">
-      <Filter>Source Files\GameObjects</Filter>
+    <ClCompile Include="src\core\BaseAttack.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyMedium.cpp">
-      <Filter>Source Files\GameObjects\Characters</Filter>
+    <ClCompile Include="src\core\BaseCharacter.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnemySlow.cpp">
-      <Filter>Source Files\GameObjects\Characters</Filter>
+    <ClCompile Include="src\core\BaseItem.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player1.cpp">
-      <Filter>Source Files\GameObjects\Characters</Filter>
+    <ClCompile Include="src\core\BasePlayer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player2.cpp">
-      <Filter>Source Files\GameObjects\Characters</Filter>
+    <ClCompile Include="src\entity\EnemyBodyNode.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BaseAttack.cpp">
-      <Filter>Source Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClCompile Include="src\entity\EnemyFast.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerAttack0.cpp">
-      <Filter>Source Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClCompile Include="src\entity\EnemyMedium.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerAttack1.cpp">
-      <Filter>Source Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClCompile Include="src\entity\EnemySlow.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerAttack2.cpp">
-      <Filter>Source Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClCompile Include="src\entity\EnemyStatic.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerSkill1.cpp">
-      <Filter>Source Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClCompile Include="src\entity\Player0.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerSkill0.cpp">
-      <Filter>Source Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClCompile Include="src\entity\Player1.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerSkill2.cpp">
-      <Filter>Source Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClCompile Include="src\entity\Player2.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyStatic.cpp">
-      <Filter>Source Files\GameObjects\Characters</Filter>
+    <ClCompile Include="src\entity\PlayerAttack0.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BaseItem.cpp">
-      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    <ClCompile Include="src\entity\PlayerAttack1.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ItemKey.cpp">
-      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    <ClCompile Include="src\entity\PlayerAttack2.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ItemLockedDoor.cpp">
-      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    <ClCompile Include="src\entity\PlayerSkill0.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TextRenderer.cpp">
-      <Filter>Source Files\Tools</Filter>
+    <ClCompile Include="src\entity\PlayerSkill1.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files\Scenes</Filter>
+    <ClCompile Include="src\entity\PlayerSkill2.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SceneGameplay.cpp">
-      <Filter>Source Files\Scenes</Filter>
+    <ClCompile Include="src\entity\PlayerTailNode.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Source Files\Scenes</Filter>
+    <ClCompile Include="src\entity\PolyLine2D.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\Scenes</Filter>
+    <ClCompile Include="src\entity\Projectile.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ClickableText.cpp">
-      <Filter>Source Files\Scenes</Filter>
+    <ClCompile Include="src\test\TestGameObject.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SceneMenu.cpp">
-      <Filter>Source Files\Scenes</Filter>
+    <ClCompile Include="src\test\TestPhysicalObject.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SceneTally.cpp">
-      <Filter>Source Files\Scenes</Filter>
+    <ClCompile Include="src\test\TestPhysicalTail.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BasePlayer.cpp">
-      <Filter>Source Files\GameObjects\Characters</Filter>
+    <ClCompile Include="src\test\TextRenderer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Source Files\GameObjects\Attacks&amp;Skills</Filter>
+    <ClCompile Include="src\ui\ClickableText.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ItemTrap.cpp">
-      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    <ClCompile Include="src\world\scene\Scene.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ItemTrapTrigger.cpp">
-      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    <ClCompile Include="src\world\scene\SceneGameplay.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Room1.cpp">
-      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    <ClCompile Include="src\world\scene\SceneManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Room2.cpp">
-      <Filter>Source Files\GameObjects\Tilemap</Filter>
+    <ClCompile Include="src\world\scene\SceneMenu.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SaveManager.cpp">
+    <ClCompile Include="src\world\scene\SceneTally.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
