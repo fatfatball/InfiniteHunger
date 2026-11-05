@@ -11,7 +11,7 @@
 
 Scene::Scene(GamesEngineeringBase::Window& window, Camera& camera, SceneManager* manager) 
 	: canvas(window), camera(camera), sceneManager(manager) {
-	// slice the canvas into tiles, for rendering
+	// slice the canvas into tiles for multi-thread rendering
 	ScreenAABB renderTile = { 0, 0, 0, 0 };
 	for (short yPos = 0; yPos < WINDOW_HEIGHT; yPos += RENDER_TILE_HEIGHT) {
 		for (short xPos = 0; xPos < WINDOW_WIDTH; xPos += RENDER_TILE_WIDTH) {
@@ -132,6 +132,12 @@ void Scene::AddPlayer(const PlayerType& type, const Vector2& pos,
 }
 
 void Scene::FixedUpdateObjects(const float& dt) {
+	// Position Based Dynamics, https://doi.org/10.1016/j.jvcir.2007.01.005
+	// let a be acceleration, v be velocity, x be position, t be time, dt be delta time.
+	// 1. get a(t+dt) from input
+	// 2. v(t) + a(t+dt)dt -> v(t+dt)
+	// 3. damp velocity: v(t+dt) * dampPercentPerSecond^dt -> v(t+dt)
+	// 4. x(t) + v(t+dt)dt -> p(t+dt)	(p for predicted x because it'll be adjusted afterwards)
 	int size = objects.GetSize();
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
@@ -140,9 +146,10 @@ void Scene::FixedUpdateObjects(const float& dt) {
 		objects[i]->FixedUpdate(dt);
 	}
 
-#pragma region CollisionSolving
-	// solve collision here
-	// 1. solve entity colliding entity.
+	// 5. solve for physical constrains and collisions (here only 1 iteration):
+	// p(t+dt) + constraintProjection -> p'(t+dt)
+#pragma region ConstraintSolving
+	// -1. solve entity colliding entity.
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 			continue;
@@ -204,7 +211,7 @@ void Scene::FixedUpdateObjects(const float& dt) {
 		}
 	}
 
-	// 2. solve entity colliding tilemap.
+	// -2. solve entity colliding tilemap.
  	if (roomManager && roomManager->rooms.GetSize() != 0) {
 		Vector2 normal;
 		Vector2 position;
@@ -222,7 +229,7 @@ void Scene::FixedUpdateObjects(const float& dt) {
 		}
 	}
 	
-	// solve other constraints here
+	// -3. solve other constraints here (distance, angle, ...)
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 			continue;
@@ -231,6 +238,13 @@ void Scene::FixedUpdateObjects(const float& dt) {
 	}
 #pragma endregion
 
+	// 6. update velocity: [p'(t+dt) - x(t)] / dt -> v(t+dt)
+	// notice that this is an approximation, using v(t+dt/2) as v(t+dt)
+	//	so it has an error of O(1)
+	// a better solution called Velocity Verlet Integration is: 
+	//	[a(t+dt) + a(t)] / 2 * dt + v(t) -> v(t+dt)
+	// but it's not compatible with constraints projection, 
+	//	since the projection uses an implicit force to move objects.
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 			continue;
@@ -238,6 +252,7 @@ void Scene::FixedUpdateObjects(const float& dt) {
 		objects[i]->UpdateVelocity(dt);
 	}
 
+	// 7. apply new pos: p'(t+dt) -> x(t+dt)
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 			continue;
@@ -268,6 +283,8 @@ void Scene::RenderObjects(const float& alpha) {
 	int size = objects.GetSize();
 	camera.ClearDepthGraph();
 
+	// 1. interpolate the renderState by prevState and curState, 
+	//		because the visual update is not consistent with fixed update.
 	for (int i = 0; i < size; ++i) {
 		if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
 			continue;
@@ -275,8 +292,7 @@ void Scene::RenderObjects(const float& alpha) {
 		objects[i]->UpdateRenderState(alpha, camera);
 	}
 
-	// render in order
-	// first slice screen into tiles, then render each tile
+	// 2. build threads to render
 	std::atomic<int> nextTile = 0;
 	std::thread workers[CO_RENDER_THREADS];
 
@@ -288,7 +304,7 @@ void Scene::RenderObjects(const float& alpha) {
 		workers[i].join();
 	}
 
-	// render UI objects at last
+	// 3. render UI objects at last
 	size = uiObjects.GetSize();
 	for (int i = 0; i < size; ++i) {
 		if (!uiObjects[i] || uiObjects[i]->isPendingDestroy) {

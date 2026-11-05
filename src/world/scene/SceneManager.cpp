@@ -18,7 +18,6 @@ void SceneManager::SolveSceneChange() {
 SceneManager::SceneManager(bool& running) : running(running) {
 	canvas.create(WINDOW_WIDTH, WINDOW_HEIGHT, "Infinite Hunger");
 	// initialize the current scene into menu scene
-	// test for single scene
 	camera.ResetCamera();
 	ChangeScene({ SceneManagerState::MenuScene, PlayerType::Swordsman, PlayerType::Archer,{} });
 	SolveSceneChange();
@@ -83,8 +82,8 @@ void SceneManager::VisualUpdate(const float& dt) {
 
 	if (isPendingQuit) {
 		// recycle everything
-		currentScene->RecycleAllObjects(); // this will leave players exist
-		// if it is single player / multi player, then save to file.
+		currentScene->RecycleAllObjects(); // this will leave players to exist
+		// if it is single / multi player, then save to file.
 		if (curState == SceneManagerState::SingleScene || curState == SceneManagerState::MultiScene) {
 			auto curScene = dynamic_cast<SceneGameplay*>(currentScene.get());
 			SaveContext saveCtx;

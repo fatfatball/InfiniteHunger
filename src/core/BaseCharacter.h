@@ -29,7 +29,6 @@ protected:
 	List<List<BasePhysicalObject*>> linedNodes;
 
 	// Solve constraints to establish physical effects.
-	// Position Based Dynamics, https://doi.org/10.1016/j.jvcir.2007.01.005
 	// here the param "stiffness" has no physical meaning. but it's simple, so I just use it.
 	// the dist between two points should stay the same.
 	void UpdateDistanceConstraint(BasePhysicalObject* o1, BasePhysicalObject* o2,

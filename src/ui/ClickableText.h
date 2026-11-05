@@ -6,6 +6,7 @@
 #include "AABB.h"
 #include "SmallStructs.h"
 
+// text object, to render directly on the screen, but not in world axis.
 class ClickableText{
 private:
 	std::string text;

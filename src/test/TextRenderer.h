@@ -4,6 +4,7 @@
 #include <string>
 #include "SmallStructs.h"
 
+// render a text onto the screen
 class TextRenderer {
 private:
 	static void DrawChar(GamesEngineeringBase::Window& env, const char& c, const int& x, const int& y, const int& scale, const ColorRGBA& color);

@@ -1,6 +1,7 @@
 #pragma once
 class BasePlayer;
 
+// it's more like an interface, for players to cast skills
 class BaseSkill {
 protected:
 	BasePlayer* owner;

@@ -33,6 +33,7 @@ private:
 	SceneManagerState curState;
 	bool isPendingQuit;
 
+	// wait until the end of frame to change
 	void SolveSceneChange();
 
 public:

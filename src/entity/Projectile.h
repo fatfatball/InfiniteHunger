@@ -4,6 +4,7 @@
 #include "Vector2.h"
 #include <string>
 
+// only used by enemies and traps. player uses PlayerAttack
 class Projectile : public BasePhysicalObject {
 protected:
 	float damage;

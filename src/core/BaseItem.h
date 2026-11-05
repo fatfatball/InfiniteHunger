@@ -3,6 +3,7 @@
 #include "GamesEngineeringBase.h"
 #include <string>
 
+// actually it's just physical object with sprite
 class BaseItem : public BasePhysicalObject {
 public:
     BaseItem(GamesEngineeringBase::Window& env, const Vector2& pos);

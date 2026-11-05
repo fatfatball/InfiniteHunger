@@ -42,6 +42,7 @@ void RoomManager::VisualUpdate(const float& dt) {
 	}
 
 	// check if the current room changes
+	// if it changed, keep the four rooms around the camera instantiated
 	RoomCoord curRoom = Wolrd2RoomCoord(scene->GetCameraTargetPos());
 	if (prevRoom != curRoom) {
 		scene->AddRoom(GetRandomRoomAt({ curRoom.x + 1, curRoom.y }));
@@ -135,11 +136,16 @@ Room* RoomManager::GetRoomAt(const RoomCoord& coord)
 }
 
 std::shared_ptr<Room> RoomManager::GetRandomRoomAt(const RoomCoord& coord) {
-	long long x = coord.x + 0xFFFF;
-	long long y = coord.y + 0xFFFF;
+	// 1. make negative coords positive.
+	long long x = static_cast<long long>(coord.x) + 0xFFFF;
+	long long y = static_cast<long long>(coord.y) + 0xFFFF;
+
+	// 2. use Cantor pairing function to pair a coord into a number.
 	long long sum = x + y;
 	long long pair = sum * (sum + 1) / 2 + y;
 	long long offset = pair * 325;
+
+	// 3. use room coord (and another global seed) as the seed to generate the room.
 	std::mt19937 rng(randSeed + offset);
 	int roomNum = rng() % 3;
 	std::shared_ptr<Room> room;

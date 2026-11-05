@@ -129,7 +129,6 @@ public:
 	}
 
 	virtual void RenderSelf(float alpha, const Camera& camera, const short& curDepth, const ScreenAABB& tile) const {
-		// render self in a specific tile
 		if (!renderVisible) {
 			return;
 		}
@@ -195,6 +194,7 @@ public:
 	}
 
 	virtual void UpdateRenderState(const float& alpha, const Camera& camera) {
+		// while updating render state, pre-calculate some values
 		renderState.globalPositionS = Math::Lerp(prevState.globalPositionS, curState.globalPositionS, alpha);
 		renderState.scaleS = Math::Lerp(prevState.scaleS, curState.scaleS, alpha);
 		renderState.rotationS = Math::LerpAngle(prevState.rotationS, curState.rotationS, alpha);

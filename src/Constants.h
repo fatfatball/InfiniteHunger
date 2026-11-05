@@ -4,7 +4,7 @@
 const float FIXED_DELTATIME = 1.0f / 50.0f;
 const short WINDOW_WIDTH = 1024; // 455
 const short WINDOW_HEIGHT = 768; // 256
-const short FOV = 768; // the verticle length of window in game global axis is 800;
+const short FOV = 768; // the verticle length of window in game global axis. it may be variant float instead.
 const float ASPECT_RATIO = (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT;
 const float PI = 3.14159265358979323846f;
 const float TWO_PI = 2.0f * PI;

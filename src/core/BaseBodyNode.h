@@ -5,6 +5,7 @@
 #include "GamesEngineeringBase.h"
 #include <string>
 
+// body node for both enemies and players
 class BaseBodyNode : public BasePhysicalObject {
 public:
 	BaseCharacter* owner;
@@ -97,6 +98,7 @@ public:
 		dampValue = 0.75f;
 	}
 
+	// after owner's death, this should vanish
 	void TickSelfVanish(const float& dt) {
 		if (isOwnerDead) {
 			selfVanishCounter -= dt;

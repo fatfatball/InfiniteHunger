@@ -31,6 +31,7 @@ public:
 	void RemoveRoom(const RoomCoord coord);
 	bool HasRoom(const RoomCoord& coord);
 	Room* GetRoomAt(const RoomCoord& coord);
+	// use room pos as the seed, generate a new room.
 	std::shared_ptr<Room> GetRandomRoomAt(const RoomCoord& coord);
 	bool CheckIfLive(const RoomCoord& coord);
 	static RoomCoord Wolrd2RoomCoord(const Vector2& pos);

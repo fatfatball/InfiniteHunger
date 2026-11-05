@@ -6,7 +6,7 @@
 #include <type_traits>
 
 template<typename T, typename Allocator = std::allocator<T>>
-class List { // build a vector<> myself, still working
+class List { // build a vector<> myself
 public:
 	List() {
 		size = 0;

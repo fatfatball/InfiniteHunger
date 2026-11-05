@@ -66,7 +66,6 @@ public:
 	}
 
 	void DrawOnCanvas(GamesEngineeringBase::Window& env, unsigned char*& backBuffer, const int& x, const int& y, const ColorRGBA& color) const {
-		// question: do I need boundary check?
 		if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT) {
 			return;
 		}
