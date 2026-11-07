@@ -136,7 +136,7 @@ void Scene::FixedUpdateObjects(const float& dt) {
 	// let a be acceleration, v be velocity, x be position, t be time, dt be delta time.
 	// 1. get a(t+dt) from input
 	// 2. damp velocity: v(t) * dampPercentPerSecond^dt -> v(t)
-	// 3. v(t) + a(t+dt)dt -> v(t+dt)
+	// 3. v(t) + a(t)dt -> v(t+dt)
 	// 4. x(t) + v(t+dt)dt -> p(t+dt)	(p for predicted x because it'll be adjusted afterwards)
 	int size = objects.GetSize();
 	for (int i = 0; i < size; ++i) {
