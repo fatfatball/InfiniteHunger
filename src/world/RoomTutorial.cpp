@@ -6,6 +6,7 @@
 #include "EnemyFast.h"
 #include "EnemyMedium.h"
 #include "EnemyStatic.h"
+//#include "TestGameObject.h"
 
 RoomTutorial::RoomTutorial(GamesEngineeringBase::Window& canvas, const RoomCoord coord)
 	: Room(canvas, coord, "./Resources/Maps/RoomTutorial") {
@@ -89,4 +90,13 @@ void RoomTutorial::OnStart() {
 		auto ptr = std::make_shared<EnemyStatic>(env, pos + globalPosition);
 		scene->AddObject(ptr);
 	}
+	// testing
+	//{
+	//	for (int i = 0; i < 100; ++i) {
+	//		pos = { 64 * 8, 64 * 0 };
+	//		auto ptr = std::make_shared<TestGameObject>(env);
+	//		ptr->globalPosition = { rand() % 1024 - 512.f, rand() % 768 - 384.f };
+	//		scene->AddObject(ptr);
+	//	}
+	//}
 }

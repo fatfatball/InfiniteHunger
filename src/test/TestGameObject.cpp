@@ -20,54 +20,56 @@ void TestGameObject::OnStart() {
 }
 
 void TestGameObject::FixedUpdate(const float& dt) {
-	Vector2 inputDir = Vector2();
-	if (env.keyPressed(0x57)) { // W
-		inputDir.y += -1;
-	}
-	if (env.keyPressed(0x41)) { // A
-		inputDir.x += -1;
-	}
-	if (env.keyPressed(0x53)) { // S
-		inputDir.y += 1;
-	}
-	if (env.keyPressed(0x44)) { // D
-		inputDir.x += 1;
-	}
+	/*
+		Vector2 inputDir = Vector2();
+		if (env.keyPressed(0x57)) { // W
+			inputDir.y += -1;
+		}
+		if (env.keyPressed(0x41)) { // A
+			inputDir.x += -1;
+		}
+		if (env.keyPressed(0x53)) { // S
+			inputDir.y += 1;
+		}
+		if (env.keyPressed(0x44)) { // D
+			inputDir.x += 1;
+		}
 
-	if (inputDir.Length() > 0) {
-		inputDir = inputDir.Normalized();
-	}
+		if (inputDir.Length() > 0) {
+			inputDir = inputDir.Normalized();
+		}
 
-	float inputAngle = 0;
-	if (env.keyPressed(0x51)) { // Q
-		inputAngle += 1;
-	}
-	if (env.keyPressed(0x45)) { // E
-		inputAngle -= 1;
-	}
+		float inputAngle = 0;
+		if (env.keyPressed(0x51)) { // Q
+			inputAngle += 1;
+		}
+		if (env.keyPressed(0x45)) { // E
+			inputAngle -= 1;
+		}
 
-	float inputZoomH = 0;
-	float inputZoomV = 0;
-	if (env.keyPressed(0x5a)) { // z
-		inputZoomH += 1;
-	}
-	if (env.keyPressed(0x58)) { // x
-		inputZoomH -= 1;
-	}
-	if (env.keyPressed(0x43)) { // c
-		inputZoomV += 1;
-	}
-	if (env.keyPressed(0x56)) { // v
-		inputZoomV -= 1;
-	}
+		float inputZoomH = 0;
+		float inputZoomV = 0;
+		if (env.keyPressed(0x5a)) { // z
+			inputZoomH += 1;
+		}
+		if (env.keyPressed(0x58)) { // x
+			inputZoomH -= 1;
+		}
+		if (env.keyPressed(0x43)) { // c
+			inputZoomV += 1;
+		}
+		if (env.keyPressed(0x56)) { // v
+			inputZoomV -= 1;
+		}
 
-	if (env.keyPressed(0x20)) { // space
-		isPendingDestroy = true;
-	}
+		if (env.keyPressed(0x20)) { // space
+			isPendingDestroy = true;
+		}
 
-	globalPosition = globalPosition + inputDir * moveSpeed * dt;
-	rotation = Math::WrapAngle(rotation + inputAngle * rotationSpeed * dt);
-	scale = scale + Vector2(inputZoomH * zoomSpeed * dt, inputZoomV * zoomSpeed * dt);
+		globalPosition = globalPosition + inputDir * moveSpeed * dt;
+		rotation = Math::WrapAngle(rotation + inputAngle * rotationSpeed * dt);
+		scale = scale + Vector2(inputZoomH * zoomSpeed * dt, inputZoomV * zoomSpeed * dt);
+	*/
 }
 
 void TestGameObject::VisualUpdate(const float& dt) {
@@ -93,5 +95,5 @@ ColorRGBA TestGameObject::GetColorAt(const float& u, const float& v) const {
 
 unsigned char TestGameObject::GetAlphaAt(const float& u, const float& v) const
 {
-	return 64;
+	return 255;
 }

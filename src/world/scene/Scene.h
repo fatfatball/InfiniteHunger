@@ -71,4 +71,5 @@ public:
 
 private:
 	void RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems);
+	void RenderWorkerNoDepth(const float& alpha, std::atomic<int>& nextTile, List<RenderedItem>& renderedItems);
 };

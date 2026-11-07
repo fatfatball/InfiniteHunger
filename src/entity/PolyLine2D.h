@@ -51,7 +51,7 @@ private:
 	template<typename Plot>
 	void DrawLineBresenham(const Vector2& a, const Vector2& b, const ScreenAABB& tile, int raduis, Plot&& plot) const;
 
-	// performs well (O(n)), but there are pixels within the line but not drawn.
+	// performs well (O(n)), but there are pixels within the line are not drawn.
 	template<typename Plot>
 	void DrawCricleMidpoint(int x, int y, const ScreenAABB& tile, int raduis,Plot&& plot) const;
 

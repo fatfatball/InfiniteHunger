@@ -473,3 +473,20 @@ void Scene::RenderWorker(const float& alpha, std::atomic<int>& nextTile, List<Re
 		renderedItems.Clear();
 	}
 }
+
+void Scene::RenderWorkerNoDepth(const float& alpha, std::atomic<int>& nextTile,
+	List<RenderedItem>& renderedItems) {
+	int tile;
+	while ((tile = nextTile.fetch_add(1, std::memory_order_relaxed)) < renderTiles.GetSize()) {
+		for (int order = 0; order <= 3; ++order) {
+			for (int i = 0; i < objects.GetSize(); ++i) {
+				if (!objects[i]->isActive || objects[i]->isPendingDestroy) {
+					continue;
+				}
+				if (objects[i]->renderOrder == order) {
+					objects[i]->RenderSelf(alpha, camera, -1, renderTiles[tile]);
+				}
+			}
+		}
+	}
+}

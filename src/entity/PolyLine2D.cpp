@@ -145,10 +145,13 @@ void PolyLine2D::DrawLineBresenham(const Vector2& a, const Vector2& b, const Scr
     int err = dx + dy;
 
     while (true) {
+        //plot(x0, y0, tile);
         // originally, just plot. here I want thickness so plot a circle here.
         //DrawCricleMidpoint(x0, y0, tile, raduis, plot);
+        //DrawCross(x0, y0, tile, raduis, plot);
         // circle is not enough. draw a filled circle instead.
         //DrawFilledCricleMidpoint(x0, y0, tile, raduis, plot);
+        
         // maybe an unfilled circle and a cross would be ok
         DrawCricleMidpoint(x0, y0, tile, raduis, plot);
         DrawCross(x0, y0, tile, raduis - 1, plot);

@@ -33,15 +33,15 @@ public:
 
 	virtual void UpdatePhysicPosition(const float& dt) {
 		// update position using Verlet Integration
-		velocity = curPhysicState.velocityS + force / mass * dt;
+		// calculate damping
+		float damping = std::powf(dampValue, dt);
+		//velocity = velocity * damping;
+		velocity = curPhysicState.velocityS * damping + force / mass * dt;
 		// clamp velocity to maxVelocity
 		if (velocity.Length() > maxVelocity) {
 			velocity = velocity.Normalized() * maxVelocity;
 		}
 
-		// calculate damping
-		float damping = std::powf(dampValue, dt);
-		velocity = velocity * damping;
 		// apply velocity
 		globalPosition = curState.globalPositionS + velocity * dt;
 	}
